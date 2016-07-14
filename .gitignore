@@ -27,3 +27,14 @@
 *.exe
 *.out
 *.app
+
+# Makefiles
+Makefile
+
+# Build specific
+tests/*
+.deps
+config.log
+config.status
+.dirstamp
+libtool
