@@ -1,0 +1,29 @@
+# project
+project(example_advect_cpp CXX)
+
+# files
+SET(CPP_Advect_Files
+advect.cpp
+ic
+phreeqc.dat
+)
+
+# src
+SET(CPP_Advect_SRC
+advect.cpp
+)
+
+# executable
+add_executable(example_advect_cpp ${CPP_Advect_SRC})
+
+# library dependencies
+SET(EXTRA_LIBS ${EXTRA_LIBS} IPhreeqc)
+
+# link 
+target_link_libraries(example_advect_cpp ${EXTRA_LIBS})
+
+# install directory
+SET(CPP_Advect_Dir ${EXAMPLES_DIR}/cpp/advect)
+
+# install
+install(FILES ${CPP_Advect_Files} DESTINATION ${CPP_Advect_Dir})
