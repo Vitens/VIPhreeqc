@@ -51,6 +51,63 @@ void Phreeqc::set_phast(int tf)
 {
 	this->phast = tf;
 }
+
+// VITENS VIPHREEQC Extension Methods
+cxxSolution Phreeqc::find_solution(int id){
+// find and return the solution with the specified number
+  {
+     std::map<int, cxxSolution>::const_iterator cit = Rxn_solution_map.begin();
+
+     for(; cit != Rxn_solution_map.end(); cit++){
+       cxxSolution entity(cit->second);
+       if (entity.Get_n_user() == id) {
+         return entity;
+       }
+     }
+
+     // if no solution is found return an empty one
+     cxxSolution empty = cxxSolution();
+     empty.Set_ph(-99);
+     return empty;
+  }
+}
+
+double Phreeqc::get_pH(int solution) {
+  cxxSolution sol = find_solution(solution);
+
+  if(sol.Get_ph() != -99) {
+    return sol.Get_ph();
+  }
+  return -999;
+}
+
+double Phreeqc::get_pe(int solution) {
+  cxxSolution sol = find_solution(solution);
+  if(sol.Get_ph() != -99) {
+    return sol.Get_pe();
+  }
+  return -999;
+}
+
+double Phreeqc::get_total(int solution, const char *string) {
+  cxxSolution sol = find_solution(solution);
+  if(sol.Get_ph() != -99) {
+    return sol.Get_total(string);
+  }
+  return -999;
+}
+
+double Phreeqc::get_total_element(int solution, const char *string) {
+  cxxSolution sol = find_solution(solution);
+  if(sol.Get_ph() != -99) {
+    return sol.Get_total_element(string);
+  }
+  return -999;
+}
+
+
+// END VITENS EXTENSIONS.
+
 size_t Phreeqc::list_components(std::list<std::string> &list_c)
 /*
  *	 Find all elements in any class definition
@@ -2538,3 +2595,34 @@ int Phreeqc::next_user_number(Keywords::KEYWORDS key)
 		return -999;
 	}
 }
+
+
+
+// string Phreeqc::list_solutions(void)
+// {
+//   std::string a;
+//   {
+//      std::map<int, cxxSolution>::const_iterator cit = Rxn_solution_map.begin();
+//      for(; cit != Rxn_solution_map.end(); cit++){
+//        cxxSolution entity(cit->second);
+//        // a += "SOLUTION ";
+//        // a += "n_user:" + std::to_string(entity.Get_n_user()) + "\n ";
+//        // a += "Total Na:" + std::to_string(entity.Get_total("Na")) + "\n ";
+//        // //a += "n_user_end:" + std::to_string(entity.Get_n_user_end()) + "\n ";
+//        // double pH = entity.Get_ph();
+//        // if (pH > 0) {
+//        //   a += "pH: " + std::to_string(pH) + "\n";
+//        // }
+//        // a += "Species: ";
+//        // for(int i = 0; i < count_species_list; i++) {
+//        //   a += species_list[i].s->name;
+//        //   a += " - " + std::to_string(species_list[i].s->moles);
+//        //   a += "\n";
+//        // }
+
+//       {
+//       std::ostringstream test;
+//       entity.dump_raw(test, 4);
+//       std::cout << test.str();
+//       }
+

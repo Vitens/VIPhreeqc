@@ -1050,6 +1050,56 @@ IPhreeqcLib::GetInstance(int id)
 	mutex_unlock(&map_lock);
 	return instance;
 }
+
+/// VITENS VIPHREEQC Extension Functions
+double
+GetPH(int id, int solution)
+{
+  static const char err_msg[] = "GetWarningString: Invalid instance id.\n";
+	IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
+	if (IPhreeqcPtr)
+	{
+    return IPhreeqcPtr->GetPH(solution);
+	}
+	return 0.0;
+}
+double
+GetPe(int id, int solution)
+{
+  static const char err_msg[] = "GetWarningString: Invalid instance id.\n";
+	IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
+	if (IPhreeqcPtr)
+	{
+    return IPhreeqcPtr->GetPe(solution);
+	}
+	return 0.0;
+}
+double
+GetTotal(int id, int solution, const char *string)
+{
+  static const char err_msg[] = "GetWarningString: Invalid instance id.\n";
+	IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
+	if (IPhreeqcPtr)
+	{
+    return IPhreeqcPtr->GetTotal(solution, string);
+	}
+	return 0.0;
+}
+double
+GetTotalElement(int id, int solution, const char *string)
+{
+  static const char err_msg[] = "GetWarningString: Invalid instance id.\n";
+  IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
+  if (IPhreeqcPtr)
+  {
+    return IPhreeqcPtr->GetTotalElement(solution, string);
+  }
+  return 0.0;
+}
+
+
+
+
 //// static method
 //void IPhreeqcLib::CleanupIPhreeqcInstances(void)
 //{

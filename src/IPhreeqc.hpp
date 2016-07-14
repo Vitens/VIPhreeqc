@@ -858,6 +858,12 @@ public:
 	 */
 	void                     SetSelectedOutputStringOn(bool bValue);
 
+  // Vitens VIPHREEQC Extension Functions
+  double                  GetPH(int solution);
+  double                  GetPe(int solution);
+  double                  GetTotal(int solution, const char *string);
+  double                  GetTotalElement(int solution, const char *string);
+
 public:
 	// overrides
 	virtual void error_msg(const char *str, bool stop=false);

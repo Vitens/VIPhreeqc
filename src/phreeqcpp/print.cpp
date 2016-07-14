@@ -1472,7 +1472,7 @@ print_species(void)
 #ifdef NO_UTF8_ENCODING
 			   "Molality", "Activity", "Molality", "Activity", "Gamma", "cm3/mol"));
 #else
-			   "Molality", "Activity", "Molality", "Activity", "Gamma", "cm³/mol"));
+			   "Molality", "Activity", "Molality", "Activity", "Gamma", "cm3/mol"));
 #endif
 /*
  *   Print list of species

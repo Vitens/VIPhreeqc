@@ -1429,7 +1429,7 @@ cxxSolution::Get_total(const char *string) const
 		return (it->second);
 	}
 }
-#ifdef SKIP
+
 LDBLE
 cxxSolution::Get_total_element(const char *string) const
 {
@@ -1453,7 +1453,6 @@ cxxSolution::Get_total_element(const char *string) const
 	}
 	return (d);
 }
-#endif
 
 void
 cxxSolution::Set_total(char *string, LDBLE d)

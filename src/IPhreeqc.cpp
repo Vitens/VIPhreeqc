@@ -1865,3 +1865,23 @@ std::string IPhreeqc::create_file_name(const char *prefix, const char *suffix)
 	oss << prefix << "." << this->Index << "." << suffix;
 	return oss.str();
 }
+
+// VITENS VIPHREEQC Extension Functions
+double IPhreeqc::GetPH(int solution)
+{
+  return this->PhreeqcPtr->get_pH(solution);
+}
+double IPhreeqc::GetPe(int solution)
+{
+  return this->PhreeqcPtr->get_pe(solution);
+}
+double IPhreeqc::GetTotal(int solution, const char *string)
+{
+  return this->PhreeqcPtr->get_total(solution, string);
+}
+double IPhreeqc::GetTotalElement(int solution, const char *string)
+{
+  return this->PhreeqcPtr->get_total_element(solution, string);
+}
+
+

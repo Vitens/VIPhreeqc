@@ -1144,6 +1144,14 @@ public:
 	void set_phast(int);
 	int next_user_number(Keywords::KEYWORDS key);
 	size_t list_components(std::list<std::string> &list_c);
+
+  // VITENS VIPHREEQC Extension functions
+  cxxSolution find_solution(int);
+  double get_pH(int);
+  double get_pe(int);
+  double get_total(int solution, const char *string);
+  double get_total_element(int solution, const char *string);
+
 	PHRQ_io * Get_phrq_io(void) {return this->phrq_io;}
 	void Set_run_cells_one_step(const bool tf) {this->run_cells_one_step = tf;}
 

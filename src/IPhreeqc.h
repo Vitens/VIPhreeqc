@@ -2126,6 +2126,11 @@ Headings
 
 // TODO int CatchErrors(PFN_CATCH_CALLBACK pfn, void *cookie);
 
+// VITENS VIPHREEQC Extension Functions
+	IPQ_DLL_EXPORT double GetPH(int id, int solution);
+	IPQ_DLL_EXPORT double GetPe(int id, int solution);
+	IPQ_DLL_EXPORT double GetTotal(int id, int solution, const char *string);
+  IPQ_DLL_EXPORT double GetTotalElement(int id, int solution, const char *string);
 
 #if defined(__cplusplus)
 }
