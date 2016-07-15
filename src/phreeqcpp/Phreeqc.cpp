@@ -88,6 +88,13 @@ double Phreeqc::get_pe(int solution) {
   }
   return -999;
 }
+double Phreeqc::get_sc(int solution) {
+  cxxSolution sol = find_solution(solution);
+  if(sol.Get_ph() != -99) {
+    return sol.Get_sc();
+  }
+  return -999;
+}
 
 double Phreeqc::get_total(int solution, const char *string) {
   cxxSolution sol = find_solution(solution);
@@ -100,6 +107,9 @@ double Phreeqc::get_total(int solution, const char *string) {
 double Phreeqc::get_total_element(int solution, const char *string) {
   cxxSolution sol = find_solution(solution);
   if(sol.Get_ph() != -99) {
+    struct species_list test = sol.Get_solution_species();
+
+    printf(test.s->name);
     return sol.Get_total_element(string);
   }
   return -999;

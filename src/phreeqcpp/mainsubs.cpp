@@ -1448,6 +1448,10 @@ xsolution_save(int n_user)
 	temp_solution.Set_tc(tc_x);
 	temp_solution.Set_patm(patm_x);
 	temp_solution.Set_ph(ph_x);
+  // Vitens modification: Store SC
+	temp_solution.Set_sc(calc_SC());
+  // Vitens modification: Store Speciation
+  temp_solution.Set_solution_species(*species_list);
 	temp_solution.Set_pe(solution_pe_x);
 	temp_solution.Set_mu(mu_x);
 	temp_solution.Set_ah2o(ah2o_x);

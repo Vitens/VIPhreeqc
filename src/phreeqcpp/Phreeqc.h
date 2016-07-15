@@ -1149,6 +1149,7 @@ public:
   cxxSolution find_solution(int);
   double get_pH(int);
   double get_pe(int);
+  double get_sc(int);
   double get_total(int solution, const char *string);
   double get_total_element(int solution, const char *string);
 

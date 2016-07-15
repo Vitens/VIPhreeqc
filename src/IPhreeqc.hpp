@@ -861,6 +861,7 @@ public:
   // Vitens VIPHREEQC Extension Functions
   double                  GetPH(int solution);
   double                  GetPe(int solution);
+  double                  GetSC(int solution);
   double                  GetTotal(int solution, const char *string);
   double                  GetTotalElement(int solution, const char *string);
 

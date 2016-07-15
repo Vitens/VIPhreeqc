@@ -1064,6 +1064,17 @@ GetPH(int id, int solution)
 	return 0.0;
 }
 double
+GetSC(int id, int solution)
+{
+  static const char err_msg[] = "GetWarningString: Invalid instance id.\n";
+	IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
+	if (IPhreeqcPtr)
+	{
+    return IPhreeqcPtr->GetSC(solution);
+	}
+	return 0.0;
+}
+double
 GetPe(int id, int solution)
 {
   static const char err_msg[] = "GetWarningString: Invalid instance id.\n";

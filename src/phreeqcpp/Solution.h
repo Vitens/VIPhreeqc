@@ -31,7 +31,11 @@ class cxxSolution:public cxxNumKeyword
 	void Set_patm(LDBLE p)    {this->patm = p;}
 	LDBLE Get_tc() const      {return this->tc;}
 	void Set_tc(LDBLE l_tc)   {this->tc = l_tc;}
+	LDBLE Get_sc() const      {return this->sc;}
+	void Set_sc(LDBLE sc)     {this->sc = sc;}
 	LDBLE Get_ph() const      {return this->ph;}
+	void Set_solution_species(struct species_list solution_species)     {this->solution_species = solution_species;}
+	struct species_list Get_solution_species() const      {return this->solution_species;}
 	void Set_ph(LDBLE pH)     {this->ph = pH;}
 	LDBLE Get_pe() const      {return this->pe;}
 	void Set_pe(LDBLE l_pe)   {this->pe = l_pe;}
@@ -119,6 +123,7 @@ class cxxSolution:public cxxNumKeyword
 	LDBLE patm;
 	LDBLE tc;
 	LDBLE ph;
+	LDBLE sc;
 	LDBLE pe;
 	LDBLE mu;
 	LDBLE ah2o;
@@ -132,6 +137,7 @@ class cxxSolution:public cxxNumKeyword
 	cxxNameDouble totals;
 	cxxNameDouble master_activity;
 	cxxNameDouble species_gamma;
+  struct species_list solution_species;
 	//cxxSolutionIsotopeList isotopes;
 	std::map < std::string, cxxSolutionIsotope > isotopes;
 	cxxISolution *initial_data;
