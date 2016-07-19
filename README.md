@@ -1,4 +1,5 @@
-# VIPhreeqc ![Vitens](https://github.com/AbelHeinsbroek/VIPhreeqc/raw/master/vitens.png)
+![Vitens](https://github.com/AbelHeinsbroek/VIPhreeqc/raw/master/vitens.png)
+# VIPhreeqc
 Vitens extension of the IPhreeqc 3.3.7 module ([Parkhurst&Appello](http://wwwbrr.cr.usgs.gov/projects/GWC_coupled/phreeqc/)).
 This extension aims to add more flexibility to the IPhreeqc module by exposing more information to the C extension. Instead of relying on SELECTED_OUTPUT this extensions enables users to directly gather information such as the pH, SC, speciation, element totals etc. of solutions.
 
