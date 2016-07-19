@@ -1152,6 +1152,12 @@ public:
   double get_sc(int);
   double get_total(int solution, const char *string);
   double get_total_element(int solution, const char *string);
+  double get_moles(int solution, const char *species);
+  double get_molality(int solution, const char *species);
+  std::string get_species(int solution);
+  std::string get_phases(int solution);
+  std::string get_elements(int solution);
+  double get_si(int solution, const char *phase);
 
 	PHRQ_io * Get_phrq_io(void) {return this->phrq_io;}
 	void Set_run_cells_one_step(const bool tf) {this->run_cells_one_step = tf;}

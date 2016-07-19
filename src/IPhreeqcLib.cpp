@@ -1055,7 +1055,6 @@ IPhreeqcLib::GetInstance(int id)
 double
 GetPH(int id, int solution)
 {
-  static const char err_msg[] = "GetWarningString: Invalid instance id.\n";
 	IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
 	if (IPhreeqcPtr)
 	{
@@ -1066,7 +1065,6 @@ GetPH(int id, int solution)
 double
 GetSC(int id, int solution)
 {
-  static const char err_msg[] = "GetWarningString: Invalid instance id.\n";
 	IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
 	if (IPhreeqcPtr)
 	{
@@ -1077,7 +1075,6 @@ GetSC(int id, int solution)
 double
 GetPe(int id, int solution)
 {
-  static const char err_msg[] = "GetWarningString: Invalid instance id.\n";
 	IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
 	if (IPhreeqcPtr)
 	{
@@ -1088,7 +1085,6 @@ GetPe(int id, int solution)
 double
 GetTotal(int id, int solution, const char *string)
 {
-  static const char err_msg[] = "GetWarningString: Invalid instance id.\n";
 	IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
 	if (IPhreeqcPtr)
 	{
@@ -1099,7 +1095,6 @@ GetTotal(int id, int solution, const char *string)
 double
 GetTotalElement(int id, int solution, const char *string)
 {
-  static const char err_msg[] = "GetWarningString: Invalid instance id.\n";
   IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
   if (IPhreeqcPtr)
   {
@@ -1107,10 +1102,71 @@ GetTotalElement(int id, int solution, const char *string)
   }
   return 0.0;
 }
-
-
-
-
+double
+GetMoles(int id, int solution, const char *species)
+{
+  IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
+  if (IPhreeqcPtr)
+  {
+    return IPhreeqcPtr->GetMoles(solution, species);
+  }
+  return 0.0;
+}
+double
+GetMolality(int id, int solution, const char *species)
+{
+  IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
+  if (IPhreeqcPtr)
+  {
+    return IPhreeqcPtr->GetMolality(solution, species);
+  }
+  return 0.0;
+}
+const char *
+GetSpecies(int id, int solution)
+{
+  static const char err_msg[] = "GetSpecies: Invalid instance id.\n";
+  IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
+  if (IPhreeqcPtr)
+  {
+    return IPhreeqcPtr->GetSpecies(solution);
+  }
+  return err_msg;
+}
+double
+GetSI(int id, int solution, const char *phase)
+{
+  IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
+  if (IPhreeqcPtr)
+  {
+    return IPhreeqcPtr->GetSI(solution, phase);
+  }
+  return 0.0;
+}
+const char *
+GetPhases(int id, int solution)
+{
+  static const char err_msg[] = "GetPhases: Invalid instance id.\n";
+  IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
+  if (IPhreeqcPtr)
+  {
+    const char *phases = IPhreeqcPtr->GetPhases(solution);
+    return phases;
+  }
+  return err_msg;
+}
+const char *
+GetElements(int id, int solution)
+{
+  static const char err_msg[] = "GetPhases: Invalid instance id.\n";
+  IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
+  if (IPhreeqcPtr)
+  {
+    const char *elements = IPhreeqcPtr->GetElements(solution);
+    return elements;
+  }
+  return err_msg;
+}
 //// static method
 //void IPhreeqcLib::CleanupIPhreeqcInstances(void)
 //{

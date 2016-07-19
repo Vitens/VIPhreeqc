@@ -1426,6 +1426,7 @@ xpp_assemblage_save(int n_user)
 	use.Set_pp_assemblage_ptr(NULL);
 	return (OK);
 }
+
 /* ---------------------------------------------------------------------- */
 int Phreeqc::
 xsolution_save(int n_user)
@@ -1450,8 +1451,6 @@ xsolution_save(int n_user)
 	temp_solution.Set_ph(ph_x);
   // Vitens modification: Store SC
 	temp_solution.Set_sc(calc_SC());
-  // Vitens modification: Store Speciation
-  temp_solution.Set_solution_species(*species_list);
 	temp_solution.Set_pe(solution_pe_x);
 	temp_solution.Set_mu(mu_x);
 	temp_solution.Set_ah2o(ah2o_x);
@@ -1467,6 +1466,52 @@ xsolution_save(int n_user)
 /*
  *   Copy pe data
  */
+  // vitens modification: Store speciation
+  for (int i =0; i < count_species_list; i++) {
+    temp_solution.species_list[species_list[i].s->name] = species_list[i].s->moles;
+  }
+  // vitens modification: Store phases
+  for (int i =0; i < count_phases; i++) {
+
+    // calculate iap and si
+    // Logic copied from print.cpp lines 1248-1276
+    LDBLE si, iap, lk, la_eminus;
+    struct rxn_token *rxn_ptr;
+    struct reaction *reaction_ptr;
+
+		if (phases[i]->in == FALSE || phases[i]->type != SOLID)
+			continue;
+		/* check for solids and gases in equation */
+		if (phases[i]->replaced)
+			reaction_ptr = phases[i]->rxn_s;
+		else
+			reaction_ptr = phases[i]->rxn;
+
+    reaction_ptr->logk[delta_v] = calc_delta_v(reaction_ptr, true) -
+       phases[i]->logk[vm0];
+    if (reaction_ptr->logk[delta_v])
+        mu_terms_in_logk = true;
+    lk = k_calc(reaction_ptr->logk, tk_x, patm_x * PASCAL_PER_ATM);
+    iap = 0.0;
+    for (rxn_ptr = reaction_ptr->token + 1; rxn_ptr->s != NULL;
+       rxn_ptr++)
+    {
+      if (rxn_ptr->s != s_eminus)
+      {
+        iap += (rxn_ptr->s->lm + rxn_ptr->s->lg) * rxn_ptr->coef;
+      }
+      else
+      {
+        iap += la_eminus * rxn_ptr->coef;
+      }
+    }
+    si = -lk + iap;
+
+    temp_solution.phases_list[phases[i]->name] = si;
+  }
+
+
+
 	/*
 	 * Add in minor isotopes if initial solution calculation
 	 */

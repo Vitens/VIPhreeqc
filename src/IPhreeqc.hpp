@@ -864,6 +864,12 @@ public:
   double                  GetSC(int solution);
   double                  GetTotal(int solution, const char *string);
   double                  GetTotalElement(int solution, const char *string);
+  double                  GetMoles(int solution, const char *species);
+  double                  GetMolality(int solution, const char *species);
+  const char*             GetSpecies(int solution);
+  double                  GetSI(int solution, const char *phase);
+  const char*             GetPhases(int solution);
+  const char*             GetElements(int solution);
 
 public:
 	// overrides

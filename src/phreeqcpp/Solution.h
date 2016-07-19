@@ -34,8 +34,6 @@ class cxxSolution:public cxxNumKeyword
 	LDBLE Get_sc() const      {return this->sc;}
 	void Set_sc(LDBLE sc)     {this->sc = sc;}
 	LDBLE Get_ph() const      {return this->ph;}
-	void Set_solution_species(struct species_list solution_species)     {this->solution_species = solution_species;}
-	struct species_list Get_solution_species() const      {return this->solution_species;}
 	void Set_ph(LDBLE pH)     {this->ph = pH;}
 	LDBLE Get_pe() const      {return this->pe;}
 	void Set_pe(LDBLE l_pe)   {this->pe = l_pe;}
@@ -118,6 +116,12 @@ class cxxSolution:public cxxNumKeyword
 	void Serialize(Dictionary & dictionary, std::vector < int >&ints, std::vector < double >&doubles);
 	void Deserialize(Dictionary & dictionary, std::vector < int >&ints, std::vector < double >&doubles, int &ii, int &dd);
 
+
+  // Vites modification: speciation and moles list
+  std::map <std::string, double> species_list;
+  // Vites modification: phases and si list
+  std::map <std::string, double> phases_list;
+
   protected:
 	bool new_def;
 	LDBLE patm;
@@ -137,7 +141,6 @@ class cxxSolution:public cxxNumKeyword
 	cxxNameDouble totals;
 	cxxNameDouble master_activity;
 	cxxNameDouble species_gamma;
-  struct species_list solution_species;
 	//cxxSolutionIsotopeList isotopes;
 	std::map < std::string, cxxSolutionIsotope > isotopes;
 	cxxISolution *initial_data;

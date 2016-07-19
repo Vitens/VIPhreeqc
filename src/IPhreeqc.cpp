@@ -1887,5 +1887,27 @@ double IPhreeqc::GetTotalElement(int solution, const char *string)
 {
   return this->PhreeqcPtr->get_total_element(solution, string);
 }
-
-
+double IPhreeqc::GetMoles(int solution, const char *species)
+{
+  return this->PhreeqcPtr->get_moles(solution, species);
+}
+double IPhreeqc::GetMolality(int solution, const char *species)
+{
+  return this->PhreeqcPtr->get_molality(solution, species);
+}
+const char *IPhreeqc::GetSpecies(int solution)
+{
+  return this->PhreeqcPtr->get_species(solution).c_str();
+}
+double IPhreeqc::GetSI(int solution, const char *phase)
+{
+  return this->PhreeqcPtr->get_si(solution, phase);
+}
+const char *IPhreeqc::GetPhases(int solution)
+{
+  return this->PhreeqcPtr->get_phases(solution).c_str();
+}
+const char *IPhreeqc::GetElements(int solution)
+{
+  return this->PhreeqcPtr->get_elements(solution).c_str();
+}

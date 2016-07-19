@@ -74,7 +74,6 @@ cxxSolution Phreeqc::find_solution(int id){
 
 double Phreeqc::get_pH(int solution) {
   cxxSolution sol = find_solution(solution);
-
   if(sol.Get_ph() != -99) {
     return sol.Get_ph();
   }
@@ -107,14 +106,97 @@ double Phreeqc::get_total(int solution, const char *string) {
 double Phreeqc::get_total_element(int solution, const char *string) {
   cxxSolution sol = find_solution(solution);
   if(sol.Get_ph() != -99) {
-    struct species_list test = sol.Get_solution_species();
-
-    printf(test.s->name);
     return sol.Get_total_element(string);
   }
   return -999;
 }
 
+double Phreeqc::get_moles(int solution, const char *species) {
+  cxxSolution sol = find_solution(solution);
+  // no solution found
+  if(sol.Get_ph() == -99) { return -999; }
+  // try to find species
+  if(sol.species_list.find(species) != sol.species_list.end()) {
+    return sol.species_list[species];
+  }
+  return 0.0;
+}
+
+double Phreeqc::get_molality(int solution, const char *species) {
+  cxxSolution sol = find_solution(solution);
+  // no solution found
+  if(sol.Get_ph() == -99) { return -999; }
+  // try to find species
+  if(sol.species_list.find(species) != sol.species_list.end()) {
+    return sol.species_list[species] / sol.Get_mass_water();
+  }
+  return 0.0;
+}
+std::string Phreeqc::get_species(int solution) {
+  cxxSolution sol = find_solution(solution);
+  // no solution found
+
+  if(sol.Get_ph() == -99) { return "-999"; }
+
+  std::string output;
+  std::map<std::string, double>::iterator it;
+
+  for (it = sol.species_list.begin(); it != sol.species_list.end(); it++)
+  {
+    output += it->first + ",";
+  }
+
+  // remove last character (comma)
+  if (output.size() > 0)  output.resize(output.size() - 1);
+  return output;
+}
+double Phreeqc::get_si(int solution, const char *phase) {
+  cxxSolution sol = find_solution(solution);
+  // no solution found
+  if(sol.Get_ph() == -99) { return -999; }
+  // try to find species
+  if(sol.phases_list.find(phase) != sol.phases_list.end()) {
+    return sol.phases_list[phase];
+  }
+  return -999;
+}
+
+std::string Phreeqc::get_phases(int solution) {
+  cxxSolution sol = find_solution(solution);
+  // no solution found
+
+  if(sol.Get_ph() == -99) { return "-999"; }
+
+  std::string output;
+  std::map<std::string, double>::iterator it;
+
+  for (it = sol.phases_list.begin(); it != sol.phases_list.end(); it++)
+  {
+    output += it->first + ",";
+  }
+  // remove last character (comma)
+  if (output.size() > 0)  output.resize(output.size() - 1);
+
+  return output;
+}
+
+std::string Phreeqc::get_elements(int solution) {
+  cxxSolution sol = find_solution(solution);
+  // no solution found
+  if(sol.Get_ph() == -99) { return "-999"; }
+
+  cxxNameDouble totals = sol.Get_totals();
+  std::string output;
+
+  cxxNameDouble::const_iterator it;
+  for(it = totals.begin(); it != totals.end(); it++) {
+    output += it->first + ",";
+  }
+  // remove last character (comma)
+  if (output.size() > 0)  output.resize(output.size() - 1);
+
+  return output;
+}
 
 // END VITENS EXTENSIONS.
 
