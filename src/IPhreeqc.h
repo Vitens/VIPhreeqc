@@ -2138,6 +2138,7 @@ Headings
   IPQ_DLL_EXPORT double GetSI(int id, int solution, const char *phase);
   IPQ_DLL_EXPORT const char* GetPhases(int id, int solution);
   IPQ_DLL_EXPORT const char* GetElements(int id, int solution);
+  IPQ_DLL_EXPORT const char* GetSolutionList(int id);
 
 #if defined(__cplusplus)
 }

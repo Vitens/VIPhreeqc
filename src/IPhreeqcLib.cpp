@@ -1060,7 +1060,7 @@ GetPH(int id, int solution)
 	{
     return IPhreeqcPtr->GetPH(solution);
 	}
-	return 0.0;
+	return -99;
 }
 double
 GetSC(int id, int solution)
@@ -1070,7 +1070,7 @@ GetSC(int id, int solution)
 	{
     return IPhreeqcPtr->GetSC(solution);
 	}
-	return 0.0;
+	return -99;
 }
 double
 GetPe(int id, int solution)
@@ -1080,7 +1080,7 @@ GetPe(int id, int solution)
 	{
     return IPhreeqcPtr->GetPe(solution);
 	}
-	return 0.0;
+	return -99;
 }
 double
 GetTotal(int id, int solution, const char *string)
@@ -1090,7 +1090,7 @@ GetTotal(int id, int solution, const char *string)
 	{
     return IPhreeqcPtr->GetTotal(solution, string);
 	}
-	return 0.0;
+	return -99;
 }
 double
 GetTotalElement(int id, int solution, const char *string)
@@ -1100,7 +1100,7 @@ GetTotalElement(int id, int solution, const char *string)
   {
     return IPhreeqcPtr->GetTotalElement(solution, string);
   }
-  return 0.0;
+  return -99;
 }
 double
 GetMoles(int id, int solution, const char *species)
@@ -1110,7 +1110,7 @@ GetMoles(int id, int solution, const char *species)
   {
     return IPhreeqcPtr->GetMoles(solution, species);
   }
-  return 0.0;
+  return -99;
 }
 double
 GetMolality(int id, int solution, const char *species)
@@ -1120,7 +1120,7 @@ GetMolality(int id, int solution, const char *species)
   {
     return IPhreeqcPtr->GetMolality(solution, species);
   }
-  return 0.0;
+  return -99;
 }
 const char *
 GetSpecies(int id, int solution)
@@ -1141,7 +1141,7 @@ GetSI(int id, int solution, const char *phase)
   {
     return IPhreeqcPtr->GetSI(solution, phase);
   }
-  return 0.0;
+  return -99;
 }
 const char *
 GetPhases(int id, int solution)
@@ -1163,6 +1163,18 @@ GetElements(int id, int solution)
   if (IPhreeqcPtr)
   {
     const char *elements = IPhreeqcPtr->GetElements(solution);
+    return elements;
+  }
+  return err_msg;
+}
+const char *
+GetSolutionList(int id)
+{
+  static const char err_msg[] = "GetSolutionList: Invalid instance id.\n";
+  IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
+  if (IPhreeqcPtr)
+  {
+    const char *elements = IPhreeqcPtr->GetSolutionList();
     return elements;
   }
   return err_msg;

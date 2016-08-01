@@ -1157,6 +1157,7 @@ public:
   std::string get_species(int solution);
   std::string get_phases(int solution);
   std::string get_elements(int solution);
+  std::string get_solution_list();
   double get_si(int solution, const char *phase);
 
 	PHRQ_io * Get_phrq_io(void) {return this->phrq_io;}

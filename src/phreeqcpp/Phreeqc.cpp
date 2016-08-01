@@ -72,6 +72,22 @@ cxxSolution Phreeqc::find_solution(int id){
   }
 }
 
+std::string Phreeqc::get_solution_list() {
+
+  std::string output; 
+  std::map<int, cxxSolution>::const_iterator cit = Rxn_solution_map.begin();
+
+  for(; cit != Rxn_solution_map.end(); cit++){
+    cxxSolution entity(cit->second);
+    output += std::to_string(entity.Get_n_user()) + ",";
+  }
+  // remove last character (comma)
+  if (output.size() > 0)  output.resize(output.size() - 1);
+  return output;
+}
+
+
+
 double Phreeqc::get_pH(int solution) {
   cxxSolution sol = find_solution(solution);
   if(sol.Get_ph() != -99) {
@@ -150,6 +166,7 @@ std::string Phreeqc::get_species(int solution) {
   if (output.size() > 0)  output.resize(output.size() - 1);
   return output;
 }
+
 double Phreeqc::get_si(int solution, const char *phase) {
   cxxSolution sol = find_solution(solution);
   // no solution found

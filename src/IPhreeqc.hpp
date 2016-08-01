@@ -859,17 +859,55 @@ public:
 	void                     SetSelectedOutputStringOn(bool bValue);
 
   // Vitens VIPHREEQC Extension Functions
+
+  /**
+   * Returns the pH of the specified solution
+   */
   double                  GetPH(int solution);
+  /**
+   * Returns the pe of the specified solution
+   */
   double                  GetPe(int solution);
+  /**
+   * Returns the specific conductance (in uS/cm) of the specified solution
+   */
   double                  GetSC(int solution);
+  /**
+   * Returns the amount (in mol) of an element (e.g. C(-4), Ca, etc.)
+   */
   double                  GetTotal(int solution, const char *string);
+  /**
+   * Returns the total amount (in mol) of an element (e.g. C, Ca, etc.)
+   */
   double                  GetTotalElement(int solution, const char *string);
+  /**
+   * Returns the amount of moles (in mol) of a species (e.g. Ca+2, OH-, etc.)
+   */
   double                  GetMoles(int solution, const char *species);
+  /**
+   * Returns the molality (in mol/kgW) of a species (e.g. Ca+2, OH-, etc.)
+   */
   double                  GetMolality(int solution, const char *species);
+  /**
+   * Returns a comma separated list of all the species in the selected solution
+   */
   const char*             GetSpecies(int solution);
+  /**
+   * Returns the Solubility Index of a phase in a solution
+   */
   double                  GetSI(int solution, const char *phase);
+  /**
+   * Returns a comma separated list of all the phases in the selected solution
+   */
   const char*             GetPhases(int solution);
+  /**
+   * Returns a comma separated list of all the elements in the selected solution
+   */
   const char*             GetElements(int solution);
+  /**
+   * Returns a comma separated list of all the solutions in the current runstate
+   */
+  const char*             GetSolutionList();
 
 public:
 	// overrides

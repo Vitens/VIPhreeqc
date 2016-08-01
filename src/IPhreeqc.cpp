@@ -1911,3 +1911,7 @@ const char *IPhreeqc::GetElements(int solution)
 {
   return this->PhreeqcPtr->get_elements(solution).c_str();
 }
+const char *IPhreeqc::GetSolutionList()
+{
+  return this->PhreeqcPtr->get_solution_list().c_str();
+}
