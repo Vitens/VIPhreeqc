@@ -1,2 +1,3 @@
 language: cpp
 before_script: autoreconf --force --install
+script: ./configure && make install
