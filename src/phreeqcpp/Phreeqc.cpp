@@ -15,6 +15,15 @@
 #include "Temperature.h"
 #include "SSassemblage.h"
 
+template <typename T>
+std::string to_string(T value)
+{
+  std::ostringstream os ;
+  os << value ;
+  return os.str() ;
+}
+
+
 const struct const_iso Phreeqc::iso_defaults[] = {
 	{"13C", -10, 1},
 	{"13C(4)", -10, 1},
@@ -79,7 +88,7 @@ std::string Phreeqc::get_solution_list() {
 
   for(; cit != Rxn_solution_map.end(); cit++){
     cxxSolution entity(cit->second);
-    output += std::to_string(entity.Get_n_user()) + ",";
+    output += to_string(entity.Get_n_user()) + ",";
   }
   // remove last character (comma)
   if (output.size() > 0)  output.resize(output.size() - 1);
