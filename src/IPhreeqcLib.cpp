@@ -1179,6 +1179,8 @@ GetSolutionList(int id)
   }
   return err_msg;
 }
+
+
 //// static method
 //void IPhreeqcLib::CleanupIPhreeqcInstances(void)
 //{

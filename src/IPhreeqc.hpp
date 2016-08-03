@@ -873,6 +873,10 @@ public:
    */
   double                  GetSC(int solution);
   /**
+   * Returns the temperature (degrees Celsius) of the specified solution
+   */
+  double                  GetTemperature(int solution);
+  /**
    * Returns the amount (in mol) of an element (e.g. C(-4), Ca, etc.)
    */
   double                  GetTotal(int solution, const char *string);
