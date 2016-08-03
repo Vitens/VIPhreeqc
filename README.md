@@ -3,7 +3,7 @@
 || **Status** |
 |---|---|
 | **Mac/Linux** | [![Build Status](https://travis-ci.org/AbelHeinsbroek/VIPhreeqc.svg?branch=master)](https://travis-ci.org/AbelHeinsbroek/VIPhreeqc) |
-| **Windows** | ![Build Status](https://ci.appveyor.com/api/projects/status/github/abelheinsbroek/viphreeqc?svg=true)|
+| **Windows** | [![Build Status](https://ci.appveyor.com/api/projects/status/github/abelheinsbroek/viphreeqc?svg=true)](https://ci.appveyor.com/project/AbelHeinsbroek/viphreeqc)|
 
 # VIPhreeqc
 Extension of the IPhreeqc 3.3.7 module ([Parkhurst&Appello](http://wwwbrr.cr.usgs.gov/projects/GWC_coupled/phreeqc/)).
