@@ -3,8 +3,9 @@ before_script: autoreconf --force --install
 script: mkdir build && ./configure --prefix=`pwd`/build && make install
 deploy:
   provider: releases
+  skip_cleanup: true
   api_key:
     secure: CoqMQTmfuWalIPbaYHiM/tvu8EX15LUHw/XwsBSV3mNra3zlO82144oTJW/3s+30N4e/bKcYtxAkmgpqfqJgptrdkPO4pOTTwhO9ksaCbrahyed3wDDrrI0u9QF1S5Usw6QNcU9GPlcPAbMUgWvxkeDNT/cBRhm6jxoIXwiw8L0fXuYS3+LaZzOuLtWV92wdqi8LSefwYZAA81lBC4HjgmH3jotXEy5qPXMzrJfKA/BrNO62NTnRnNi9n/ysHkqg76mlHpvdI0YEOkf5sz2yypET/1cm+nwNboQpVSp+hYl0LaQF7doYFffbT02ZLmWQazMHqMcEdoAlCgAKaUBA/5pvoNsOkH9NyRkNc7eI43/lwtGKXyfxdXp31ajzAV3fT4gcm/eoKg+gl5JWj9RpvaKstZu1QZN3D+p2v20ReZl6B5vroAxltQmJH96OOEZThFIDYYwPoQBzydRAeNsm7zwK8DTvupq45n7k4uovkmCRhrAoGT4PpuipzzR4KrbftQeqjWZP74CVx5qhYqNmftOh42FdvMQiokalv/qpmynWTN4efYFqtqwSlVSLuz+aWnUeaoxFMASYnfL1G7WvWIrlZhh2YpyIUabtWv//gNcW6GROh/RaUsBc/PnXnL7c8xEtn1icE5mXpfAGL3IvdNKbDl8Ss6T8+KOxyAD55cY=
-  file: build/lib/libiphreeqc-3.3.7.so
+  file: /home/travis/build/AbelHeinsbroek/VIPhreeqc/build/lib/libiphreeqc-3.3.7.so
   on:
     repo: AbelHeinsbroek/VIPhreeqc
