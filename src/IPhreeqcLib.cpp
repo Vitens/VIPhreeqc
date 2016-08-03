@@ -1073,6 +1073,16 @@ GetSC(int id, int solution)
 	return -99;
 }
 double
+GetTemperature(int id, int solution)
+{
+	IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
+	if (IPhreeqcPtr)
+	{
+    return IPhreeqcPtr->GetTemperature(solution);
+	}
+	return -99;
+}
+double
 GetPe(int id, int solution)
 {
 	IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
