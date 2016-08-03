@@ -1899,23 +1899,23 @@ double IPhreeqc::GetMolality(int solution, const char *species)
 {
   return this->PhreeqcPtr->get_molality(solution, species);
 }
-const char *IPhreeqc::GetSpecies(int solution)
+std::string IPhreeqc::GetSpecies(int solution)
 {
-  return this->PhreeqcPtr->get_species(solution).c_str();
+  return this->PhreeqcPtr->get_species(solution);
 }
 double IPhreeqc::GetSI(int solution, const char *phase)
 {
   return this->PhreeqcPtr->get_si(solution, phase);
 }
-const char *IPhreeqc::GetPhases(int solution)
+std::string IPhreeqc::GetPhases(int solution)
 {
-  return this->PhreeqcPtr->get_phases(solution).c_str();
+  return this->PhreeqcPtr->get_phases(solution);
 }
-const char *IPhreeqc::GetElements(int solution)
+std::string IPhreeqc::GetElements(int solution)
 {
-  return this->PhreeqcPtr->get_elements(solution).c_str();
+  return this->PhreeqcPtr->get_elements(solution);
 }
-const char *IPhreeqc::GetSolutionList()
+std::string IPhreeqc::GetSolutionList()
 {
-  return this->PhreeqcPtr->get_solution_list().c_str();
+  return this->PhreeqcPtr->get_solution_list();
 }

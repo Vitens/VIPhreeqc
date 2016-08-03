@@ -1,4 +1,10 @@
 ![Vitens](https://github.com/AbelHeinsbroek/VIPhreeqc/raw/master/vitens.png)
+
+|| **Status** |
+|---|---|
+| **Mac/Linux** | [![Build Status](https://travis-ci.org/AbelHeinsbroek/VIPhreeqc.svg?branch=master)](https://travis-ci.org/AbelHeinsbroek/VIPhreeqc) |
+| **Windows** | [![Build Status](https://ci.appveyor.com/api/projects/status/github/abelheinsbroek/viphreeqc?svg=true)](https://ci.appveyor.com/project/AbelHeinsbroek/viphreeqc)|
+
 # VIPhreeqc
 Extension of the IPhreeqc 3.3.7 module ([Parkhurst&Appello](http://wwwbrr.cr.usgs.gov/projects/GWC_coupled/phreeqc/)).
 This extension aims to add more flexibility to the IPhreeqc module by exposing more information to the C extension. Instead of relying on SELECTED_OUTPUT this extensions enables users to directly gather information such as the pH, SC, speciation, element totals etc. of solutions.

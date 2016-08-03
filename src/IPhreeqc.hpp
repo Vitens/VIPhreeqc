@@ -895,7 +895,7 @@ public:
   /**
    * Returns a comma separated list of all the species in the selected solution
    */
-  const char*             GetSpecies(int solution);
+  std::string             GetSpecies(int solution);
   /**
    * Returns the Solubility Index of a phase in a solution
    */
@@ -903,15 +903,15 @@ public:
   /**
    * Returns a comma separated list of all the phases in the selected solution
    */
-  const char*             GetPhases(int solution);
+  std::string             GetPhases(int solution);
   /**
    * Returns a comma separated list of all the elements in the selected solution
    */
-  const char*             GetElements(int solution);
+  std::string             GetElements(int solution);
   /**
    * Returns a comma separated list of all the solutions in the current runstate
    */
-  const char*             GetSolutionList();
+  std::string             GetSolutionList();
 
 public:
 	// overrides
