@@ -1129,7 +1129,8 @@ GetSpecies(int id, int solution)
   IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
   if (IPhreeqcPtr)
   {
-    return IPhreeqcPtr->GetSpecies(solution);
+    static std::string result = IPhreeqcPtr->GetSpecies(solution);
+    return result.c_str();
   }
   return err_msg;
 }
@@ -1150,8 +1151,8 @@ GetPhases(int id, int solution)
   IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
   if (IPhreeqcPtr)
   {
-    const char *phases = IPhreeqcPtr->GetPhases(solution);
-    return phases;
+    static std::string result = IPhreeqcPtr->GetPhases(solution);
+    return result.c_str();
   }
   return err_msg;
 }
@@ -1162,8 +1163,8 @@ GetElements(int id, int solution)
   IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
   if (IPhreeqcPtr)
   {
-    const char *elements = IPhreeqcPtr->GetElements(solution);
-    return elements;
+    static std::string result = IPhreeqcPtr->GetElements(solution);
+    return result.c_str();
   }
   return err_msg;
 }
@@ -1174,8 +1175,8 @@ GetSolutionList(int id)
   IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
   if (IPhreeqcPtr)
   {
-    const char *elements = IPhreeqcPtr->GetSolutionList();
-    return elements;
+    static std::string result = IPhreeqcPtr->GetSolutionList();
+    return result.c_str();
   }
   return err_msg;
 }
