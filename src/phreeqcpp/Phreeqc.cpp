@@ -62,22 +62,23 @@ void Phreeqc::set_phast(int tf)
 }
 
 // VITENS VIPHREEQC Extension Methods
-cxxSolution Phreeqc::find_solution(int id){
+cxxSolution * Phreeqc::find_solution(int id){
 // find and return the solution with the specified number
   {
-     std::map<int, cxxSolution>::const_iterator cit = Rxn_solution_map.begin();
+//std::map<int, cxxSolution>::const_iterator cit = Rxn_solution_map.begin();
+     return Utilities::Rxn_find(Rxn_solution_map, id);
 
-     for(; cit != Rxn_solution_map.end(); cit++){
-       cxxSolution entity(cit->second);
-       if (entity.Get_n_user() == id) {
-         return entity;
-       }
-     }
-
-     // if no solution is found return an empty one
-     cxxSolution empty = cxxSolution();
-     empty.Set_ph(-99);
-     return empty;
+//     for(; cit != Rxn_solution_map.end(); cit++){
+//       cxxSolution entity(cit->second);
+//       if (entity.Get_n_user() == id) {
+//         return entity;
+//       }
+//     }
+//
+//     // if no solution is found return an empty one
+//     cxxSolution empty = cxxSolution();
+//     empty.Set_ph(-99);
+//     return empty;
   }
 }
 
@@ -98,82 +99,82 @@ std::string Phreeqc::get_solution_list() {
 
 
 double Phreeqc::get_pH(int solution) {
-  cxxSolution sol = find_solution(solution);
-  if(sol.Get_ph() != -99) {
-    return sol.Get_ph();
+  cxxSolution * sol = find_solution(solution);
+  if(sol->Get_ph() != -99) {
+    return sol->Get_ph();
   }
   return -999;
 }
 
 double Phreeqc::get_pe(int solution) {
-  cxxSolution sol = find_solution(solution);
-  if(sol.Get_ph() != -99) {
-    return sol.Get_pe();
+  cxxSolution * sol = find_solution(solution);
+  if(sol->Get_ph() != -99) {
+    return sol->Get_pe();
   }
   return -999;
 }
 double Phreeqc::get_sc(int solution) {
-  cxxSolution sol = find_solution(solution);
-  if(sol.Get_ph() != -99) {
-    return sol.Get_sc();
+  cxxSolution * sol = find_solution(solution);
+  if(sol->Get_ph() != -99) {
+    return sol->Get_sc();
   }
   return -999;
 }
 double Phreeqc::get_temperature(int solution) {
-  cxxSolution sol = find_solution(solution);
-  if(sol.Get_ph() != -99) {
-    return sol.Get_tc();
+  cxxSolution * sol = find_solution(solution);
+  if(sol->Get_ph() != -99) {
+    return sol->Get_tc();
   }
   return -999;
 }
 
 double Phreeqc::get_total(int solution, const char *string) {
-  cxxSolution sol = find_solution(solution);
-  if(sol.Get_ph() != -99) {
-    return sol.Get_total(string);
+  cxxSolution * sol = find_solution(solution);
+  if(sol->Get_ph() != -99) {
+    return sol->Get_total(string);
   }
   return -999;
 }
 
 double Phreeqc::get_total_element(int solution, const char *string) {
-  cxxSolution sol = find_solution(solution);
-  if(sol.Get_ph() != -99) {
-    return sol.Get_total_element(string);
+  cxxSolution * sol = find_solution(solution);
+  if(sol->Get_ph() != -99) {
+    return sol->Get_total_element(string);
   }
   return -999;
 }
 
 double Phreeqc::get_moles(int solution, const char *species) {
-  cxxSolution sol = find_solution(solution);
+  cxxSolution * sol = find_solution(solution);
   // no solution found
-  if(sol.Get_ph() == -99) { return -999; }
+  if(sol->Get_ph() == -99) { return -999; }
   // try to find species
-  if(sol.species_list.find(species) != sol.species_list.end()) {
-    return sol.species_list[species];
+  if(sol->species_list.find(species) != sol->species_list.end()) {
+    return sol->species_list[species];
   }
   return 0.0;
 }
 
 double Phreeqc::get_molality(int solution, const char *species) {
-  cxxSolution sol = find_solution(solution);
+  cxxSolution * sol = find_solution(solution);
   // no solution found
-  if(sol.Get_ph() == -99) { return -999; }
+  if(sol->Get_ph() == -99) { return -999; }
   // try to find species
-  if(sol.species_list.find(species) != sol.species_list.end()) {
-    return sol.species_list[species] / sol.Get_mass_water();
+  if(sol->species_list.find(species) != sol->species_list.end()) {
+    return sol->species_list[species] / sol->Get_mass_water();
   }
   return 0.0;
 }
 std::string Phreeqc::get_species(int solution) {
-  cxxSolution sol = find_solution(solution);
+  cxxSolution * sol = find_solution(solution);
   // no solution found
 
-  if(sol.Get_ph() == -99) { return "-999"; }
+  if(sol->Get_ph() == -99) { return "-999"; }
 
   std::string output;
   std::map<std::string, double>::iterator it;
 
-  for (it = sol.species_list.begin(); it != sol.species_list.end(); it++)
+  for (it = sol->species_list.begin(); it != sol->species_list.end(); it++)
   {
     output += it->first + ",";
   }
@@ -184,26 +185,26 @@ std::string Phreeqc::get_species(int solution) {
 }
 
 double Phreeqc::get_si(int solution, const char *phase) {
-  cxxSolution sol = find_solution(solution);
+  cxxSolution * sol = find_solution(solution);
   // no solution found
-  if(sol.Get_ph() == -99) { return -999; }
+  if(sol->Get_ph() == -99) { return -999; }
   // try to find species
-  if(sol.phases_list.find(phase) != sol.phases_list.end()) {
-    return sol.phases_list[phase];
+  if(sol->phases_list.find(phase) != sol->phases_list.end()) {
+    return sol->phases_list[phase];
   }
   return -999;
 }
 
 std::string Phreeqc::get_phases(int solution) {
-  cxxSolution sol = find_solution(solution);
+  cxxSolution * sol = find_solution(solution);
   // no solution found
 
-  if(sol.Get_ph() == -99) { return "-999"; }
+  if(sol->Get_ph() == -99) { return "-999"; }
 
   std::string output;
   std::map<std::string, double>::iterator it;
 
-  for (it = sol.phases_list.begin(); it != sol.phases_list.end(); it++)
+  for (it = sol->phases_list.begin(); it != sol->phases_list.end(); it++)
   {
     output += it->first + ",";
   }
@@ -214,11 +215,11 @@ std::string Phreeqc::get_phases(int solution) {
 }
 
 std::string Phreeqc::get_elements(int solution) {
-  cxxSolution sol = find_solution(solution);
+  cxxSolution * sol = find_solution(solution);
   // no solution found
-  if(sol.Get_ph() == -99) { return "-999"; }
+  if(sol->Get_ph() == -99) { return "-999"; }
 
-  cxxNameDouble totals = sol.Get_totals();
+  cxxNameDouble totals = sol->Get_totals();
   std::string output;
 
   cxxNameDouble::const_iterator it;

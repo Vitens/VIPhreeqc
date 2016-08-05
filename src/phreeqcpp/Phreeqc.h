@@ -1146,7 +1146,7 @@ public:
 	size_t list_components(std::list<std::string> &list_c);
 
   // VITENS VIPHREEQC Extension functions
-  cxxSolution find_solution(int);
+  cxxSolution * find_solution(int);
   double get_pH(int);
   double get_pe(int);
   double get_sc(int);
