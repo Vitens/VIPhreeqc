@@ -911,7 +911,7 @@ public:
   /**
    * Returns a comma separated list of all the solutions in the current runstate
    */
-  std::string             GetSolutionList();
+  std::string             GetSolutionList2(int id);
 
 public:
 	// overrides

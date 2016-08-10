@@ -82,9 +82,9 @@ cxxSolution * Phreeqc::find_solution(int id){
   }
 }
 
-std::string Phreeqc::get_solution_list() {
+std::string Phreeqc::get_solution_list(int id) {
 
-  std::string output; 
+  std::string output;
   std::map<int, cxxSolution>::const_iterator cit = Rxn_solution_map.begin();
 
   for(; cit != Rxn_solution_map.end(); cit++){

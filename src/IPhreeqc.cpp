@@ -1915,7 +1915,7 @@ std::string IPhreeqc::GetElements(int solution)
 {
   return this->PhreeqcPtr->get_elements(solution);
 }
-std::string IPhreeqc::GetSolutionList()
+std::string IPhreeqc::GetSolutionList2(int id)
 {
-  return this->PhreeqcPtr->get_solution_list();
+  return this->PhreeqcPtr->get_solution_list(id);
 }

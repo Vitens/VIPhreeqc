@@ -1,6 +1,7 @@
 #include <cassert>
 #include <iostream>
 #include <map>
+#include <sstream>
 
 #include "IPhreeqc.h"
 #include "IPhreeqc.hpp"
@@ -1139,8 +1140,11 @@ GetSpecies(int id, int solution)
   IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
   if (IPhreeqcPtr)
   {
-    static std::string result = IPhreeqcPtr->GetSpecies(solution);
-    return result.c_str();
+    static std::string str;
+    std::stringstream stream;
+    stream << IPhreeqcPtr->GetSpecies(solution);
+    str = stream.str();
+    return str.c_str();
   }
   return err_msg;
 }
@@ -1161,8 +1165,11 @@ GetPhases(int id, int solution)
   IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
   if (IPhreeqcPtr)
   {
-    static std::string result = IPhreeqcPtr->GetPhases(solution);
-    return result.c_str();
+    static std::string str;
+    std::stringstream stream;
+    stream << IPhreeqcPtr->GetPhases(solution);
+    str = stream.str();
+    return str.c_str();
   }
   return err_msg;
 }
@@ -1173,8 +1180,11 @@ GetElements(int id, int solution)
   IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
   if (IPhreeqcPtr)
   {
-    static std::string result = IPhreeqcPtr->GetElements(solution);
-    return result.c_str();
+    static std::string str;
+    std::stringstream stream;
+    stream << IPhreeqcPtr->GetElements(solution);
+    str = stream.str();
+    return str.c_str();
   }
   return err_msg;
 }
@@ -1185,8 +1195,11 @@ GetSolutionList(int id)
   IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
   if (IPhreeqcPtr)
   {
-    static std::string result = IPhreeqcPtr->GetSolutionList();
-    return result.c_str();
+    static std::string str;
+    std::stringstream stream;
+    stream << IPhreeqcPtr->GetSolutionList2(0);
+    str = stream.str();
+    return str.c_str();
   }
   return err_msg;
 }

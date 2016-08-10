@@ -7,7 +7,7 @@
 A0	phreeqcpp/Phreeqc.h	/^	LDBLE A0;$/;"	m	class:Phreeqc
 AA	phreeqcpp/Phreeqc.h	/^	LDBLE GASCON, TZ, AA;$/;"	m	class:Phreeqc
 ABS	phreeqcpp/sundialsmath.h	/^#define ABS(/;"	d
-ACLOCAL	Makefile	/^ACLOCAL = ${SHELL} \/Users\/Abel\/Vitens\/Projecten\/VIPHREEQC\/config\/missing aclocal-1.14$/;"	m
+ACLOCAL	Makefile	/^ACLOCAL = ${SHELL} \/Users\/Abel\/Vitens\/Projecten\/VIPhreeqc\/config\/missing aclocal-1.13$/;"	m
 ACLOCAL_M4	Makefile	/^ACLOCAL_M4 = $(top_srcdir)\/aclocal.m4$/;"	m
 ACTION	phreeqcpp/global_structures.h	/^{ FIND, ENTER } ACTION;$/;"	t	typeref:enum:__anon17
 ADAMS	phreeqcpp/cvode.h	/^	{ ADAMS, BDF };				\/* lmm *\/$/;"	e	enum:__anon4
@@ -36,9 +36,9 @@ APR_STRINGIFY_HELPER	Version.h	/^#define APR_STRINGIFY_HELPER(/;"	d
 AQ	phreeqcpp/global_structures.h	/^#define AQ /;"	d
 AR	Makefile	/^AR = ar$/;"	m
 ASSERT	Debug.h	/^#define ASSERT /;"	d
-AUTOCONF	Makefile	/^AUTOCONF = ${SHELL} \/Users\/Abel\/Vitens\/Projecten\/VIPHREEQC\/config\/missing autoconf$/;"	m
-AUTOHEADER	Makefile	/^AUTOHEADER = ${SHELL} \/Users\/Abel\/Vitens\/Projecten\/VIPHREEQC\/config\/missing autoheader$/;"	m
-AUTOMAKE	Makefile	/^AUTOMAKE = ${SHELL} \/Users\/Abel\/Vitens\/Projecten\/VIPHREEQC\/config\/missing automake-1.14$/;"	m
+AUTOCONF	Makefile	/^AUTOCONF = ${SHELL} \/Users\/Abel\/Vitens\/Projecten\/VIPhreeqc\/config\/missing autoconf$/;"	m
+AUTOHEADER	Makefile	/^AUTOHEADER = ${SHELL} \/Users\/Abel\/Vitens\/Projecten\/VIPhreeqc\/config\/missing autoheader$/;"	m
+AUTOMAKE	Makefile	/^AUTOMAKE = ${SHELL} \/Users\/Abel\/Vitens\/Projecten\/VIPhreeqc\/config\/missing automake-1.13$/;"	m
 AVOGADRO	phreeqcpp/global_structures.h	/^#define AVOGADRO /;"	d
 AW	phreeqcpp/Phreeqc.h	/^	LDBLE AW;$/;"	m	class:Phreeqc
 AWK	Makefile	/^AWK = awk$/;"	m
@@ -575,6 +575,8 @@ GetDumpStringOnF	IPhreeqc_interface_F.cpp	/^GetDumpStringOnF(int *id)$/;"	f
 GetDumpStringOnF	IPhreeqc_interface_F.h	/^#define GetDumpStringOnF /;"	d
 GetDumpStringOnF	fwrap.cpp	/^GetDumpStringOnF(int *id)$/;"	f
 GetDumpStringOnF	fwrap.h	/^#define GetDumpStringOnF /;"	d
+GetElements	IPhreeqc.cpp	/^std::string IPhreeqc::GetElements(int solution)$/;"	f	class:IPhreeqc
+GetElements	IPhreeqcLib.cpp	/^GetElements(int id, int solution)$/;"	f
 GetErrorFileName	IPhreeqc.cpp	/^const char* IPhreeqc::GetErrorFileName(void)const$/;"	f	class:IPhreeqc
 GetErrorFileName	IPhreeqcF.f	/^      SUBROUTINE GetErrorFileName(/;"	s
 GetErrorFileName	IPhreeqcLib.cpp	/^GetErrorFileName(int id)$/;"	f
@@ -662,6 +664,10 @@ GetLogStringOnF	IPhreeqc_interface_F.cpp	/^GetLogStringOnF(int *id)$/;"	f
 GetLogStringOnF	IPhreeqc_interface_F.h	/^#define GetLogStringOnF /;"	d
 GetLogStringOnF	fwrap.cpp	/^GetLogStringOnF(int *id)$/;"	f
 GetLogStringOnF	fwrap.h	/^#define GetLogStringOnF /;"	d
+GetMolality	IPhreeqc.cpp	/^double IPhreeqc::GetMolality(int solution, const char *species)$/;"	f	class:IPhreeqc
+GetMolality	IPhreeqcLib.cpp	/^GetMolality(int id, int solution, const char *species)$/;"	f
+GetMoles	IPhreeqc.cpp	/^double IPhreeqc::GetMoles(int solution, const char *species)$/;"	f	class:IPhreeqc
+GetMoles	IPhreeqcLib.cpp	/^GetMoles(int id, int solution, const char *species)$/;"	f
 GetNthSelectedOutputUserNumber	IPhreeqc.cpp	/^int IPhreeqc::GetNthSelectedOutputUserNumber(int n)const$/;"	f	class:IPhreeqc
 GetNthSelectedOutputUserNumber	IPhreeqcF.f	/^      FUNCTION GetNthSelectedOutputUserNumber(/;"	f
 GetNthSelectedOutputUserNumber	IPhreeqcLib.cpp	/^GetNthSelectedOutputUserNumber(int id, int n)$/;"	f
@@ -717,7 +723,13 @@ GetPH	IPhreeqc.cpp	/^double IPhreeqc::GetPH(int solution)$/;"	f	class:IPhreeqc
 GetPH	IPhreeqcLib.cpp	/^GetPH(int id, int solution)$/;"	f
 GetPe	IPhreeqc.cpp	/^double IPhreeqc::GetPe(int solution)$/;"	f	class:IPhreeqc
 GetPe	IPhreeqcLib.cpp	/^GetPe(int id, int solution)$/;"	f
+GetPhases	IPhreeqc.cpp	/^std::string IPhreeqc::GetPhases(int solution)$/;"	f	class:IPhreeqc
+GetPhases	IPhreeqcLib.cpp	/^GetPhases(int id, int solution)$/;"	f
 GetRowCount	CSelectedOutput.cpp	/^size_t CSelectedOutput::GetRowCount(void)const$/;"	f	class:CSelectedOutput
+GetSC	IPhreeqc.cpp	/^double IPhreeqc::GetSC(int solution)$/;"	f	class:IPhreeqc
+GetSC	IPhreeqcLib.cpp	/^GetSC(int id, int solution)$/;"	f
+GetSI	IPhreeqc.cpp	/^double IPhreeqc::GetSI(int solution, const char *phase)$/;"	f	class:IPhreeqc
+GetSI	IPhreeqcLib.cpp	/^GetSI(int id, int solution, const char *phase)$/;"	f
 GetSelectedOutputColumnCount	IPhreeqc.cpp	/^int IPhreeqc::GetSelectedOutputColumnCount(void)const$/;"	f	class:IPhreeqc
 GetSelectedOutputColumnCount	IPhreeqcF.f	/^      FUNCTION GetSelectedOutputColumnCount(/;"	f
 GetSelectedOutputColumnCount	IPhreeqcLib.cpp	/^GetSelectedOutputColumnCount(int id)$/;"	f
@@ -794,8 +806,16 @@ GetSelectedOutputValueF	IPhreeqc_interface_F.cpp	/^GetSelectedOutputValueF(int *
 GetSelectedOutputValueF	IPhreeqc_interface_F.h	/^#define GetSelectedOutputValueF /;"	d
 GetSelectedOutputValueF	fwrap.cpp	/^GetSelectedOutputValueF(int *id, int *row, int *col, int *vtype, double* dvalue, char* svalue, size_t svalue_length)$/;"	f
 GetSelectedOutputValueF	fwrap.h	/^#define GetSelectedOutputValueF /;"	d
+GetSolutionList	IPhreeqcLib.cpp	/^GetSolutionList(int id)$/;"	f
+GetSolutionList2	IPhreeqc.cpp	/^std::string IPhreeqc::GetSolutionList2(int id)$/;"	f	class:IPhreeqc
+GetSpecies	IPhreeqc.cpp	/^std::string IPhreeqc::GetSpecies(int solution)$/;"	f	class:IPhreeqc
+GetSpecies	IPhreeqcLib.cpp	/^GetSpecies(int id, int solution)$/;"	f
+GetTemperature	IPhreeqc.cpp	/^double IPhreeqc::GetTemperature(int solution)$/;"	f	class:IPhreeqc
+GetTemperature	IPhreeqcLib.cpp	/^GetTemperature(int id, int solution)$/;"	f
 GetTotal	IPhreeqc.cpp	/^double IPhreeqc::GetTotal(int solution, const char *string)$/;"	f	class:IPhreeqc
 GetTotal	IPhreeqcLib.cpp	/^GetTotal(int id, int solution, const char *string)$/;"	f
+GetTotalElement	IPhreeqc.cpp	/^double IPhreeqc::GetTotalElement(int solution, const char *string)$/;"	f	class:IPhreeqc
+GetTotalElement	IPhreeqcLib.cpp	/^GetTotalElement(int id, int solution, const char *string)$/;"	f
 GetVersionString	IPhreeqc.cpp	/^const char* IPhreeqc::GetVersionString(void)$/;"	f	class:IPhreeqc
 GetVersionString	IPhreeqcF.f	/^      SUBROUTINE GetVersionString(/;"	s
 GetVersionString	IPhreeqcLib.cpp	/^GetVersionString(void)$/;"	f
@@ -1242,6 +1262,7 @@ Get_run_cells	phreeqcpp/runner.h	/^	bool Get_run_cells() { return(this->run_cell
 Get_rxn	phreeqcpp/SelectedOutput.h	/^	inline bool Get_rxn(void)const                                    {return this->rxn;}$/;"	f	class:SelectedOutput
 Get_s_s	phreeqcpp/SelectedOutput.h	/^	inline const std::vector< std::pair< std::string, void * > > & Get_s_s(void)const              {return this->s_s;}$/;"	f	class:SelectedOutput
 Get_s_s	phreeqcpp/SelectedOutput.h	/^	inline std::vector< std::pair< std::string, void * > > & Get_s_s(void)              {return this->s_s;}$/;"	f	class:SelectedOutput
+Get_sc	phreeqcpp/Solution.h	/^	LDBLE Get_sc() const      {return this->sc;}$/;"	f	class:cxxSolution
 Get_screen_on	phreeqcpp/common/PHRQ_io.h	/^	bool Get_screen_on(void)						{return this->screen_on;};$/;"	f	class:PHRQ_io
 Get_secondary_y	phreeqcpp/ChartObject.h	/^	const std::map<int, bool> &Get_secondary_y()const$/;"	f	class:ChartObject
 Get_secondary_y	phreeqcpp/ChartObject.h	/^	std::map<int, bool> &Get_secondary_y()$/;"	f	class:ChartObject
@@ -1730,7 +1751,7 @@ MACHENV	phreeqcpp/cvdense.cpp	/^#define MACHENV /;"	d	file:
 MACHENV	phreeqcpp/cvode.cpp	/^#define MACHENV /;"	d	file:
 MACHENV_MALLOC	phreeqcpp/cvdense.cpp	/^#define MACHENV_MALLOC /;"	d	file:
 MACHENV_MALLOC	phreeqcpp/cvode.cpp	/^#define MACHENV_MALLOC /;"	d	file:
-MAKEINFO	Makefile	/^MAKEINFO = ${SHELL} \/Users\/Abel\/Vitens\/Projecten\/VIPHREEQC\/config\/missing makeinfo$/;"	m
+MAKEINFO	Makefile	/^MAKEINFO = ${SHELL} \/Users\/Abel\/Vitens\/Projecten\/VIPhreeqc\/config\/missing makeinfo$/;"	m
 MANIFEST_TOOL	Makefile	/^MANIFEST_TOOL = :$/;"	m
 MASS_BALANCE	phreeqcpp/global_structures.h	/^#define MASS_BALANCE /;"	d
 MAX	phreeqcpp/sundialsmath.h	/^#define MAX(/;"	d
@@ -2841,6 +2862,7 @@ Set_rk	phreeqcpp/cxxKinetics.h	/^	void Set_rk(int t) {rk = t;}$/;"	f	class:cxxKi
 Set_run_cells	phreeqcpp/runner.h	/^	void Set_run_cells(bool tf) { this->run_cells = tf; };$/;"	f	class:runner
 Set_run_cells_one_step	phreeqcpp/Phreeqc.h	/^	void Set_run_cells_one_step(const bool tf) {this->run_cells_one_step = tf;}$/;"	f	class:Phreeqc
 Set_rxn	phreeqcpp/SelectedOutput.h	/^	inline void Set_rxn(bool tf)                                      {this->rxn = tf;                     this->set_rxn = true;}$/;"	f	class:SelectedOutput
+Set_sc	phreeqcpp/Solution.h	/^	void Set_sc(LDBLE sc)     {this->sc = sc;}$/;"	f	class:cxxSolution
 Set_screen_on	phreeqcpp/common/PHRQ_io.h	/^	void Set_screen_on(bool tf)						{this->screen_on = tf;};$/;"	f	class:PHRQ_io
 Set_si	phreeqcpp/PPassemblageComp.h	/^	void Set_si(LDBLE t) {this->si = t;}$/;"	f	class:cxxPPassemblageComp
 Set_si_org	phreeqcpp/PPassemblageComp.h	/^	void Set_si_org(LDBLE t) {this->si_org = t;}$/;"	f	class:cxxPPassemblageComp
@@ -3134,10 +3156,10 @@ a1	phreeqcpp/Phreeqc.h	/^	LDBLE a0, a1, kc, kb;$/;"	m	class:Phreeqc
 a1	phreeqcpp/SS.h	/^	LDBLE a0, a1;$/;"	m	class:cxxSS
 a_aa_sum	phreeqcpp/Phreeqc.h	/^	LDBLE a_aa_sum, b2, b_sum, R_TK;$/;"	m	class:Phreeqc
 a_f	phreeqcpp/global_structures.h	/^	LDBLE dha, dhb, a_f;		\/* WATEQ Debye Huckel a and b-dot; active_fraction coef for exchange species *\/$/;"	m	struct:species
-abs_builddir	Makefile	/^abs_builddir = \/Users\/Abel\/Vitens\/Projecten\/VIPHREEQC\/src$/;"	m
-abs_srcdir	Makefile	/^abs_srcdir = \/Users\/Abel\/Vitens\/Projecten\/VIPHREEQC\/src$/;"	m
-abs_top_builddir	Makefile	/^abs_top_builddir = \/Users\/Abel\/Vitens\/Projecten\/VIPHREEQC$/;"	m
-abs_top_srcdir	Makefile	/^abs_top_srcdir = \/Users\/Abel\/Vitens\/Projecten\/VIPHREEQC$/;"	m
+abs_builddir	Makefile	/^abs_builddir = \/Users\/Abel\/Vitens\/Projecten\/VIPhreeqc\/src$/;"	m
+abs_srcdir	Makefile	/^abs_srcdir = \/Users\/Abel\/Vitens\/Projecten\/VIPhreeqc\/src$/;"	m
+abs_top_builddir	Makefile	/^abs_top_builddir = \/Users\/Abel\/Vitens\/Projecten\/VIPhreeqc$/;"	m
+abs_top_srcdir	Makefile	/^abs_top_srcdir = \/Users\/Abel\/Vitens\/Projecten\/VIPhreeqc$/;"	m
 abstol	phreeqcpp/cvode.cpp	/^#define abstol /;"	d	file:
 ac_ct_AR	Makefile	/^ac_ct_AR = ar$/;"	m
 ac_ct_CC	Makefile	/^ac_ct_CC = gcc$/;"	m
@@ -3248,12 +3270,9 @@ am__include	Makefile	/^am__include = include$/;"	m
 am__include_HEADERS_DIST	Makefile	/^am__include_HEADERS_DIST = $(top_srcdir)\/src\/IPhreeqc.h \\$/;"	m
 am__install_max	Makefile	/^am__install_max = 40$/;"	m
 am__installdirs	Makefile	/^am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(sourcedir)" \\$/;"	m
-am__is_gnu_make	Makefile	/^am__is_gnu_make = test -n '$(MAKEFILE_LIST)' && test -n '$(MAKELEVEL)'$/;"	m
 am__leading_dot	Makefile	/^am__leading_dot = .$/;"	m
 am__libiphreeqc_la_SOURCES_DIST	Makefile	/^am__libiphreeqc_la_SOURCES_DIST = CSelectedOutput.cpp \\$/;"	m
-am__make_dryrun	Makefile	/^am__make_dryrun = (target_option=n; $(am__make_running_with_option))$/;"	m
-am__make_keepgoing	Makefile	/^am__make_keepgoing = (target_option=k; $(am__make_running_with_option))$/;"	m
-am__make_running_with_option	Makefile	/^am__make_running_with_option = \\$/;"	m
+am__make_dryrun	Makefile	/^am__make_dryrun = \\$/;"	m
 am__mv	Makefile	/^am__mv = mv -f$/;"	m
 am__nobase_list	Makefile	/^am__nobase_list = $(am__nobase_strip_setup); \\$/;"	m
 am__nobase_strip	Makefile	/^am__nobase_strip = \\$/;"	m
@@ -4251,7 +4270,7 @@ find_misc1	phreeqcpp/basicsubs.cpp	/^find_misc1(const char *ss_name)$/;"	f	class
 find_misc2	phreeqcpp/basicsubs.cpp	/^find_misc2(const char *ss_name)$/;"	f	class:Phreeqc
 find_option	phreeqcpp/common/Parser.cxx	/^CParser::FIND_TYPE CParser::find_option(const std::string & item, int *n,$/;"	f	class:CParser
 find_option	phreeqcpp/read.cpp	/^find_option(const char *item, int *n, const char **list, int count_list, int exact)$/;"	f	class:Phreeqc
-find_solution	phreeqcpp/Phreeqc.cpp	/^cxxSolution Phreeqc::find_solution(int id){$/;"	f	class:Phreeqc
+find_solution	phreeqcpp/Phreeqc.cpp	/^cxxSolution * Phreeqc::find_solution(int id){$/;"	f	class:Phreeqc
 find_ss_comp	phreeqcpp/basicsubs.cpp	/^find_ss_comp(const char *ss_comp_name)$/;"	f	class:Phreeqc
 find_surface_charge_unknown	phreeqcpp/prep.cpp	/^find_surface_charge_unknown(std::string &str, int plane)$/;"	f	class:Phreeqc
 findline	phreeqcpp/PBasic.cpp	/^findline(long n)$/;"	f	class:PBasic
@@ -4352,6 +4371,7 @@ get_coef	phreeqcpp/parse.cpp	/^get_coef(LDBLE * coef, char **eqnaddr)$/;"	f	clas
 get_echo_file	phreeqcpp/common/Parser.h	/^	ECHO_OPTION get_echo_file()$/;"	f	class:CParser
 get_echo_stream	phreeqcpp/common/Parser.h	/^	ECHO_OPTION get_echo_stream()$/;"	f	class:CParser
 get_edl_species	phreeqcpp/basicsubs.cpp	/^get_edl_species(cxxSurfaceCharge & charge_ref)$/;"	f	class:Phreeqc
+get_elements	phreeqcpp/Phreeqc.cpp	/^std::string Phreeqc::get_elements(int solution) {$/;"	f	class:Phreeqc
 get_elt	phreeqcpp/common/Parser.cxx	/^CParser::STATUS_TYPE CParser::get_elt(std::string::iterator & begin,$/;"	f	class:CParser
 get_elt	phreeqcpp/parse.cpp	/^get_elt(char **t_ptr, char *element, int *i)$/;"	f	class:Phreeqc
 get_elts_in_species	phreeqcpp/parse.cpp	/^get_elts_in_species(char **t_ptr, LDBLE coef)$/;"	f	class:Phreeqc
@@ -4371,23 +4391,32 @@ get_list_master_ptrs	phreeqcpp/prep.cpp	/^get_list_master_ptrs(char *ptr, struct
 get_logical_line	phreeqcpp/common/PHRQ_io.cpp	/^get_logical_line(void)$/;"	f	class:PHRQ_io
 get_logical_line	phreeqcpp/common/Parser.cxx	/^PHRQ_io::LINE_TYPE CParser::get_logical_line()$/;"	f	class:CParser
 get_m_line_type	phreeqcpp/common/Parser.h	/^	PHRQ_io::LINE_TYPE get_m_line_type(void) const {return this->m_line_type;}$/;"	f	class:CParser
+get_molality	phreeqcpp/Phreeqc.cpp	/^double Phreeqc::get_molality(int solution, const char *species) {$/;"	f	class:Phreeqc
+get_moles	phreeqcpp/Phreeqc.cpp	/^double Phreeqc::get_moles(int solution, const char *species) {$/;"	f	class:Phreeqc
 get_num	phreeqcpp/parse.cpp	/^get_num(char **t_ptr, LDBLE * num)$/;"	f	class:Phreeqc
 get_option	phreeqcpp/common/Parser.cxx	/^CParser::get_option(const std::vector < std::string > &opt_list,$/;"	f	class:CParser
 get_option	phreeqcpp/read.cpp	/^get_option(const char **opt_list, int count_opt_list, char **next_char)$/;"	f	class:Phreeqc
 get_option_string	phreeqcpp/spread.cpp	/^get_option_string(const char **opt_list, int count_opt_list, char **next_char)$/;"	f	class:Phreeqc
 get_pH	phreeqcpp/Phreeqc.cpp	/^double Phreeqc::get_pH(int solution) {$/;"	f	class:Phreeqc
 get_pe	phreeqcpp/Phreeqc.cpp	/^double Phreeqc::get_pe(int solution) {$/;"	f	class:Phreeqc
+get_phases	phreeqcpp/Phreeqc.cpp	/^std::string Phreeqc::get_phases(int solution) {$/;"	f	class:Phreeqc
 get_rest_of_line	phreeqcpp/common/Parser.cxx	/^CParser::TOKEN_TYPE CParser::get_rest_of_line(std::string &token)$/;"	f	class:CParser
+get_sc	phreeqcpp/Phreeqc.cpp	/^double Phreeqc::get_sc(int solution) {$/;"	f	class:Phreeqc
 get_secondary	phreeqcpp/parse.cpp	/^get_secondary(char **t_ptr, char *element, int *i)$/;"	f	class:Phreeqc
 get_secondary_in_species	phreeqcpp/parse.cpp	/^get_secondary_in_species(char **t_ptr, LDBLE coef)$/;"	f	class:Phreeqc
 get_sel_out_file_on	IPhreeqc.cpp	/^bool IPhreeqc::get_sel_out_file_on(int n)const$/;"	f	class:IPhreeqc
 get_sel_out_string_on	IPhreeqc.cpp	/^bool IPhreeqc::get_sel_out_string_on(int n)const$/;"	f	class:IPhreeqc
+get_si	phreeqcpp/Phreeqc.cpp	/^double Phreeqc::get_si(int solution, const char *phase) {$/;"	f	class:Phreeqc
+get_solution_list	phreeqcpp/Phreeqc.cpp	/^std::string Phreeqc::get_solution_list(int id) {$/;"	f	class:Phreeqc
+get_species	phreeqcpp/Phreeqc.cpp	/^std::string Phreeqc::get_species(int solution) {$/;"	f	class:Phreeqc
 get_species	phreeqcpp/parse.cpp	/^get_species(char **ptr)$/;"	f	class:Phreeqc
 get_tally_table_column_heading	phreeqcpp/tally.cpp	/^get_tally_table_column_heading(int column, int *type, char *string)$/;"	f	class:Phreeqc
 get_tally_table_row_heading	phreeqcpp/tally.cpp	/^get_tally_table_row_heading(int row, char *string)$/;"	f	class:Phreeqc
 get_tally_table_rows_columns	phreeqcpp/tally.cpp	/^get_tally_table_rows_columns(int *rows, int *columns)$/;"	f	class:Phreeqc
+get_temperature	phreeqcpp/Phreeqc.cpp	/^double Phreeqc::get_temperature(int solution) {$/;"	f	class:Phreeqc
 get_token	phreeqcpp/utilities.cpp	/^get_token(char **eqnaddr, char *string, LDBLE * l_z, int *l)$/;"	f	class:Phreeqc
 get_total	phreeqcpp/Phreeqc.cpp	/^double Phreeqc::get_total(int solution, const char *string) {$/;"	f	class:Phreeqc
+get_total_element	phreeqcpp/Phreeqc.cpp	/^double Phreeqc::get_total_element(int solution, const char *string) {$/;"	f	class:Phreeqc
 get_true_false	phreeqcpp/common/Parser.cxx	/^bool CParser::get_true_false(std::istream::pos_type & pos, bool def)$/;"	f	class:CParser
 get_true_false	phreeqcpp/read.cpp	/^get_true_false(char *string, int default_value)$/;"	f	class:Phreeqc
 getc	phreeqcpp/common/PHRQ_io.cpp	/^getc(void)$/;"	f	class:PHRQ_io
@@ -4501,7 +4530,7 @@ input_conc	phreeqcpp/ISolutionComp.h	/^	  LDBLE input_conc;$/;"	m	class:cxxISolu
 input_error	phreeqcpp/Phreeqc.h	/^	int input_error;$/;"	m	class:Phreeqc
 input_file	IPhreeqc.hpp	/^	FILE *input_file;$/;"	m	class:IPhreeqc
 insert	phreeqcpp/NameDouble.h	/^	insert(const char *str, LDBLE d)$/;"	f	class:cxxNameDouble
-install_sh	Makefile	/^install_sh = ${SHELL} \/Users\/Abel\/Vitens\/Projecten\/VIPHREEQC\/config\/install-sh$/;"	m
+install_sh	Makefile	/^install_sh = ${SHELL} \/Users\/Abel\/Vitens\/Projecten\/VIPhreeqc\/config\/install-sh$/;"	m
 install_sh_DATA	Makefile	/^install_sh_DATA = $(install_sh) -c -m 644$/;"	m
 install_sh_PROGRAM	Makefile	/^install_sh_PROGRAM = $(install_sh) -c$/;"	m
 install_sh_SCRIPT	Makefile	/^install_sh_SCRIPT = $(install_sh) -c$/;"	m
@@ -5315,6 +5344,7 @@ phase_unknown	phreeqcpp/global_structures.h	/^	struct unknown *phase_unknown;$/;
 phases	phreeqcpp/Phreeqc.h	/^	struct phase **phases;$/;"	m	class:Phreeqc	typeref:struct:Phreeqc::phase
 phases	phreeqcpp/global_structures.h	/^	struct inv_phases *phases;$/;"	m	struct:inverse	typeref:struct:inverse::inv_phases
 phases_hash_table	phreeqcpp/Phreeqc.h	/^	HashTable *phases_hash_table;$/;"	m	class:Phreeqc
+phases_list	phreeqcpp/Solution.h	/^  std::map <std::string, double> phases_list;$/;"	m	class:cxxSolution
 phast	phreeqcpp/Phreeqc.h	/^	int phast;$/;"	m	class:Phreeqc
 phreeqc2cxxStorageBin	phreeqcpp/structures.cpp	/^phreeqc2cxxStorageBin(cxxStorageBin & sb)$/;"	f	class:Phreeqc
 phreeqc2cxxStorageBin	phreeqcpp/structures.cpp	/^phreeqc2cxxStorageBin(cxxStorageBin & sb, int n)$/;"	f	class:Phreeqc
@@ -5390,7 +5420,7 @@ pr_pressure	phreeqcpp/basicsubs.cpp	/^pr_pressure(const char *phase_name)$/;"	f	
 pr_si_f	phreeqcpp/global_structures.h	/^	LDBLE pr_si_f;				\/* si adapter: log10(phi) - delta_v[0] * (P - 1) \/RT *\/$/;"	m	struct:phase
 pr_tk	phreeqcpp/global_structures.h	/^	LDBLE pr_tk, pr_p;			\/* Temperature (K), Pressure (atm) *\/$/;"	m	struct:phase
 precipitate_only	phreeqcpp/PPassemblageComp.h	/^	bool precipitate_only;$/;"	m	class:cxxPPassemblageComp
-prefix	Makefile	/^prefix = \/usr\/local$/;"	m
+prefix	Makefile	/^prefix = \/Users\/Abel\/Vitens\/Projecten\/VIPhreeqc\/build$/;"	m
 preorder	phreeqcpp/global_structures.h	/^{ preorder, postorder, endorder, leaf } VISIT;$/;"	e	enum:__anon18
 prep	phreeqcpp/prep.cpp	/^prep(void)$/;"	f	class:Phreeqc
 pressure	phreeqcpp/StorageBinList.h	/^	StorageBinListItem pressure;$/;"	m	class:StorageBinList
@@ -5793,6 +5823,7 @@ savedJ	phreeqcpp/cvdense.cpp	/^#define savedJ /;"	d	file:
 saved_tq5	phreeqcpp/cvode.cpp	/^#define saved_tq5 /;"	d	file:
 saver	phreeqcpp/mainsubs.cpp	/^saver(void)$/;"	f	class:Phreeqc
 sbindir	Makefile	/^sbindir = ${exec_prefix}\/sbin$/;"	m
+sc	phreeqcpp/Solution.h	/^	LDBLE sc;$/;"	m	class:cxxSolution
 scaled_error	phreeqcpp/Phreeqc.h	/^	LDBLE toler, error, max_pct, scaled_error;$/;"	m	class:Phreeqc
 scratch	phreeqcpp/Phreeqc.h	/^	LDBLE *x_arg, *res_arg, *scratch;$/;"	m	class:Phreeqc
 scratch_max	phreeqcpp/Phreeqc.h	/^	int x_arg_max, res_arg_max, scratch_max;$/;"	m	class:Phreeqc
@@ -5963,6 +5994,7 @@ species_formula	phreeqcpp/basicsubs.cpp	/^species_formula(std::string phase_name
 species_gamma	phreeqcpp/Solution.h	/^	cxxNameDouble species_gamma;$/;"	m	class:cxxSolution
 species_hash_table	phreeqcpp/Phreeqc.h	/^	HashTable *species_hash_table;$/;"	m	class:Phreeqc
 species_list	phreeqcpp/Phreeqc.h	/^	struct species_list *species_list;$/;"	m	class:Phreeqc	typeref:struct:Phreeqc::species_list
+species_list	phreeqcpp/Solution.h	/^  std::map <std::string, double> species_list;$/;"	m	class:cxxSolution
 species_list	phreeqcpp/global_structures.h	/^struct species_list$/;"	s
 species_list_compare	phreeqcpp/structures.cpp	/^species_list_compare(const void *ptr1, const void *ptr2)$/;"	f	class:Phreeqc
 species_list_compare_alk	phreeqcpp/structures.cpp	/^species_list_compare_alk(const void *ptr1, const void *ptr2)$/;"	f	class:Phreeqc
@@ -6251,6 +6283,7 @@ tk_x	phreeqcpp/Phreeqc.h	/^	LDBLE tk_x;$/;"	m	class:Phreeqc
 tmerr	phreeqcpp/PBasic.cpp	/^	tmerr(const char * l_s)$/;"	f	class:PBasic
 tn	phreeqcpp/cvdense.cpp	/^#define tn /;"	d	file:
 tn	phreeqcpp/cvode.cpp	/^#define tn /;"	d	file:
+to_string	phreeqcpp/Phreeqc.cpp	/^std::string to_string(T value)$/;"	f
 tokabs	phreeqcpp/PBasic.h	/^		tokabs,$/;"	e	enum:PBasic::BASIC_TOKEN
 tokact	phreeqcpp/PBasic.h	/^		tokact,$/;"	e	enum:PBasic::BASIC_TOKEN
 tokalk	phreeqcpp/PBasic.h	/^		tokalk,$/;"	e	enum:PBasic::BASIC_TOKEN
