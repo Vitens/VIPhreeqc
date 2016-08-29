@@ -1883,6 +1883,10 @@ double IPhreeqc::GetTemperature(int solution)
 {
   return this->PhreeqcPtr->get_temperature(solution);
 }
+double IPhreeqc::GetMass(int solution)
+{
+  return this->PhreeqcPtr->get_mass(solution);
+}
 double IPhreeqc::GetTotal(int solution, const char *string)
 {
   return this->PhreeqcPtr->get_total(solution, string);

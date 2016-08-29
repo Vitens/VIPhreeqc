@@ -877,6 +877,10 @@ public:
    */
   double                  GetTemperature(int solution);
   /**
+   * Returns the mass (kg) of the specified solution
+   */
+  double                  GetMass(int solution);
+  /**
    * Returns the amount (in mol) of an element (e.g. C(-4), Ca, etc.)
    */
   double                  GetTotal(int solution, const char *string);

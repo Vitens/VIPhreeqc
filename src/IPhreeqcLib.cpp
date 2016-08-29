@@ -1094,6 +1094,16 @@ GetPe(int id, int solution)
 	return -99;
 }
 double
+GetMass(int id, int solution)
+{
+	IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
+	if (IPhreeqcPtr)
+	{
+    return IPhreeqcPtr->GetMass(solution);
+	}
+	return -99;
+}
+double
 GetTotal(int id, int solution, const char *string)
 {
 	IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);

@@ -25,6 +25,14 @@ The following functions are implemented in addition to the standard IPhreeqc fun
    */
   double                  GetSC(int solution);
   /**
+   * Returns the temperature (degrees Celsius) of the specified solution
+   */
+  double                  GetTemperature(int solution);
+  /**
+   * Returns the mass (kg) of the specified solution
+   */
+  double                  GetMass(int solution);
+  /**
    * Returns the amount (in mol) of an element (e.g. C(-4), Ca, etc.)
    */
   double                  GetTotal(int solution, const char *string);
@@ -43,7 +51,7 @@ The following functions are implemented in addition to the standard IPhreeqc fun
   /**
    * Returns a comma separated list of all the species in the selected solution
    */
-  const char*             GetSpecies(int solution);
+  std::string             GetSpecies(int solution);
   /**
    * Returns the Solubility Index of a phase in a solution
    */
@@ -51,11 +59,15 @@ The following functions are implemented in addition to the standard IPhreeqc fun
   /**
    * Returns a comma separated list of all the phases in the selected solution
    */
-  const char*             GetPhases(int solution);
+  std::string             GetPhases(int solution);
   /**
    * Returns a comma separated list of all the elements in the selected solution
    */
-  const char*             GetElements(int solution);
+  std::string             GetElements(int solution);
+  /**
+   * Returns a comma separated list of all the solutions in the current runstate
+   */
+  std::string             GetSolutionList2(int id);
 ```
 ### Error values
 The following values are returned on error

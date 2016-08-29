@@ -1498,7 +1498,10 @@ xsolution_save(int n_user)
     {
       if (rxn_ptr->s != s_eminus)
       {
-        iap += (rxn_ptr->s->lm + rxn_ptr->s->lg) * rxn_ptr->coef;
+        // vitens fix
+        if(strcmp(rxn_ptr->s->name,"H2O") != 0){
+          iap += (rxn_ptr->s->lm + rxn_ptr->s->lg) * rxn_ptr->coef;
+        }
       }
       else
       {

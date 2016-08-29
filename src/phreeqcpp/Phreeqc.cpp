@@ -127,6 +127,13 @@ double Phreeqc::get_temperature(int solution) {
   }
   return -999;
 }
+double Phreeqc::get_mass(int solution) {
+  cxxSolution * sol = find_solution(solution);
+  if(sol->Get_ph() != -99) {
+    return sol->Get_mass_water();
+  }
+  return -999;
+}
 
 double Phreeqc::get_total(int solution, const char *string) {
   cxxSolution * sol = find_solution(solution);
