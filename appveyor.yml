@@ -2,9 +2,21 @@ image: Visual Studio 2015
 platform: x64
 configuration: Release
 
+environment:
+  my_variable:
+    secure: t6LRspfqCvRq4W9yTedmCWCKLCuZZLaSI1tAPAfHRBWSPBqHDId8wHXXpItj67nk
+
 build_script:
   - cd C:/projects/viphreeqc
   - cmake -DBUILD_SHARED_LIBS:BOOL=ON -G "Visual Studio 14 2015 Win64" .
   - cmake --build . --config Release
+
+after_build:
   - cd C:/projects/viphreeqc/release
   - dir
+  - git clone https://%token%@https://github.com/VitensTC/phreeqpython.git _deploy
+  - move /y IPhreeqc.dll _deploy/phreeqpython/lib/viphreeqc.dll
+  - cd _deploy
+  - git add -A
+  - git commit --allow-empty -m "Deploying Appveyor Build"
+  - git push origin master
