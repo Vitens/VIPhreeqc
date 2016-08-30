@@ -4,12 +4,6 @@ os:
 language: cpp
 before_script: autoreconf --force --install
 script: mkdir build && ./configure --prefix=`pwd`/build && make install
-before_deploy:
-- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then export RELEASE_PKG_FILE="/home/travis/build/AbelHeinsbroek/VIPhreeqc/build/lib/libiphreeqc-3.3.7.dylib";
-  fi
-- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then export RELEASE_PKG_FILE="/home/travis/build/AbelHeinsbroek/VIPhreeqc/build/lib/libiphreeqc-3.3.7.so";
-  fi
-- echo "deploying $RELEASE_PKG_FILE to GitHub releases"
 deploy:
   provider: script
   skip_cleanup: true
