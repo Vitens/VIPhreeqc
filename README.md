@@ -1,5 +1,6 @@
-
-
+<p align="center">
+  <img src="https://github.com/VitensTC/VIPhreeqc/blob/master/logo.png" alt="VIPhreeqc Logo"/>
+</p>
 || **Status** |
 |---|---|
 | **Mac/Linux** | [![Build Status](https://travis-ci.org/VitensTC/VIPhreeqc.svg?branch=master)](https://travis-ci.org/VitensTC/VIPhreeqc) |
