@@ -18,4 +18,4 @@ deploy:
   file_glob: true
   file: "${RELEASE_PKG_FILE}"
   on:
-    repo: AbelHeinsbroek/VIPhreeqc
+    repo: VitensTC/VIPhreeqc
