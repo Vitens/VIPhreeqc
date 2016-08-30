@@ -7,7 +7,7 @@ script: mkdir build && ./configure --prefix=`pwd`/build && make install
 deploy:
   provider: script
   skip_cleanup: true
-  script: /bin/sh deploy.sh
+  script: /bin/bash deploy.sh
   on:
     repo: VitensTC/VIPhreeqc
 
