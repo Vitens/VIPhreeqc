@@ -7,12 +7,15 @@ CURRENT_COMMIT=`git rev-parse HEAD`
 echo "Cloning master branch..."
 
 # Hide output since we use an access token here
-git clone -b master "https://${GH_TOKEN}@${GH_REF}" _deploy > /dev/null 2>&1 || exit 1
+#git clone -b master "https://${GH_TOKEN}@${GH_REF}" _deploy > /dev/null 2>&1 || exit 1
+git clone -b master "https://${GH_TOKEN}@${GH_REF}" _deploy 
 
-if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then export RELEASE_PKG_FILE="/home/travis/build/VitensTC/VIPhreeqc/build/lib/libiphreeqc-3.3.7.dylib"; fi
-if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then export DEPLOY_PKG_FILE="viphreeqc.dylib"; fi
-if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then export RELEASE_PKG_FILE="/home/travis/build/VitensTC/VIPhreeqc/build/lib/libiphreeqc-3.3.7.so"; fi
-if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then export DEPLOY_PKG_FILE="viphreeqc.so"; fi
+#if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then export RELEASE_PKG_FILE="/home/travis/build/VitensTC/VIPhreeqc/build/lib/libiphreeqc-3.3.7.dylib"; fi
+#if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then export DEPLOY_PKG_FILE="viphreeqc.dylib"; fi
+#if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then export RELEASE_PKG_FILE="/home/travis/build/VitensTC/VIPhreeqc/build/lib/libiphreeqc-3.3.7.so"; fi
+#if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then export DEPLOY_PKG_FILE="viphreeqc.so"; fi
+export RELEASE_PKG_FILE = "build/lib/libiphreeqc-3.3.7.dylib"
+export DEPLOY_PKG_FILE = "viphreeqc.dylib"
 
 ###
 # Copy your source files to a deployment directory
