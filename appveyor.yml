@@ -3,8 +3,8 @@ platform: x64
 configuration: Release
 
 environment:
-  my_variable:
-    secure: t6LRspfqCvRq4W9yTedmCWCKLCuZZLaSI1tAPAfHRBWSPBqHDId8wHXXpItj67nk
+  token:
+    secure: QECCMgb2aMisxefvyRQI+5x9AgU0GaVINxob8E/xY6KW9yH4VFoyWo43VSOph7dc
 
 build_script:
   - cd C:/projects/viphreeqc
