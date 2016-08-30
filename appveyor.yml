@@ -14,7 +14,7 @@ build_script:
 after_build:
   - cd C:/projects/viphreeqc/release
   - dir
-  - git clone https://%token%@https://github.com/VitensTC/phreeqpython.git _deploy
+  - git clone https://%token%@github.com/VitensTC/phreeqpython.git _deploy
   - move /y IPhreeqc.dll _deploy/phreeqpython/lib/viphreeqc.dll
   - cd _deploy
   - git add -A
