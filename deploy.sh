@@ -1,5 +1,9 @@
 #!/bin/bash
+echo "Moving to home dir"
+cd ..
+echo `pwd`
 echo "Running deployment script..."
+
 
 CURRENT_COMMIT=`git rev-parse HEAD`
 
@@ -8,7 +12,9 @@ echo "Cloning master branch..."
 
 # Hide output since we use an access token here
 #git clone -b master "https://${GH_TOKEN}@${GH_REF}" _deploy > /dev/null 2>&1 || exit 1
-git clone -b master "https://${GH_TOKEN}@github.com/VitensTC/phreeqpython" _deploy || exit 1
+git clone -b master https://${GH_TOKEN}@github.com/VitensTC/phreeqpython _deploy || exit 1
+
+#TRAVIS_OS_NAME="osx"
 
 if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then export RELEASE_PKG_FILE="/home/travis/build/VitensTC/VIPhreeqc/build/lib/libiphreeqc-3.3.7.dylib"; fi
 if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then export DEPLOY_PKG_FILE="viphreeqc.dylib"; fi
@@ -30,11 +36,11 @@ git config user.name "Travis CI"
 git config user.email "travis@vitens.nl"
 
 # Commit changes, allowing empty changes (when unchanged)
-#git add -A
-#git commit --allow-empty -m "Deploying build for $CURRENT_COMMIT" || exit 1
+git add -A
+git commit --allow-empty -m "Deploying build for $CURRENT_COMMIT" || exit 1
 
 # Push to branch
-#git push origin master > /dev/null 2>&1 || exit 1
+git push origin master > /dev/null 2>&1 || exit 1
 
 echo "Pushed deployment successfully"
 exit 0
