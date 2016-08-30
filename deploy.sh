@@ -16,7 +16,7 @@ git clone -b master https://${GH_TOKEN}@github.com/VitensTC/phreeqpython.git _de
 
 #TRAVIS_OS_NAME="osx"
 
-if [ "$TRAVIS_OS_NAME" == "osx" ]; then export RELEASE_PKG_FILE="/home/travis/build/VitensTC/VIPhreeqc/build/lib/libiphreeqc-3.3.7.dylib"; fi
+if [ "$TRAVIS_OS_NAME" == "osx" ]; then export RELEASE_PKG_FILE="/Users/travis/build/VitensTC/VIPhreeqc/build/lib/libiphreeqc-3.3.7.dylib"; fi
 if [ "$TRAVIS_OS_NAME" == "osx" ]; then export DEPLOY_PKG_FILE="viphreeqc.dylib"; fi
 if [ "$TRAVIS_OS_NAME" == "linux" ]; then export RELEASE_PKG_FILE="/home/travis/build/VitensTC/VIPhreeqc/build/lib/libiphreeqc-3.3.7.so"; fi
 if [ "$TRAVIS_OS_NAME" == "linux" ]; then export DEPLOY_PKG_FILE="viphreeqc.so"; fi
