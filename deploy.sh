@@ -1,11 +1,10 @@
 #!/bin/bash
+CURRENT_COMMIT=`git rev-parse HEAD`
+
 echo "Moving to home dir"
 cd ..
 echo `pwd`
 echo "Running deployment script..."
-
-
-CURRENT_COMMIT=`git rev-parse HEAD`
 
 # Change the branch used if applicable (e.g. gh-pages)
 echo "Cloning master branch..."
@@ -21,16 +20,23 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then export DEPLOY_PKG_FILE="viphreeqc.dylib"
 if [ "$TRAVIS_OS_NAME" == "linux" ]; then export RELEASE_PKG_FILE="/home/travis/build/VitensTC/VIPhreeqc/build/lib/libiphreeqc-3.3.7.so"; fi
 if [ "$TRAVIS_OS_NAME" == "linux" ]; then export DEPLOY_PKG_FILE="viphreeqc.so"; fi
 
+# install sshpass
+if [ "$TRAVIS_OS_NAME" == "osx" ]; then brew install https://raw.githubusercontent.com/kadwanev/bigboybrew/master/Library/Formula/sshpass.rb ; fi
+
 ###
 # Copy your source files to a deployment directory
-echo "Copying built files"
-cp $RELEASE_PKG_FILE _deploy/phreeqpython/lib/$DEPLOY_PKG_FILE
-###
+echo "uploading built files"
+
+export SSHPASS=$DEPLOY_PASS
+cp $RELEASE_PKG_FILE $DEPLOY_PKG_FILE
+sshpass -e scp $DEPLOY_PKG_FILE $DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH
+
+### trigger nosetests
 
 # Move into deployment directory
 cd _deploy
 
-echo "Committing and pushing to GH"
+echo "Committing and pushing to phreeqpython GH to trigger nosetests"
 
 git config user.name "Travis CI"
 git config user.email "travis@vitens.nl"

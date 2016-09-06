@@ -1074,6 +1074,16 @@ GetSC(int id, int solution)
 	return -99;
 }
 double
+GetMu(int id, int solution)
+{
+	IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
+	if (IPhreeqcPtr)
+	{
+    return IPhreeqcPtr->GetMu(solution);
+	}
+	return -99;
+}
+double
 GetTemperature(int id, int solution)
 {
 	IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
@@ -1130,6 +1140,16 @@ GetMoles(int id, int solution, const char *species)
   if (IPhreeqcPtr)
   {
     return IPhreeqcPtr->GetMoles(solution, species);
+  }
+  return -99;
+}
+double
+GetActivity(int id, int solution, const char *species)
+{
+  IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
+  if (IPhreeqcPtr)
+  {
+    return IPhreeqcPtr->GetActivity(solution, species);
   }
   return -99;
 }

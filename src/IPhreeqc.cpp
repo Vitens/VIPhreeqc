@@ -1879,6 +1879,10 @@ double IPhreeqc::GetSC(int solution)
 {
   return this->PhreeqcPtr->get_sc(solution);
 }
+double IPhreeqc::GetMu(int solution)
+{
+  return this->PhreeqcPtr->get_mu(solution);
+}
 double IPhreeqc::GetTemperature(int solution)
 {
   return this->PhreeqcPtr->get_temperature(solution);
@@ -1894,6 +1898,10 @@ double IPhreeqc::GetTotal(int solution, const char *string)
 double IPhreeqc::GetTotalElement(int solution, const char *string)
 {
   return this->PhreeqcPtr->get_total_element(solution, string);
+}
+double IPhreeqc::GetActivity(int solution, const char *species)
+{
+  return this->PhreeqcPtr->get_activity(solution, species);
 }
 double IPhreeqc::GetMoles(int solution, const char *species)
 {

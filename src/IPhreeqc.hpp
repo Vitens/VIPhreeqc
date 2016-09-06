@@ -875,6 +875,10 @@ public:
   /**
    * Returns the temperature (degrees Celsius) of the specified solution
    */
+  double                  GetMu(int solution);
+  /**
+   * Returns the ionic strength (mol/kgw) of the specified solution
+   */
   double                  GetTemperature(int solution);
   /**
    * Returns the mass (kg) of the specified solution
@@ -890,6 +894,10 @@ public:
   double                  GetTotalElement(int solution, const char *string);
   /**
    * Returns the amount of moles (in mol) of a species (e.g. Ca+2, OH-, etc.)
+   */
+  double                  GetActivity(int solution, const char *species);
+  /**
+   * Returns the activity of a species (e.g. Ca+2, OH-, etc.)
    */
   double                  GetMoles(int solution, const char *species);
   /**

@@ -119,6 +119,8 @@ class cxxSolution:public cxxNumKeyword
 
   // Vites modification: speciation and moles list
   std::map <std::string, double> species_list;
+  // Vites modification: speciation and activity list
+  std::map <std::string, double> species_activity_list;
   // Vites modification: phases and si list
   std::map <std::string, double> phases_list;
 

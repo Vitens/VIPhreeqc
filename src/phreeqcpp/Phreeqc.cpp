@@ -120,6 +120,13 @@ double Phreeqc::get_sc(int solution) {
   }
   return -999;
 }
+double Phreeqc::get_mu(int solution) {
+  cxxSolution * sol = find_solution(solution);
+  if(sol->Get_ph() != -99) {
+    return sol->Get_mu();
+  }
+  return -999;
+}
 double Phreeqc::get_temperature(int solution) {
   cxxSolution * sol = find_solution(solution);
   if(sol->Get_ph() != -99) {
@@ -158,6 +165,16 @@ double Phreeqc::get_moles(int solution, const char *species) {
   // try to find species
   if(sol->species_list.find(species) != sol->species_list.end()) {
     return sol->species_list[species];
+  }
+  return 0.0;
+}
+double Phreeqc::get_activity(int solution, const char *species) {
+  cxxSolution * sol = find_solution(solution);
+  // no solution found
+  if(sol->Get_ph() == -99) { return -999; }
+  // try to find species
+  if(sol->species_activity_list.find(species) != sol->species_activity_list.end()) {
+    return sol->species_activity_list[species];
   }
   return 0.0;
 }

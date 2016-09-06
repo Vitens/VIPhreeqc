@@ -1150,11 +1150,13 @@ public:
   double get_pH(int);
   double get_pe(int);
   double get_sc(int);
+  double get_mu(int);
   double get_temperature(int);
   double get_mass(int);
   double get_total(int solution, const char *string);
   double get_total_element(int solution, const char *string);
   double get_moles(int solution, const char *species);
+  double get_activity(int solution, const char *species);
   double get_molality(int solution, const char *species);
   std::string get_species(int solution);
   std::string get_phases(int solution);

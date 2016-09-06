@@ -1470,6 +1470,11 @@ xsolution_save(int n_user)
   for (int i =0; i < count_species_list; i++) {
     temp_solution.species_list[species_list[i].s->name] = species_list[i].s->moles;
   }
+  // vitens modification: Store activity
+  for (int i =0; i < count_species_list; i++) {
+    temp_solution.species_activity_list[species_list[i].s->name] = (double) under(species_list[i].s->lm + species_list[i].s->lg);
+  }
+
   // vitens modification: Store phases
   for (int i =0; i < count_phases; i++) {
 

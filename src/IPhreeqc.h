@@ -2130,11 +2130,13 @@ Headings
 	IPQ_DLL_EXPORT double GetPH(int id, int solution);
 	IPQ_DLL_EXPORT double GetPe(int id, int solution);
 	IPQ_DLL_EXPORT double GetSC(int id, int solution);
+	IPQ_DLL_EXPORT double GetMu(int id, int solution);
 	IPQ_DLL_EXPORT double GetTemperature(int id, int solution);
 	IPQ_DLL_EXPORT double GetMass(int id, int solution);
 	IPQ_DLL_EXPORT double GetTotal(int id, int solution, const char *string);
   IPQ_DLL_EXPORT double GetTotalElement(int id, int solution, const char *string);
   IPQ_DLL_EXPORT double GetMoles(int id, int solution, const char *species);
+  IPQ_DLL_EXPORT double GetActivity(int id, int solution, const char *species);
   IPQ_DLL_EXPORT double GetMolality(int id, int solution, const char *species);
   IPQ_DLL_EXPORT const char* GetSpecies(int id, int solution);
   IPQ_DLL_EXPORT double GetSI(int id, int solution, const char *phase);
