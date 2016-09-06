@@ -1,5 +1,5 @@
 image: Visual Studio 2015
-platform: x64
+platform: x86
 configuration: Release
 
 environment:
@@ -15,7 +15,7 @@ after_build:
   - cd C:/projects/viphreeqc/release
   - dir
   - git clone https://%token%@github.com/VitensTC/phreeqpython.git _deploy
-  - move /y IPhreeqc.dll _deploy/phreeqpython/lib/viphreeqc.dll
+  - move /y IPhreeqc.dll _deploy/phreeqpython/lib/viphreeqc32.dll
   - cd _deploy
   - git add -A
   - git commit --allow-empty -m "Deploying Appveyor Build"
