@@ -31,10 +31,7 @@ export SSHPASS=$DEPLOY_PASSWORD
 cp $RELEASE_PKG_FILE $DEPLOY_PKG_FILE
 ls -l
 
-echo $DEPLOY_PASS
-echo $DEPLOY_USER
-echo $DEPLOY_HOST
-echo $DEPLOY_PATH
+echo $SSHPASS
 
 #sshpass -e scp -v $DEPLOY_PKG_FILE $DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH 
 sshpass -e ssh -v $DEPLOY_USER@$DEPLOY_HOST ls -l
@@ -50,11 +47,11 @@ git config user.name "Travis CI"
 git config user.email "travis@vitens.nl"
 
 # Commit changes, allowing empty changes (when unchanged)
-git add -A
-git commit --allow-empty -m "Deploying build for $CURRENT_COMMIT" || exit 1
+#git add -A
+#git commit --allow-empty -m "Deploying build for $CURRENT_COMMIT" || exit 1
 
 # Push to branch
-git push origin master > /dev/null 2>&1 || exit 1
+#git push origin master > /dev/null 2>&1 || exit 1
 
 echo "Pushed deployment successfully"
 exit 0
