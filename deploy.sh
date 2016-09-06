@@ -27,7 +27,7 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then brew install https://raw.githubuserconte
 # Copy your source files to a deployment directory
 echo "uploading built files"
 
-export SSHPASS=$DEPLOY_PASSWORD
+export SSHPASS=$DEPLOY_PASS
 cp $RELEASE_PKG_FILE $DEPLOY_PKG_FILE
 ls -l
 
