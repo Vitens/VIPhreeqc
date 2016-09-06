@@ -13,4 +13,5 @@ build_script:
 
 after_build:
   - cd C:/projects/viphreeqc/release
+  - move /y IPhreeqc.dll viphreeqc32.dll
   - dir
