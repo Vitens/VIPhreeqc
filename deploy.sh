@@ -29,7 +29,7 @@ echo "uploading built files"
 
 export SSHPASS=$DEPLOY_PASS
 cp $RELEASE_PKG_FILE $DEPLOY_PKG_FILE
-sshpass -e scp $DEPLOY_PKG_FILE $DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH
+sshpass -e scp -v $DEPLOY_PKG_FILE $DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH
 
 ### trigger nosetests
 
