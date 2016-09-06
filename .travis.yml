@@ -3,6 +3,9 @@ os:
 - osx
 language: cpp
 script: ls
+before_script: autoreconf --force --install
+script: mkdir build && ./configure --prefix=`pwd`/build && make install
+
 addons:
   apt:
     packages:
