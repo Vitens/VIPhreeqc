@@ -8,6 +8,12 @@
 
 Extension of the IPhreeqc 3.3.7 module ([Parkhurst&Appello](http://wwwbrr.cr.usgs.gov/projects/GWC_coupled/phreeqc/)).
 This extension aims to add more flexibility to the IPhreeqc module by exposing more information to the C extension. Instead of relying on SELECTED_OUTPUT this extensions enables users to directly gather information such as the pH, SC, speciation, element totals etc. of solutions.
+## Downloads
+Download a pre-build binary for the right platform using one of the links below:
+- [Windows (x86)](http://ci.abelheinsbroek.nl/viphreeqc64.dll)
+- [Windows (x64)](http://ci.abelheinsbroek.nl/viphreeqc32.dll)
+- [Linux](http://ci.abelheinsbroek.nl/viphreeqc.so)
+- [OS X](http://ci.abelheinsbroek.nl/viphreeqc.dylib)
 
 ## Implemented Functionality
 The following functions are implemented in addition to the standard IPhreeqc functionality:
