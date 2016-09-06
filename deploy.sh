@@ -34,7 +34,7 @@ ls -l
 echo $SSHPASS
 
 #sshpass -e scp -v $DEPLOY_PKG_FILE $DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH 
-sshpass -e ssh -v $DEPLOY_USER@$DEPLOY_HOST ls -l
+sshpass -e ssh -o StrictHostKeyChecking=no -v $DEPLOY_USER@$DEPLOY_HOST ls -l
 
 ### trigger nosetests
 
