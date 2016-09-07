@@ -12,6 +12,7 @@ build_script:
   - cmake --build . --config Release
 
 after_build:
-  - cd C:/projects/viphreeqc/release
-  - move /y IPhreeqc.dll viphreeqc32.dll
-  - dir
+  - cd %APPVEYOR_BUILD_FOLDER%
+  - move /y C:/projects/viphreeqc/release/IPhreeqc.dll C:/projects/viphreeqc/release/viphreeqc32.dll
+  - 7z a viphreeqc.zip C:\projects\viphreeqc\release\*.dll
+  - appveyor PushArtifact viphreeqc.zip
