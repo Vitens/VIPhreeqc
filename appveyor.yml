@@ -13,6 +13,9 @@ build_script:
 
 after_build:
   - cd %APPVEYOR_BUILD_FOLDER%
-  - move /y C:/projects/viphreeqc/release/IPhreeqc.dll C:/projects/viphreeqc/release/viphreeqc32.dll
+  - dir
+  - cd Release
+  - dir
+  - move /y %APPVEYOR_BUILD_FOLDER%\Release\IPhreeqc.dll %APPVEYOR_BUILD_FOLDER%\Release\viphreeqc32.dll
   - 7z a viphreeqc.zip C:\projects\viphreeqc\release\*.dll
   - appveyor PushArtifact viphreeqc.zip
