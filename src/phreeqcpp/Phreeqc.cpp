@@ -65,20 +65,7 @@ void Phreeqc::set_phast(int tf)
 cxxSolution * Phreeqc::find_solution(int id){
 // find and return the solution with the specified number
   {
-//std::map<int, cxxSolution>::const_iterator cit = Rxn_solution_map.begin();
      return Utilities::Rxn_find(Rxn_solution_map, id);
-
-//     for(; cit != Rxn_solution_map.end(); cit++){
-//       cxxSolution entity(cit->second);
-//       if (entity.Get_n_user() == id) {
-//         return entity;
-//       }
-//     }
-//
-//     // if no solution is found return an empty one
-//     cxxSolution empty = cxxSolution();
-//     empty.Set_ph(-99);
-//     return empty;
   }
 }
 
@@ -100,7 +87,7 @@ std::string Phreeqc::get_solution_list(int id) {
 
 double Phreeqc::get_pH(int solution) {
   cxxSolution * sol = find_solution(solution);
-  if(sol->Get_ph() != -99) {
+  if(sol != NULL) {
     return sol->Get_ph();
   }
   return -999;
@@ -108,35 +95,35 @@ double Phreeqc::get_pH(int solution) {
 
 double Phreeqc::get_pe(int solution) {
   cxxSolution * sol = find_solution(solution);
-  if(sol->Get_ph() != -99) {
+  if(sol != NULL) {
     return sol->Get_pe();
   }
   return -999;
 }
 double Phreeqc::get_sc(int solution) {
   cxxSolution * sol = find_solution(solution);
-  if(sol->Get_ph() != -99) {
+  if(sol != NULL) {
     return sol->Get_sc();
   }
   return -999;
 }
 double Phreeqc::get_mu(int solution) {
   cxxSolution * sol = find_solution(solution);
-  if(sol->Get_ph() != -99) {
+  if(sol != NULL) {
     return sol->Get_mu();
   }
   return -999;
 }
 double Phreeqc::get_temperature(int solution) {
   cxxSolution * sol = find_solution(solution);
-  if(sol->Get_ph() != -99) {
+  if(sol != NULL) {
     return sol->Get_tc();
   }
   return -999;
 }
 double Phreeqc::get_mass(int solution) {
   cxxSolution * sol = find_solution(solution);
-  if(sol->Get_ph() != -99) {
+  if(sol != NULL) {
     return sol->Get_mass_water();
   }
   return -999;
@@ -144,7 +131,7 @@ double Phreeqc::get_mass(int solution) {
 
 double Phreeqc::get_total(int solution, const char *string) {
   cxxSolution * sol = find_solution(solution);
-  if(sol->Get_ph() != -99) {
+  if(sol != NULL) {
     return sol->Get_total(string);
   }
   return -999;
@@ -152,7 +139,7 @@ double Phreeqc::get_total(int solution, const char *string) {
 
 double Phreeqc::get_total_element(int solution, const char *string) {
   cxxSolution * sol = find_solution(solution);
-  if(sol->Get_ph() != -99) {
+  if(sol != NULL) {
     return sol->Get_total_element(string);
   }
   return -999;
@@ -161,7 +148,7 @@ double Phreeqc::get_total_element(int solution, const char *string) {
 double Phreeqc::get_moles(int solution, const char *species) {
   cxxSolution * sol = find_solution(solution);
   // no solution found
-  if(sol->Get_ph() == -99) { return -999; }
+  if(sol == NULL) { return -999; }
   // try to find species
   if(sol->species_list.find(species) != sol->species_list.end()) {
     return sol->species_list[species];
@@ -171,7 +158,7 @@ double Phreeqc::get_moles(int solution, const char *species) {
 double Phreeqc::get_activity(int solution, const char *species) {
   cxxSolution * sol = find_solution(solution);
   // no solution found
-  if(sol->Get_ph() == -99) { return -999; }
+  if(sol == NULL) { return -999; }
   // try to find species
   if(sol->species_activity_list.find(species) != sol->species_activity_list.end()) {
     return sol->species_activity_list[species];
@@ -182,7 +169,7 @@ double Phreeqc::get_activity(int solution, const char *species) {
 double Phreeqc::get_molality(int solution, const char *species) {
   cxxSolution * sol = find_solution(solution);
   // no solution found
-  if(sol->Get_ph() == -99) { return -999; }
+  if(sol == NULL) { return -999; }
   // try to find species
   if(sol->species_list.find(species) != sol->species_list.end()) {
     return sol->species_list[species] / sol->Get_mass_water();
@@ -193,7 +180,7 @@ std::string Phreeqc::get_species(int solution) {
   cxxSolution * sol = find_solution(solution);
   // no solution found
 
-  if(sol->Get_ph() == -99) { return "-999"; }
+  if(sol == NULL) { return "-999"; }
 
   std::string output;
   std::map<std::string, double>::iterator it;
@@ -211,7 +198,7 @@ std::string Phreeqc::get_species(int solution) {
 double Phreeqc::get_si(int solution, const char *phase) {
   cxxSolution * sol = find_solution(solution);
   // no solution found
-  if(sol->Get_ph() == -99) { return -999; }
+  if(sol == NULL) { return -999; }
   // try to find species
   if(sol->phases_list.find(phase) != sol->phases_list.end()) {
     return sol->phases_list[phase];
@@ -223,7 +210,7 @@ std::string Phreeqc::get_phases(int solution) {
   cxxSolution * sol = find_solution(solution);
   // no solution found
 
-  if(sol->Get_ph() == -99) { return "-999"; }
+  if(sol == NULL) { return "-999"; }
 
   std::string output;
   std::map<std::string, double>::iterator it;
@@ -241,7 +228,7 @@ std::string Phreeqc::get_phases(int solution) {
 std::string Phreeqc::get_elements(int solution) {
   cxxSolution * sol = find_solution(solution);
   // no solution found
-  if(sol->Get_ph() == -99) { return "-999"; }
+  if(sol == NULL) { return "-999"; }
 
   cxxNameDouble totals = sol->Get_totals();
   std::string output;
