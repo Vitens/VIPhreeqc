@@ -10,8 +10,7 @@ Extension of the IPhreeqc 3.3.7 module ([Parkhurst&Appello](http://wwwbrr.cr.usg
 This extension aims to add more flexibility to the IPhreeqc module by exposing more information to the C extension. Instead of relying on SELECTED_OUTPUT this extensions enables users to directly gather information such as the pH, SC, speciation, element totals etc. of solutions.
 ## Downloads
 Download a pre-build binary for the right platform using one of the links below:
-- [Windows (x86)](http://ci.abelheinsbroek.nl/viphreeqc64.dll)
-- [Windows (x64)](http://ci.abelheinsbroek.nl/viphreeqc32.dll)
+- [Windows (x64)](http://ci.abelheinsbroek.nl/viphreeqc.zip)
 - [Linux](http://ci.abelheinsbroek.nl/viphreeqc.so)
 - [OS X](http://ci.abelheinsbroek.nl/viphreeqc.dylib)
 
