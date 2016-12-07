@@ -909,6 +909,10 @@ public:
    */
   std::string             GetSpecies(int solution);
   /**
+   * Returns a semicolon separated list of all the species and their master elements in the selected solution
+   */
+  std::string             GetSpeciesMasters(int solution);
+  /**
    * Returns the Solubility Index of a phase in a solution
    */
   double                  GetSI(int solution, const char *phase);

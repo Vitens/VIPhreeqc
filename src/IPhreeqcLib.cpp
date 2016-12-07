@@ -1178,6 +1178,21 @@ GetSpecies(int id, int solution)
   }
   return err_msg;
 }
+const char *
+GetSpeciesMasters(int id, int solution)
+{
+  static const char err_msg[] = "GetSpecies: Invalid instance id.\n";
+  IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
+  if (IPhreeqcPtr)
+  {
+    static std::string str;
+    std::stringstream stream;
+    stream << IPhreeqcPtr->GetSpeciesMasters(solution);
+    str = stream.str();
+    return str.c_str();
+  }
+  return err_msg;
+}
 double
 GetSI(int id, int solution, const char *phase)
 {

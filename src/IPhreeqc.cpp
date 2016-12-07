@@ -1915,6 +1915,10 @@ std::string IPhreeqc::GetSpecies(int solution)
 {
   return this->PhreeqcPtr->get_species(solution);
 }
+std::string IPhreeqc::GetSpeciesMasters(int solution)
+{
+  return this->PhreeqcPtr->get_species_masters(solution);
+}
 double IPhreeqc::GetSI(int solution, const char *phase)
 {
   return this->PhreeqcPtr->get_si(solution, phase);

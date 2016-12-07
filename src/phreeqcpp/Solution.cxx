@@ -67,6 +67,7 @@ cxxSolution::operator =(const cxxSolution &rhs)
 		this->tc                         = rhs.tc;
 		this->sc                         = rhs.sc;
     this->species_list               = rhs.species_list;
+    this->species_masters_list       = rhs.species_masters_list;
     this->species_activity_list      = rhs.species_activity_list;
     this->phases_list                = rhs.phases_list;
 		this->ph                         = rhs.ph;

@@ -116,12 +116,13 @@ class cxxSolution:public cxxNumKeyword
 	void Serialize(Dictionary & dictionary, std::vector < int >&ints, std::vector < double >&doubles);
 	void Deserialize(Dictionary & dictionary, std::vector < int >&ints, std::vector < double >&doubles, int &ii, int &dd);
 
-
-  // Vites modification: speciation and moles list
+  // Vitens modification: speciation and master elements list
+  std::map <std::string, std::string> species_masters_list;
+  // Vitens modification: speciation and moles list
   std::map <std::string, double> species_list;
-  // Vites modification: speciation and activity list
+  // Vitens modification: speciation and activity list
   std::map <std::string, double> species_activity_list;
-  // Vites modification: phases and si list
+  // Vitens modification: phases and si list
   std::map <std::string, double> phases_list;
 
   protected:

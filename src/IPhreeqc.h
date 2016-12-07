@@ -2139,6 +2139,7 @@ Headings
   IPQ_DLL_EXPORT double GetActivity(int id, int solution, const char *species);
   IPQ_DLL_EXPORT double GetMolality(int id, int solution, const char *species);
   IPQ_DLL_EXPORT const char* GetSpecies(int id, int solution);
+  IPQ_DLL_EXPORT const char* GetSpeciesMasters(int id, int solution);
   IPQ_DLL_EXPORT double GetSI(int id, int solution, const char *phase);
   IPQ_DLL_EXPORT const char* GetPhases(int id, int solution);
   IPQ_DLL_EXPORT const char* GetElements(int id, int solution);

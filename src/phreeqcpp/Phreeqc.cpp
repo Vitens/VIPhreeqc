@@ -185,12 +185,32 @@ std::string Phreeqc::get_species(int solution) {
   std::string output;
   std::map<std::string, double>::iterator it;
 
+  int i;
+
   for (it = sol->species_list.begin(); it != sol->species_list.end(); it++)
   {
     output += it->first + ",";
   }
 
   // remove last character (comma)
+  if (output.size() > 0)  output.resize(output.size() - 1);
+  return output;
+}
+
+std::string Phreeqc::get_species_masters(int solution) {
+  cxxSolution * sol = find_solution(solution);
+  // no solution found
+  if(sol == NULL) { return "-999"; }
+
+  std::string output;
+
+  std::map<std::string, std::string>::iterator it;
+
+  for (it = sol->species_masters_list.begin(); it != sol->species_masters_list.end(); it++)
+    {
+    output += it->first + ":" + it->second + ";";
+  }
+
   if (output.size() > 0)  output.resize(output.size() - 1);
   return output;
 }
