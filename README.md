@@ -1,10 +1,6 @@
 <p align="center">
   <img src="https://github.com/VitensTC/VIPhreeqc/blob/master/logo.png" alt="VIPhreeqc Logo"/>
 </p>
-|| **Status** |
-|---|---|
-| **Mac/Linux** | [![Build Status](https://travis-ci.org/VitensTC/VIPhreeqc.svg?branch=master)](https://travis-ci.org/VitensTC/VIPhreeqc) |
-| **Windows** | [![Build status](https://ci.appveyor.com/api/projects/status/livettljrd43y2we?svg=true)](https://ci.appveyor.com/project/AbelHeinsbroek/viphreeqc) |
 
 Extension of the IPhreeqc 3.3.7 module ([Parkhurst&Appello](http://wwwbrr.cr.usgs.gov/projects/GWC_coupled/phreeqc/)).
 This extension aims to add more flexibility to the IPhreeqc module by exposing more information to the C extension. Instead of relying on SELECTED_OUTPUT this extensions enables users to directly gather information such as the pH, SC, speciation, element totals etc. of solutions.
@@ -80,6 +76,13 @@ The following values are returned on error
 -99  = Invalid IPhreeqc Instance
 -999 = Solution Not Found
 ```
+
+## Status
+
+|| **Status** |
+|---|---|
+| **Mac/Linux** | [![Build Status](https://travis-ci.org/VitensTC/VIPhreeqc.svg?branch=master)](https://travis-ci.org/VitensTC/VIPhreeqc)|
+| **Windows** | [![Build status](https://ci.appveyor.com/api/projects/status/livettljrd43y2we?svg=true)](https://ci.appveyor.com/project/AbelHeinsbroek/viphreeqc) |
 
 ## About Vitens
 Vitens is the largest drinking water company in The Netherlands. We deliver top quality drinking water to 5.6 million people and companies in the provinces Flevoland, Fryslân, Gelderland, Utrecht and Overijssel and some municipalities in Drenthe and Noord-Holland. Annually we deliver 350 million m³ water with 1,400 employees, 100 water treatment works and 49,000 kilometres of water mains.
