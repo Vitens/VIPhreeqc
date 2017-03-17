@@ -1,11 +1,11 @@
 <p align="center">
-  <img src="https://github.com/VitensTC/VIPhreeqc/blob/master/logo.png" alt="VIPhreeqc Logo"/>
+  <img src="https://github.com/Vitens/VIPhreeqc/blob/master/logo.png" alt="VIPhreeqc Logo"/>
 </p>
 
 
 | Platform | **Status** |
 |---|---|
-| **Mac/Linux** | [![Build Status](https://travis-ci.org/VitensTC/VIPhreeqc.svg?branch=master)](https://travis-ci.org/VitensTC/VIPhreeqc)|
+| **Mac/Linux** | [![Build Status](https://travis-ci.org/Vitens/VIPhreeqc.svg?branch=master)](https://travis-ci.org/Vitens/VIPhreeqc)|
 | **Windows** | [![Build status](https://ci.appveyor.com/api/projects/status/livettljrd43y2we?svg=true)](https://ci.appveyor.com/project/AbelHeinsbroek/viphreeqc) |
 
 Extension of the IPhreeqc 3.3.7 module ([Parkhurst&Appello](http://wwwbrr.cr.usgs.gov/projects/GWC_coupled/phreeqc/)).
