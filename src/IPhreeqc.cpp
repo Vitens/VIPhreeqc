@@ -1867,6 +1867,31 @@ std::string IPhreeqc::create_file_name(const char *prefix, const char *suffix)
 }
 
 // VITENS VIPHREEQC Extension Functions
+// Gas Phase
+
+double IPhreeqc::GetGasVolume(int gas_phase)
+{
+  return this->PhreeqcPtr->get_gas_volume(gas_phase);
+}
+double IPhreeqc::GetGasPressure(int gas_phase)
+{
+  return this->PhreeqcPtr->get_gas_pressure(gas_phase);
+}
+double IPhreeqc::GetGasTotalMoles(int gas_phase)
+{
+  return this->PhreeqcPtr->get_gas_total_moles(gas_phase);
+}
+std::string IPhreeqc::GetGasComponents(int gas_phase)
+{
+  return this->PhreeqcPtr->get_gas_components(gas_phase);
+}
+double IPhreeqc::GetGasComponentMoles(int gas_phase, const char *component)
+{
+  return this->PhreeqcPtr->get_gas_component_moles(gas_phase, component);
+}
+
+// VITENS VIPHREEQC Extension Functions
+// Solution
 double IPhreeqc::GetPH(int solution)
 {
   return this->PhreeqcPtr->get_pH(solution);

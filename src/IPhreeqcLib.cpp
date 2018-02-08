@@ -1053,6 +1053,67 @@ IPhreeqcLib::GetInstance(int id)
 }
 
 /// VITENS VIPHREEQC Extension Functions
+// Gas
+//
+double
+GetGasVolume(int id, int gas_phase)
+{
+	IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
+	if (IPhreeqcPtr)
+	{
+    return IPhreeqcPtr->GetGasVolume(gas_phase);
+	}
+	return -99;
+}
+double
+GetGasPressure(int id, int gas_phase)
+{
+	IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
+	if (IPhreeqcPtr)
+	{
+    return IPhreeqcPtr->GetGasPressure(gas_phase);
+	}
+	return -99;
+}
+double
+GetGasTotalMoles(int id, int gas_phase)
+{
+	IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
+	if (IPhreeqcPtr)
+	{
+    return IPhreeqcPtr->GetGasTotalMoles(gas_phase);
+	}
+	return -99;
+}
+
+double 
+GetGasComponentMoles(int id, int gas_phase, const char *component)
+{
+	IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
+	if (IPhreeqcPtr)
+	{
+    return IPhreeqcPtr->GetGasComponentMoles(gas_phase, component);
+	}
+	return -99;
+}
+
+const char*
+GetGasComponents(int id, int gas_phase)
+{
+  static const char err_msg[] = "GetGasComponents: Invalid instance id.\n";
+  IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
+  if (IPhreeqcPtr)
+  {
+    static std::string str;
+    std::stringstream stream;
+    stream << IPhreeqcPtr->GetGasComponents(gas_phase);
+    str = stream.str();
+    return str.c_str();
+  }
+  return err_msg;
+}
+
+// Solution
 double
 GetPH(int id, int solution)
 {

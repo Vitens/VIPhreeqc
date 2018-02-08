@@ -69,6 +69,12 @@ cxxSolution * Phreeqc::find_solution(int id){
   }
 }
 
+cxxGasPhase * Phreeqc::find_gas_phase(int id){
+  {
+    return Utilities::Rxn_find(Rxn_gas_phase_map, id);
+  }
+}
+
 std::string Phreeqc::get_solution_list(int id) {
 
   std::string output;
@@ -83,8 +89,67 @@ std::string Phreeqc::get_solution_list(int id) {
   return output;
 }
 
+// gas phase options
+double Phreeqc::get_gas_volume(int gasphase) {
+  cxxGasPhase * gas = find_gas_phase(gasphase);
+  if(gas != NULL) {
+    return gas->Get_total_moles() * R_LITER_ATM * 298.15 / gas->Get_total_p();
+  }
+  return -999;
+}
+
+double Phreeqc::get_gas_pressure(int gasphase) {
+  cxxGasPhase * gas = find_gas_phase(gasphase);
+  if(gas != NULL) {
+    return gas->Get_total_p();
+  }
+  return -999;
+}
+double Phreeqc::get_gas_total_moles(int gasphase) {
+  cxxGasPhase * gas = find_gas_phase(gasphase);
+  if(gas != NULL) {
+    return gas->Get_total_moles();
+  }
+  return -999;
+}
+
+double Phreeqc::get_gas_component_moles(int gasphase, const char *component) {
+  cxxGasPhase * gas = find_gas_phase(gasphase);
+  if(gas == NULL) { return -999; }
+  double ii = 0;
+
+  for (size_t i=0 ; i< gas->Get_gas_comps().size(); i++) {
+		cxxGasComp * gc_ptr = &(gas->Get_gas_comps()[i]);
+    if (!strcmp(gc_ptr->Get_phase_name().c_str(), component)) {
+      return gc_ptr->Get_moles();
+    }
+    ii+=1;
+  }
+
+  return -99;
+}
+
+std::string Phreeqc::get_gas_components(int gasphase) {
+  cxxGasPhase * gas = find_gas_phase(gasphase);
+  // no solution found
+
+  if(gas == NULL) { return "-999"; }
+
+  std::string output;
+
+  for (size_t i=0 ; i< gas->Get_gas_comps().size(); i++) {
+		cxxGasComp * gc_ptr = &(gas->Get_gas_comps()[i]);
+    output += gc_ptr->Get_phase_name() + ",";
+  }
+
+  // remove last character (comma)
+  if (output.size() > 0)  output.resize(output.size() - 1);
+  return output;
+}
 
 
+
+// volume phase options
 double Phreeqc::get_pH(int solution) {
   cxxSolution * sol = find_solution(solution);
   if(sol != NULL) {

@@ -1326,9 +1326,12 @@ xgas_save(int n_user)
 	temp_gas_phase.Set_new_def(false);
 	temp_gas_phase.Set_solution_equilibria(false);
 	temp_gas_phase.Set_n_solution(-99);
+
+
 /*
  *   Update amounts
  */
+  double total_moles = 0;
 	for (size_t i = 0 ; i < temp_gas_phase.Get_gas_comps().size(); i++)
 	{
 		cxxGasComp * gc_ptr = &(temp_gas_phase.Get_gas_comps()[i]);
@@ -1336,10 +1339,18 @@ xgas_save(int n_user)
 		struct phase *phase_ptr = phase_bsearch(gc_ptr->Get_phase_name().c_str(), &k, FALSE);
 		assert(phase_ptr);
 		gc_ptr->Set_moles(phase_ptr->moles_x);
+    total_moles += phase_ptr->moles_x;
 	}
+
+	temp_gas_phase.Set_total_moles(total_moles);
+  temp_gas_phase.Set_total_p(gas_phase_ptr->Get_total_p());
+
 	Rxn_gas_phase_map[n_user] = temp_gas_phase;
 
+
 	use.Set_gas_phase_ptr(NULL);
+
+
 	return (OK);
 }
 /* ---------------------------------------------------------------------- */

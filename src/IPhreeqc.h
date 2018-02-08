@@ -2127,6 +2127,14 @@ Headings
 // TODO int CatchErrors(PFN_CATCH_CALLBACK pfn, void *cookie);
 
 // VITENS VIPHREEQC Extension Functions
+  // gas
+	IPQ_DLL_EXPORT double GetGasVolume(int id, int gas_phase);
+	IPQ_DLL_EXPORT double GetGasPressure(int id, int gas_phase);
+	IPQ_DLL_EXPORT double GetGasTotalMoles(int id, int gas_phase);
+  IPQ_DLL_EXPORT const char* GetGasComponents(int id, int solution);
+  IPQ_DLL_EXPORT double GetGasComponentMoles(int id, int solution, const char *component);
+
+  // solution
 	IPQ_DLL_EXPORT double GetPH(int id, int solution);
 	IPQ_DLL_EXPORT double GetPe(int id, int solution);
 	IPQ_DLL_EXPORT double GetSC(int id, int solution);

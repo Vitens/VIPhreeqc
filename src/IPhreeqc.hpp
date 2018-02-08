@@ -859,7 +859,31 @@ public:
 	void                     SetSelectedOutputStringOn(bool bValue);
 
   // Vitens VIPHREEQC Extension Functions
+  // gas functions
+  //
+  /**
+   * Returns the volume of the specified gas_phase
+   */
+  double                  GetGasVolume(int gas_phase);
+  /**
+   * Returns the pressure of the specified gas_phase
+   */
+  double                  GetGasPressure(int gas_phase);
+  /**
+   * Returns the total moles of the specified gas_phase
+   */
+  double                  GetGasTotalMoles(int gas_phase);
+  /**
+   * Returns a list of components in the gas phase
+   */
+  std::string             GetGasComponents(int gas_phase);
 
+  /**
+   * Returns the amount of moles in a gas component
+   */
+  double             GetGasComponentMoles(int gas_phase, const char* component);
+
+  // volume functions
   /**
    * Returns the pH of the specified solution
    */
