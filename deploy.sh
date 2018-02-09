@@ -11,7 +11,7 @@ echo "Cloning master branch..."
 
 # Hide output since we use an access token here
 #git clone -b master "https://${GH_TOKEN}@${GH_REF}" _deploy > /dev/null 2>&1 || exit 1
-git clone -b master https://${GH_TOKEN}@github.com/VitensTC/phreeqpython.git _deploy || exit 1
+git clone -b master https://${GH_TOKEN}@github.com/Vitens/phreeqpython.git _deploy || exit 1
 
 #TRAVIS_OS_NAME="osx"
 
