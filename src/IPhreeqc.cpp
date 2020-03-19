@@ -1891,6 +1891,11 @@ double IPhreeqc::GetGasComponentMoles(int gas_phase, const char *component)
 }
 
 // VITENS VIPHREEQC Extension Functions
+// Surface
+double IPhreeqc::GetThickness(int surface)
+{
+  return this->PhreeqcPtr->get_thickness(surface);
+}
 // Solution
 double IPhreeqc::GetPH(int solution)
 {

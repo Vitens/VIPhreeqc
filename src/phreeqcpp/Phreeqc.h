@@ -1148,12 +1148,15 @@ public:
   // VITENS VIPHREEQC Extension functions
   cxxSolution * find_solution(int);
   cxxGasPhase * find_gas_phase(int);
+  cxxSurface * find_surface(int);
   // gas phase functions
   double get_gas_volume(int);
   double get_gas_pressure(int);
   double get_gas_total_moles(int);
   std::string get_gas_components(int);
   double get_gas_component_moles(int, const char *component);
+  // surface functions
+  double get_thickness(int surface);
   // functions
   double get_pH(int);
   double get_pe(int);

@@ -1112,7 +1112,17 @@ GetGasComponents(int id, int gas_phase)
   }
   return err_msg;
 }
-
+// Surface
+double
+GetThickness(int id, int surface)
+{
+	IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
+	if (IPhreeqcPtr)
+	{
+    return IPhreeqcPtr->GetThickness(surface);
+	}
+	return -99;
+}
 // Solution
 double
 GetPH(int id, int solution)

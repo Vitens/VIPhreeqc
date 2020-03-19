@@ -69,6 +69,13 @@ cxxSolution * Phreeqc::find_solution(int id){
   }
 }
 
+cxxSurface * Phreeqc::find_surface(int id){
+// find and return the solution with the specified number
+  {
+     return Utilities::Rxn_find(Rxn_surface_map, id);
+  }
+}
+
 cxxGasPhase * Phreeqc::find_gas_phase(int id){
   {
     return Utilities::Rxn_find(Rxn_gas_phase_map, id);
@@ -148,6 +155,14 @@ std::string Phreeqc::get_gas_components(int gasphase) {
 }
 
 
+// surface options
+double Phreeqc::get_thickness(int surface) { 
+  cxxSurface * sur = find_surface(surface);
+  if(sur != NULL) {
+    return sur->Get_thickness();
+  }
+  return -999;
+}
 
 // volume phase options
 double Phreeqc::get_pH(int solution) {

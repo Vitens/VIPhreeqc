@@ -883,6 +883,12 @@ public:
    */
   double             GetGasComponentMoles(int gas_phase, const char* component);
 
+  // surface functions
+  /**
+   * Returns the thickness of the specified surface
+   */
+  double                  GetThickness(int surface);
+
   // volume functions
   /**
    * Returns the pH of the specified solution
