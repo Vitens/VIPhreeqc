@@ -14,6 +14,30 @@ This extension aims to add more flexibility to the IPhreeqc module by exposing m
 ## Implemented Functionality
 The following functions are implemented in addition to the standard IPhreeqc functionality:
 ```C
+  // gas functions
+  /**
+   * Returns the volume of the specified gas_phase
+   */
+  double                  GetGasVolume(int gas_phase);
+  /**
+   * Returns the pressure of the specified gas_phase
+   */
+  double                  GetGasPressure(int gas_phase);
+  /**
+   * Returns the total moles of the specified gas_phase
+   */
+  double                  GetGasTotalMoles(int gas_phase);
+  /**
+   * Returns a list of components in the gas phase
+   */
+  std::string             GetGasComponents(int gas_phase);
+
+  /**
+   * Returns the amount of moles in a gas component
+   */
+  double             GetGasComponentMoles(int gas_phase, const char* component);
+
+  // volume functions
   /**
    * Returns the pH of the specified solution
    */
@@ -28,6 +52,10 @@ The following functions are implemented in addition to the standard IPhreeqc fun
   double                  GetSC(int solution);
   /**
    * Returns the temperature (degrees Celsius) of the specified solution
+   */
+  double                  GetMu(int solution);
+  /**
+   * Returns the ionic strength (mol/kgw) of the specified solution
    */
   double                  GetTemperature(int solution);
   /**
@@ -45,6 +73,10 @@ The following functions are implemented in addition to the standard IPhreeqc fun
   /**
    * Returns the amount of moles (in mol) of a species (e.g. Ca+2, OH-, etc.)
    */
+  double                  GetActivity(int solution, const char *species);
+  /**
+   * Returns the activity of a species (e.g. Ca+2, OH-, etc.)
+   */
   double                  GetMoles(int solution, const char *species);
   /**
    * Returns the molality (in mol/kgW) of a species (e.g. Ca+2, OH-, etc.)
@@ -54,6 +86,10 @@ The following functions are implemented in addition to the standard IPhreeqc fun
    * Returns a comma separated list of all the species in the selected solution
    */
   std::string             GetSpecies(int solution);
+  /**
+   * Returns a semicolon separated list of all the species and their master elements in the selected solution
+   */
+  std::string             GetSpeciesMasters(int solution);
   /**
    * Returns the Solubility Index of a phase in a solution
    */
