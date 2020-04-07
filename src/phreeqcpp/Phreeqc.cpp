@@ -70,7 +70,7 @@ cxxSolution * Phreeqc::find_solution(int id){
 }
 
 cxxSurface * Phreeqc::find_surface(int id){
-// find and return the solution with the specified number
+// find and return the surface with the specified number
   {
      return Utilities::Rxn_find(Rxn_surface_map, id);
   }
@@ -162,6 +162,17 @@ double Phreeqc::get_thickness(int surface) {
     return sur->Get_thickness();
   }
   return -999;
+}
+
+// surface charge balance
+double Phreeqc::get_surface_charge_balance(int surface){
+	cxxSurface * surface_ptr = find_surface(surface);
+	if (surface_ptr != NULL){
+		int size = surface_ptr->Get_surface_charges().size();
+		cxxSurfaceCharge * sc_ptr = &surface_ptr->Get_surface_charges()[size - 1];
+		return sc_ptr->Get_charge_balance();
+	}
+	return -999;
 }
 
 // volume phase options

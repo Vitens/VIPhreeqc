@@ -1896,6 +1896,10 @@ double IPhreeqc::GetThickness(int surface)
 {
   return this->PhreeqcPtr->get_thickness(surface);
 }
+double IPhreeqc::GetSurfaceChargeBalance(int surface)
+{
+	return this->PhreeqcPtr->get_surface_charge_balance(surface);
+}
 // Solution
 double IPhreeqc::GetPH(int solution)
 {

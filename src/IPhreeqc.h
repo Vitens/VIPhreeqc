@@ -2136,6 +2136,7 @@ Headings
 
   // surface
 	IPQ_DLL_EXPORT double GetThickness(int id, int surface);
+	IPQ_DLL_EXPORT double GetSurfaceChargeBalance(int id, int surface);
 
   // solution
 	IPQ_DLL_EXPORT double GetPH(int id, int solution);

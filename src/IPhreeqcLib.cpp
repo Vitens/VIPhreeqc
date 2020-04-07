@@ -1123,6 +1123,17 @@ GetThickness(int id, int surface)
 	}
 	return -99;
 }
+double
+GetSurfaceChargeBalance(int id, int surface)
+{
+	IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
+	if (IPhreeqcPtr)
+	{
+    return IPhreeqcPtr->GetSurfaceChargeBalance(surface);
+	}
+	return -99;
+}
+
 // Solution
 double
 GetPH(int id, int solution)

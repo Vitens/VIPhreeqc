@@ -889,6 +889,11 @@ public:
    */
   double                  GetThickness(int surface);
 
+  /**
+   * Returns the thickness of the specified surface
+   */
+  double                  GetSurfaceChargeBalance(int surface);
+
   // volume functions
   /**
    * Returns the pH of the specified solution

@@ -1157,6 +1157,7 @@ public:
   double get_gas_component_moles(int, const char *component);
   // surface functions
   double get_thickness(int surface);
+  double get_surface_charge_balance(int surface);
   // functions
   double get_pH(int);
   double get_pe(int);
