@@ -156,6 +156,25 @@ std::string Phreeqc::get_gas_components(int gasphase) {
 
 
 // ####################### surface options #########################
+
+
+std::string Phreeqc::get_surface_xml(int surface) {
+
+  std::string output;
+  std::ostringstream stream;
+
+  cxxSurface * surface_ptr = find_surface(surface);
+  if(surface_ptr != NULL) {
+    surface_ptr->dump_raw(stream, 2, NULL);
+    output = stream.str();
+    printf("%s", output.c_str());
+
+  }
+
+  return output;
+}
+
+
 double Phreeqc::get_thickness(int surface) { 
   cxxSurface * surface_ptr = find_surface(surface);
   if(surface_ptr != NULL) {

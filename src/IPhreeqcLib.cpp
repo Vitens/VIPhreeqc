@@ -1113,6 +1113,23 @@ GetGasComponents(int id, int gas_phase)
   return err_msg;
 }
 // Surface
+//
+const char*
+GetSurfaceXML(int id, int surface)
+{
+  static const char err_msg[] = "GetSurfaceXML: Invalid instance id.\n";
+	IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
+	if (IPhreeqcPtr)
+	{
+    static std::string str;
+    std::stringstream stream;
+    stream << IPhreeqcPtr->GetSurfaceXML(surface);
+    str = stream.str();
+    return str.c_str();
+	}
+	return err_msg;
+}
+
 double
 GetThickness(int id, int surface)
 {

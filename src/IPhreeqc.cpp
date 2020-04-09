@@ -1892,6 +1892,10 @@ double IPhreeqc::GetGasComponentMoles(int gas_phase, const char *component)
 
 // VITENS VIPHREEQC Extension Functions
 // Surface
+std::string IPhreeqc::GetSurfaceXML(int surface)
+{
+  return this->PhreeqcPtr->get_surface_xml(surface);
+}
 double IPhreeqc::GetThickness(int surface)
 {
   return this->PhreeqcPtr->get_thickness(surface);

@@ -885,6 +885,11 @@ public:
 
   // surface functions
   /**
+   * Returns the xml of the specified surface
+   */
+  std::string             GetSurfaceXML(int surface);
+
+  /**
    * Returns the thickness of the specified surface
    */
   double                  GetThickness(int surface);

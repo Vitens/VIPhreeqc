@@ -1156,6 +1156,7 @@ public:
   std::string get_gas_components(int);
   double get_gas_component_moles(int, const char *component);
   // surface functions
+  std::string get_surface_xml(int surface);
   double get_thickness(int surface);
   double get_surface_charge_balance(int surface);
   double get_surface_specific_area(int surface);

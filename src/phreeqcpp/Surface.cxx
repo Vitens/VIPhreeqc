@@ -94,6 +94,7 @@ cxxSurface::Get_related_rate() const
 	}
 	return (false);
 }
+
 #ifdef SKIP
 void
 cxxSurface::dump_xml(std::ostream & s_oss, unsigned int indent) const
@@ -141,15 +142,24 @@ cxxSurface::dump_xml(std::ostream & s_oss, unsigned int indent) const
 	s_oss << "transport=\"" << this->transport << "\"" << "\n";
 
 	// surface component structures
-	s_oss << indent1;
-	s_oss << "<component " << "\n";
-	{
+	/*{
 		for (std::map < std::string, cxxSurfaceComp >::const_iterator it =
-			 this->surfaceComps.begin(); it != this->surfaceComps.end(); ++it)
+			 this->surface_comps.begin(); it != this->surface_comps.end(); ++it)
 		{
 			(*it).second.dump_xml(s_oss, indent + 2);
 		}
 	}
+  */
+	for (size_t i = 0; i != this->surface_comps.size(); i++)
+	{
+		const cxxSurfaceComp * comp_ptr = &(this->surface_comps[i]);
+    s_oss << indent1;
+    s_oss << "<component " << "\n";
+		comp_ptr->dump_xml(s_oss, indent + 2);
+	}
+
+  /*
+   * NOG TE FIXEN!
 	// surface charge structures
 	s_oss << indent1;
 	s_oss << "<charge_component " << "\n";
@@ -158,10 +168,13 @@ cxxSurface::dump_xml(std::ostream & s_oss, unsigned int indent) const
 	{
 		(*it).second.dump_xml(s_oss, indent + 2);
 	}
+  */
 
 	return;
 }
+
 #endif
+//
 void
 cxxSurface::dump_raw(std::ostream & s_oss, unsigned int indent, int *n_out) const
 {

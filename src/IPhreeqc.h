@@ -2135,6 +2135,7 @@ Headings
   IPQ_DLL_EXPORT double GetGasComponentMoles(int id, int solution, const char *component);
 
   // surface
+	IPQ_DLL_EXPORT const char* GetSurfaceXML(int id, int surface);
 	IPQ_DLL_EXPORT double GetThickness(int id, int surface);
 	IPQ_DLL_EXPORT double GetSurfaceChargeBalance(int id, int surface);
 	IPQ_DLL_EXPORT double GetSurfaceSpecificArea(int id, int surface);
