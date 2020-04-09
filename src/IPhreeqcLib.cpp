@@ -1123,6 +1123,7 @@ GetThickness(int id, int surface)
 	}
 	return -99;
 }
+
 double
 GetSurfaceChargeBalance(int id, int surface)
 {
@@ -1130,6 +1131,61 @@ GetSurfaceChargeBalance(int id, int surface)
 	if (IPhreeqcPtr)
 	{
     return IPhreeqcPtr->GetSurfaceChargeBalance(surface);
+	}
+	return -99;
+}
+
+double
+GetSurfaceSpecificArea(int id, int surface)
+{
+	IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
+	if (IPhreeqcPtr)
+	{
+    return IPhreeqcPtr->GetSurfaceSpecificArea(surface);
+	}
+	return -99;
+}
+
+double
+GetSurfaceSigma0(int id, int surface)
+{
+	IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
+	if (IPhreeqcPtr)
+	{
+    return IPhreeqcPtr->GetSurfaceSigma0(surface);
+	}
+	return -99;
+}
+
+double
+GetSurfaceSigma1(int id, int surface)
+{
+	IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
+	if (IPhreeqcPtr)
+	{
+    return IPhreeqcPtr->GetSurfaceSigma1(surface);
+	}
+	return -99;
+}
+
+double
+GetSurfaceSigma2(int id, int surface)
+{
+	IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
+	if (IPhreeqcPtr)
+	{
+    return IPhreeqcPtr->GetSurfaceSigma2(surface);
+	}
+	return -99;
+}
+
+double
+GetSurfaceSigma_ddl(int id, int surface)
+{
+	IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
+	if (IPhreeqcPtr)
+	{
+    return IPhreeqcPtr->GetSurfaceSigma_ddl(surface);
 	}
 	return -99;
 }

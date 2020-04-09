@@ -1158,6 +1158,11 @@ public:
   // surface functions
   double get_thickness(int surface);
   double get_surface_charge_balance(int surface);
+  double get_surface_specific_area(int surface);
+  double get_surface_sigma0(int surface);
+  double get_surface_sigma1(int surface);
+  double get_surface_sigma2(int surface);
+  double get_surface_sigma_ddl(int surface);
   // functions
   double get_pH(int);
   double get_pe(int);

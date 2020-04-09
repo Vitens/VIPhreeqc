@@ -40,3 +40,5 @@ config.status
 libtool
 
 build/
+.DS_Store
+.vscode/

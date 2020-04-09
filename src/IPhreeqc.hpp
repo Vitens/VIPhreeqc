@@ -890,9 +890,30 @@ public:
   double                  GetThickness(int surface);
 
   /**
-   * Returns the thickness of the specified surface
+   * Returns the surface charge balance of the specified surface
    */
   double                  GetSurfaceChargeBalance(int surface);
+ 
+  /**
+   * Returns the surface specific area of the specified surface
+   */
+  double                  GetSurfaceSpecificArea(int surface);
+  /**
+   * Returns the surface sigma 0 of the specified surface
+   */
+  double                  GetSurfaceSigma0(int surface);
+  /**
+   * Returns the surface sigma 1 of the specified surface
+   */
+  double                  GetSurfaceSigma1(int surface);
+  /**
+   * Returns the surface sigma 2 of the specified surface
+   */
+  double                  GetSurfaceSigma2(int surface);
+  /**
+   * Returns the surface sigma ddl of the specified surface
+   */
+  double                  GetSurfaceSigma_ddl(int surface);
 
   // volume functions
   /**
