@@ -1112,99 +1112,22 @@ GetGasComponents(int id, int gas_phase)
   }
   return err_msg;
 }
+
 // Surface
-//
 const char*
-GetSurfaceXML(int id, int surface)
+GetSurfaceJSON(int id, int surface)
 {
-  static const char err_msg[] = "GetSurfaceXML: Invalid instance id.\n";
+  static const char err_msg[] = "GetSurfaceJSON: Invalid instance id.\n";
 	IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
 	if (IPhreeqcPtr)
 	{
     static std::string str;
     std::stringstream stream;
-    stream << IPhreeqcPtr->GetSurfaceXML(surface);
+    stream << IPhreeqcPtr->GetSurfaceJSON(surface);
     str = stream.str();
     return str.c_str();
 	}
 	return err_msg;
-}
-
-double
-GetThickness(int id, int surface)
-{
-	IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
-	if (IPhreeqcPtr)
-	{
-    return IPhreeqcPtr->GetThickness(surface);
-	}
-	return -99;
-}
-
-double
-GetSurfaceChargeBalance(int id, int surface)
-{
-	IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
-	if (IPhreeqcPtr)
-	{
-    return IPhreeqcPtr->GetSurfaceChargeBalance(surface);
-	}
-	return -99;
-}
-
-double
-GetSurfaceSpecificArea(int id, int surface)
-{
-	IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
-	if (IPhreeqcPtr)
-	{
-    return IPhreeqcPtr->GetSurfaceSpecificArea(surface);
-	}
-	return -99;
-}
-
-double
-GetSurfaceSigma0(int id, int surface)
-{
-	IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
-	if (IPhreeqcPtr)
-	{
-    return IPhreeqcPtr->GetSurfaceSigma0(surface);
-	}
-	return -99;
-}
-
-double
-GetSurfaceSigma1(int id, int surface)
-{
-	IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
-	if (IPhreeqcPtr)
-	{
-    return IPhreeqcPtr->GetSurfaceSigma1(surface);
-	}
-	return -99;
-}
-
-double
-GetSurfaceSigma2(int id, int surface)
-{
-	IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
-	if (IPhreeqcPtr)
-	{
-    return IPhreeqcPtr->GetSurfaceSigma2(surface);
-	}
-	return -99;
-}
-
-double
-GetSurfaceSigma_ddl(int id, int surface)
-{
-	IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
-	if (IPhreeqcPtr)
-	{
-    return IPhreeqcPtr->GetSurfaceSigma_ddl(surface);
-	}
-	return -99;
 }
 
 // Solution

@@ -1892,38 +1892,11 @@ double IPhreeqc::GetGasComponentMoles(int gas_phase, const char *component)
 
 // VITENS VIPHREEQC Extension Functions
 // Surface
-std::string IPhreeqc::GetSurfaceXML(int surface)
+std::string IPhreeqc::GetSurfaceJSON(int surface)
 {
-  return this->PhreeqcPtr->get_surface_xml(surface);
+  return this->PhreeqcPtr->get_surface_json(surface);
 }
-double IPhreeqc::GetThickness(int surface)
-{
-  return this->PhreeqcPtr->get_thickness(surface);
-}
-double IPhreeqc::GetSurfaceChargeBalance(int surface)
-{
-	return this->PhreeqcPtr->get_surface_charge_balance(surface);
-}
-double IPhreeqc::GetSurfaceSpecificArea(int surface)
-{
-	return this->PhreeqcPtr->get_surface_specific_area(surface);
-}
-double IPhreeqc::GetSurfaceSigma0(int surface)
-{
-	return this->PhreeqcPtr->get_surface_sigma0(surface);
-}
-double IPhreeqc::GetSurfaceSigma1(int surface)
-{
-	return this->PhreeqcPtr->get_surface_sigma1(surface);
-}
-double IPhreeqc::GetSurfaceSigma2(int surface)
-{
-	return this->PhreeqcPtr->get_surface_sigma2(surface);
-}
-double IPhreeqc::GetSurfaceSigma_ddl(int surface)
-{
-	return this->PhreeqcPtr->get_surface_sigma_ddl(surface);
-}
+
 // Solution
 double IPhreeqc::GetPH(int solution)
 {

@@ -154,113 +154,17 @@ std::string Phreeqc::get_gas_components(int gasphase) {
   return output;
 }
 
-
 // ####################### surface options #########################
-
-
-std::string Phreeqc::get_surface_xml(int surface) {
-
+std::string Phreeqc::get_surface_json(int surface) {
   std::string output;
   std::ostringstream stream;
-
   cxxSurface * surface_ptr = find_surface(surface);
   if(surface_ptr != NULL) {
-    surface_ptr->dump_raw(stream, 2, NULL);
+    surface_ptr->dump_json(stream, 2, NULL);
     output = stream.str();
-    printf("%s", output.c_str());
-
   }
-
   return output;
 }
-
-
-double Phreeqc::get_thickness(int surface) { 
-  cxxSurface * surface_ptr = find_surface(surface);
-  if(surface_ptr != NULL) {
-    return surface_ptr->Get_thickness();
-  }
-  return -999;
-}
-
-// surface charge balance
-double Phreeqc::get_surface_charge_balance(int surface){
-	cxxSurface * surface_ptr = find_surface(surface);
-	if (surface_ptr != NULL){
-		int size = surface_ptr->Get_surface_charges().size();
-		cxxSurfaceCharge * surface_charge_ptr = &surface_ptr->Get_surface_charges()[size - 1];
-		return surface_charge_ptr->Get_charge_balance();
-	}
-	return -999;
-}
-
-// surface specific area
-double Phreeqc::get_surface_specific_area(int surface){
-	cxxSurface * surface_ptr = find_surface(surface);
-	
-	if (surface_ptr != NULL){
-		int size = surface_ptr->Get_surface_charges().size();
-		cxxSurfaceCharge * sc_ptr = &surface_ptr->Get_surface_charges()[size - 1];
-		
-		return sc_ptr->Get_specific_area();
-	}
-	return -999;
-}
-
-// surface sigma 0
-double Phreeqc::get_surface_sigma0(int surface){
-	cxxSurface * surface_ptr = find_surface(surface);
-	
-	if (surface_ptr != NULL){
-		int size = surface_ptr->Get_surface_charges().size();
-		cxxSurfaceCharge * sc_ptr = &surface_ptr->Get_surface_charges()[size - 1];
-		
-		return sc_ptr->Get_sigma0();
-	}
-	return -999;
-}
-
-// surface sigma 1
-double Phreeqc::get_surface_sigma1(int surface){
-	cxxSurface * surface_ptr = find_surface(surface);
-	
-	if (surface_ptr != NULL){
-		int size = surface_ptr->Get_surface_charges().size();
-		cxxSurfaceCharge * sc_ptr = &surface_ptr->Get_surface_charges()[size - 1];
-		
-		return sc_ptr->Get_sigma1();
-	}
-	return -999;
-}
-
-// surface sigma 2
-double Phreeqc::get_surface_sigma2(int surface){
-	cxxSurface * surface_ptr = find_surface(surface);
-	
-	if (surface_ptr != NULL){
-		int size = surface_ptr->Get_surface_charges().size();
-		cxxSurfaceCharge * sc_ptr = &surface_ptr->Get_surface_charges()[size - 1];
-		
-		return sc_ptr->Get_sigma2();
-	}
-	return -999;
-}
-
-// surface sigma ddl
-double Phreeqc::get_surface_sigma_ddl(int surface){
-	cxxSurface * surface_ptr = find_surface(surface);
-	
-	if (surface_ptr != NULL){
-		int size = surface_ptr->Get_surface_charges().size();
-		
-		cxxSurfaceCharge * sc_ptr = &surface_ptr->Get_surface_charges()[size - 1];
-		
-		return sc_ptr->Get_sigmaddl();
-	}
-	return -999;
-}
-
-// ####################### END surface options #########################
 
 // volume phase options
 double Phreeqc::get_pH(int solution) {
