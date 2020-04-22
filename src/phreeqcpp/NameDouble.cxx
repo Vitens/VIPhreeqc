@@ -193,13 +193,15 @@ cxxNameDouble::dump_json(std::ostream & s_oss, unsigned int indent) const
 
 	for (const_iterator it = (*this).begin(); it != (*this).end(); it++)
 	{
-		if (i == 2){
+		if (i == (*this).size() - 1){
 			s_oss << "\"" << it->first << "\": " << "\"" << it->second << "\"\n";
 		} else {
 			s_oss << "\"" << it->first << "\": " << "\"" << it->second << "\",\n";
 		}
 		i++;
 	}
+	// attempt to remove last comma
+	// s_oss << "\b" << " ";
 }
 
 void
