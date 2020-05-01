@@ -73,6 +73,33 @@ cxxSurfaceCharge::dump_xml(std::ostream & s_oss, unsigned int indent) const
 }
 
 void
+cxxSurfaceCharge::dump_json(std::ostream & s_oss, unsigned int indent) const
+{
+	s_oss.precision(DBL_DIG - 1);
+
+	// Surf_Charge element and attributes
+	s_oss << "\"specific_area\": " << "\"" << this->specific_area << "\",\n";
+	s_oss << "\"grams\": " << "\"" << this->grams << "\",\n";
+	s_oss << "\"charge_balance\":" << "\"" << this->charge_balance << "\",\n";
+	s_oss << "\"mass_water\": " << "\"" << this->mass_water << "\",\n";
+	s_oss << "\"la_psi\": " << "\"" << this->la_psi << "\",\n";
+	s_oss << "\"capacitance1\": " << "\"" << this->capacitance[1] << "\",\n";
+	s_oss << "\"capacitance0\": " << "\"" << this->capacitance[0] << "\",\n";
+	
+	// totals
+	s_oss << "\"diffuse_layer_totals\": ";
+	
+	s_oss << "{";
+	this->diffuse_layer_totals.dump_json(s_oss, indent + 1);
+	s_oss << "},\n";
+
+	s_oss << "\"sigma0\": " << "\"" << this->sigma0 << "\",\n";
+	s_oss << "\"sigma1\": " << "\"" << this->sigma1 << "\",\n";
+	s_oss << "\"sigma2\": " << "\"" << this->sigma2 << "\",\n";
+	s_oss << "\"sigmaddl\": " << "\"" << this->sigmaddl << "\"\n";
+}
+
+void
 cxxSurfaceCharge::dump_raw(std::ostream & s_oss, unsigned int indent) const
 {
 	unsigned int i;

@@ -94,6 +94,7 @@ cxxSurface::Get_related_rate() const
 	}
 	return (false);
 }
+
 #ifdef SKIP
 void
 cxxSurface::dump_xml(std::ostream & s_oss, unsigned int indent) const
@@ -141,15 +142,24 @@ cxxSurface::dump_xml(std::ostream & s_oss, unsigned int indent) const
 	s_oss << "transport=\"" << this->transport << "\"" << "\n";
 
 	// surface component structures
-	s_oss << indent1;
-	s_oss << "<component " << "\n";
-	{
+	/*{
 		for (std::map < std::string, cxxSurfaceComp >::const_iterator it =
-			 this->surfaceComps.begin(); it != this->surfaceComps.end(); ++it)
+			 this->surface_comps.begin(); it != this->surface_comps.end(); ++it)
 		{
 			(*it).second.dump_xml(s_oss, indent + 2);
 		}
 	}
+  */
+	for (size_t i = 0; i != this->surface_comps.size(); i++)
+	{
+		const cxxSurfaceComp * comp_ptr = &(this->surface_comps[i]);
+    s_oss << indent1;
+    s_oss << "<component " << "\n";
+		comp_ptr->dump_xml(s_oss, indent + 2);
+	}
+
+  /*
+   * NOG TE FIXEN!
 	// surface charge structures
 	s_oss << indent1;
 	s_oss << "<charge_component " << "\n";
@@ -158,10 +168,67 @@ cxxSurface::dump_xml(std::ostream & s_oss, unsigned int indent) const
 	{
 		(*it).second.dump_xml(s_oss, indent + 2);
 	}
+  */
 
 	return;
 }
+
 #endif
+//
+void
+cxxSurface::dump_json(std::ostream & s_oss, unsigned int indent, int *n_out) const
+{
+	s_oss.precision(DBL_DIG - 1);
+	// Surface element and attributes
+	s_oss << "{\n";
+	s_oss << "\"type\": " << "\"" << this->type << "\",\n";
+	s_oss << "\"dl_type\": " << "\"" << this->dl_type << "\",\n";
+	s_oss << "\"only_counter_ions\": " << "\"" << this->only_counter_ions << "\",\n";
+	s_oss << "\"thickness\" :" << "\"" << this->thickness << "\",\n";
+	s_oss << "\"debye_lengths\": " << "\"" << this->debye_lengths << "\",\n";
+	s_oss << "\"DDL_viscosity\": " << "\"" << this->DDL_viscosity << "\",\n";
+	s_oss << "\"DDL_limit\": " << "\"" << this->DDL_limit << "\",\n";
+	s_oss << "\"components\": ";
+	s_oss << "[";
+
+	// surfaceComps
+	for (size_t i = 0; i != this->surface_comps.size(); i++)
+	{
+		const cxxSurfaceComp * comp_ptr = &(this->surface_comps[i]);
+		s_oss << "{\n";
+		s_oss << "\"component\": " << "\"" << comp_ptr->Get_formula() << "\",\n";
+		comp_ptr->dump_json(s_oss, indent + 2);
+		s_oss << "},\n";
+	}
+	
+	// surface charge 
+	for (size_t i = 0; i != this->surface_charges.size(); i++)
+	{
+		const cxxSurfaceCharge * charge_ptr = &(this->surface_charges[i]);
+		s_oss << "{\n";
+		s_oss << "\"charge_component\": " << "\"" << charge_ptr->Get_name() << "\",\n";
+		charge_ptr->dump_json(s_oss, indent + 2);
+
+		if ((i+1)==surface_charges.size()){
+			s_oss << "}\n";
+		} else {
+			s_oss << "},\n";
+		}
+	}
+	s_oss << "],\n";
+
+	s_oss << "\"new_def\":" << "\"" << this->new_def << "\",\n";
+	s_oss << "\"sites_units\":" << "\"" << this->sites_units << "\",\n";
+	s_oss << "\"solution_equilibria\":" << "\"" << this->solution_equilibria << "\",\n";
+	s_oss << "\"n_solution\":" << "\"" << this->n_solution << "\",\n";
+
+	s_oss << "\"transport\":" << "\"" << this->transport << "\"\n";
+	
+	this->totals.dump_json(s_oss, indent + 2);
+	s_oss << "}";
+	return;
+}
+
 void
 cxxSurface::dump_raw(std::ostream & s_oss, unsigned int indent, int *n_out) const
 {

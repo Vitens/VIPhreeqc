@@ -72,6 +72,7 @@ public:
 
 	struct master *Get_psi_master();
 	void dump_xml(std::ostream & os, unsigned int indent = 0) const;
+	void dump_json(std::ostream & s_oss, unsigned int indent) const;
 	void dump_raw(std::ostream & s_oss, unsigned int indent) const;
 	void read_raw(CParser & parser, bool check = true);
 	void add(const cxxSurfaceCharge & comp, LDBLE extensive);
