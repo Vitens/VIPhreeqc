@@ -200,8 +200,6 @@ cxxNameDouble::dump_json(std::ostream & s_oss, unsigned int indent) const
 		}
 		i++;
 	}
-	// attempt to remove last comma
-	// s_oss << "\b" << " ";
 }
 
 void

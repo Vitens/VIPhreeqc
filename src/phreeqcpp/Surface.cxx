@@ -191,7 +191,7 @@ cxxSurface::dump_json(std::ostream & s_oss, unsigned int indent, int *n_out) con
 	s_oss << "\"components\": ";
 	s_oss << "[";
 
-	// // surfaceComps 
+	// surfaceComps
 	for (size_t i = 0; i != this->surface_comps.size(); i++)
 	{
 		const cxxSurfaceComp * comp_ptr = &(this->surface_comps[i]);
@@ -216,7 +216,6 @@ cxxSurface::dump_json(std::ostream & s_oss, unsigned int indent, int *n_out) con
 		}
 	}
 	s_oss << "],\n";
-	
 
 	s_oss << "\"new_def\":" << "\"" << this->new_def << "\",\n";
 	s_oss << "\"sites_units\":" << "\"" << this->sites_units << "\",\n";

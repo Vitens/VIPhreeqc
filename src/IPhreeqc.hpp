@@ -885,7 +885,7 @@ public:
 
   // surface functions
   /**
-   * Returns the xml of the specified surface
+   * Returns a JSON representation of the specified surface
    */
   std::string             GetSurfaceJSON(int surface);
 
