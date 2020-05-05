@@ -1112,17 +1112,24 @@ GetGasComponents(int id, int gas_phase)
   }
   return err_msg;
 }
+
 // Surface
-double
-GetThickness(int id, int surface)
+const char*
+GetSurfaceJSON(int id, int surface)
 {
+  static const char err_msg[] = "GetSurfaceJSON: Invalid instance id.\n";
 	IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
 	if (IPhreeqcPtr)
 	{
-    return IPhreeqcPtr->GetThickness(surface);
+    static std::string str;
+    std::stringstream stream;
+    stream << IPhreeqcPtr->GetSurfaceJSON(surface);
+    str = stream.str();
+    return str.c_str();
 	}
-	return -99;
+	return err_msg;
 }
+
 // Solution
 double
 GetPH(int id, int solution)
