@@ -885,9 +885,9 @@ public:
 
   // surface functions
   /**
-   * Returns the thickness of the specified surface
+   * Returns a JSON representation of the specified surface
    */
-  double                  GetThickness(int surface);
+  std::string             GetSurfaceJSON(int surface);
 
   // volume functions
   /**

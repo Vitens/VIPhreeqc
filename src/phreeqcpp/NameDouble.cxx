@@ -186,6 +186,23 @@ cxxNameDouble::dump_xml(std::ostream & s_oss, unsigned int indent) const
 }
 
 void
+cxxNameDouble::dump_json(std::ostream & s_oss, unsigned int indent) const
+{
+	s_oss.precision(DBL_DIG - 1);
+	int i = 0;
+
+	for (const_iterator it = (*this).begin(); it != (*this).end(); it++)
+	{
+		if (i == (*this).size() - 1){
+			s_oss << "\"" << it->first << "\": " << "\"" << it->second << "\"\n";
+		} else {
+			s_oss << "\"" << it->first << "\": " << "\"" << it->second << "\",\n";
+		}
+		i++;
+	}
+}
+
+void
 cxxNameDouble::dump_raw(std::ostream & s_oss, unsigned int indent) const
 {
 	unsigned int i;

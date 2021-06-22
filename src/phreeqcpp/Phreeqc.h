@@ -1155,8 +1155,10 @@ public:
   double get_gas_total_moles(int);
   std::string get_gas_components(int);
   double get_gas_component_moles(int, const char *component);
+  
   // surface functions
-  double get_thickness(int surface);
+  std::string get_surface_json(int surface);
+  
   // functions
   double get_pH(int);
   double get_pe(int);

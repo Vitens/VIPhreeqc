@@ -75,6 +75,34 @@ cxxSurfaceComp::dump_xml(std::ostream & s_oss, unsigned int indent) const
 }
 
 void
+cxxSurfaceComp::dump_json(std::ostream & s_oss, unsigned int indent) const
+{
+	unsigned int i;
+	s_oss.precision(DBL_DIG - 1);
+	s_oss << "\"formula_z\": " << "\"" << this->formula_z << "\",\n";
+	s_oss << "\"moles\": " << "\"" << this->moles << "\",\n";
+	s_oss << "\"la\": " << "\"" << this->la << "\",\n";
+	s_oss << "\"charge_balance\": " << "\"" << this->charge_balance << "\",\n";
+	if (this->phase_name.size() != 0)
+	{
+		s_oss << "-phase_name              " << this->phase_name << "\n";
+	}
+	if (this->rate_name.size() != 0)
+	{
+		s_oss << "-rate_name               " << this->rate_name << "\n";
+	}
+	s_oss << "\"phase_porportion\": " << "\"" << this->phase_proportion << "\",\n";
+	s_oss << "\"Dw\": " << "\"" << this->Dw << "\",\n";
+	s_oss << "\"charge_name\": " << "\"" << this->charge_name << "\",\n";
+	s_oss << "\"master_element\": " << "\"" << this->master_element << "\",\n";
+	s_oss << "\"totals\": ";
+	
+	s_oss << "{";
+	this->totals.dump_json(s_oss, indent + 1);
+	s_oss << "}";
+}
+
+void
 cxxSurfaceComp::dump_raw(std::ostream & s_oss, unsigned int indent) const
 {
 	unsigned int i;

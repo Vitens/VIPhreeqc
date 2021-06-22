@@ -45,6 +45,7 @@ class IPQ_DLL_EXPORT cxxNameDouble:public
 	void Multiply_activities_redox(std::string, LDBLE f);
 
 	void dump_xml(std::ostream & s_oss, unsigned int indent) const;
+	void dump_json(std::ostream & s_oss, unsigned int indent) const;
 	void dump_raw(std::ostream & s_oss, unsigned int indent) const;
 	CParser::STATUS_TYPE read_raw(CParser & parser, std::istream::pos_type & pos);
 	void add_extensive(const cxxNameDouble & old, LDBLE factor);
