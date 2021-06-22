@@ -23,9 +23,21 @@ EXTRA_DIST=\
 	phreeqcpp/Form1.resX\
 	phreeqcpp/ZedGraph.dll	
 
-AM_CPPFLAGS=-I$(top_srcdir)/src -I$(top_srcdir)/src/phreeqcpp -I$(top_srcdir)/src/phreeqcpp/common -I$(top_srcdir)/src/phreeqcpp/PhreeqcKeywords
+AM_CPPFLAGS=-I$(top_srcdir)/src -I$(top_srcdir)/src/phreeqcpp -I$(top_srcdir)/src/phreeqcpp/common -I$(top_srcdir)/src/phreeqcpp/PhreeqcKeywords $(BOOST_CPPFLAGS)
 
-AM_LDFLAGS=-release 3.3.7
+AM_LDFLAGS=-release 3.3.7 $(LDFLAGS_BOOST) $(LDFLAGS_BOOST_LIBS)
+
+LIBS += $(LIBS_BOOST)
+
+LDFLAGS_BOOST = \
+    $(BOOST_SYSTEM_LDFLAGS) \
+    $(BOOST_PROGRAM_OPTIONS_LDFLAGS)
+
+LIBS_BOOST = \
+    $(BOOST_SYSTEM_LIBS) \
+    $(BOOST_PROGRAM_OPTIONS_LIBS) \
+    $(BOOST_FILESYSTEM_LIBS)
+
 
 # libtool libraries to build
 lib_LTLIBRARIES=libiphreeqc.la

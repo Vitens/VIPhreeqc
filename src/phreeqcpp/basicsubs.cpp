@@ -127,7 +127,7 @@ sa_declercq(double sa_type, double Sa, double d, double m, double m0, double gfw
 	}
 	else if (sa_type == 2)
 	{
-		//double pi = 3.14159265359;
+		double pi = 3.14159265359;
 		double mass0 = m0 * gfw;
 		double V0 = mass0 / d;                         // volume
 		double St0 = mass0 * Sa;                       // total surface

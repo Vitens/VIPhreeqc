@@ -217,6 +217,29 @@ double Phreeqc::get_total(int solution, const char *string) {
   return -999;
 }
 
+double Phreeqc::get_total_ion(int solution, const char *string) {
+  cxxSolution * sol = find_solution(solution);
+
+  if(sol != NULL) {
+		double total = 0;
+		std::map<std::string, double>::iterator it;
+
+		for (it = sol->species_list.begin(); it != sol->species_list.end(); it++) 
+		{
+			std::string s = it->first;
+
+			int f = s.find(string);
+			if(f==0 || (f>0 && !isupper(s.at(f-1)))) {
+				total += sol->species_list[s];
+			}
+
+		}
+
+		return total;
+  }
+  return -999;
+}
+
 double Phreeqc::get_total_element(int solution, const char *string) {
   cxxSolution * sol = find_solution(solution);
   if(sol != NULL) {

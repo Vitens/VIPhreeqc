@@ -1205,6 +1205,16 @@ GetTotalElement(int id, int solution, const char *string)
   return -99;
 }
 double
+GetTotalIon(int id, int solution, const char *string)
+{
+  IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
+  if (IPhreeqcPtr)
+  {
+    return IPhreeqcPtr->GetTotalIon(solution, string);
+  }
+  return -99;
+}
+double
 GetMoles(int id, int solution, const char *species)
 {
   IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);

@@ -1933,6 +1933,10 @@ double IPhreeqc::GetActivity(int solution, const char *species)
 {
   return this->PhreeqcPtr->get_activity(solution, species);
 }
+double IPhreeqc::GetTotalIon(int solution, const char *ion)
+{
+  return this->PhreeqcPtr->get_total_ion(solution, ion);
+}
 double IPhreeqc::GetMoles(int solution, const char *species)
 {
   return this->PhreeqcPtr->get_moles(solution, species);
@@ -1965,3 +1969,4 @@ std::string IPhreeqc::GetSolutionList2(int id)
 {
   return this->PhreeqcPtr->get_solution_list(id);
 }
+

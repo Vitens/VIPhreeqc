@@ -927,7 +927,11 @@ public:
    */
   double                  GetActivity(int solution, const char *species);
   /**
-   * Returns the activity of a species (e.g. Ca+2, OH-, etc.)
+   * Returns the activity of a ion (e.g. Ca+2, OH-, etc.)
+   */
+  double                  GetTotalIon(int solution, const char *string);
+  /**
+   * Returns the molality (in mol/kgW) of a species (e.g. Ca+2, OH-, etc.)
    */
   double                  GetMoles(int solution, const char *species);
   /**

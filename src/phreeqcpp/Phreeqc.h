@@ -1166,6 +1166,7 @@ public:
   double get_mass(int);
   double get_total(int solution, const char *string);
   double get_total_element(int solution, const char *string);
+  double get_total_ion(int solution, const char *string);
   double get_moles(int solution, const char *species);
   double get_activity(int solution, const char *species);
   double get_molality(int solution, const char *species);

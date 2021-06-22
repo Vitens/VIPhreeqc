@@ -218,6 +218,7 @@ LDBLE Phreeqc::
 calc_dielectrics(LDBLE tc, LDBLE pa)
 /* ---------------------------------------------------------------------- */
 {
+	double pi = 3.14159265358979;
 	/* Relative dielectric constant of pure water, eps as a function of (P, T)
        Bradley and Pitzer, 1979, JPC 83, 1599.
 	   (newer data in Fernandez et al., 1995, JPCRD 24, 33,
