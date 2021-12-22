@@ -213,9 +213,19 @@ bool IPhreeqc::GetErrorFileOn(void)const
 	return this->ErrorFileOn;
 }
 
+bool IPhreeqc::GetErrorOn(void)const
+{
+	return this->Get_error_on();
+}
+
 const char* IPhreeqc::GetErrorString(void)
 {
 	static const char err_msg[] = "GetErrorString: ErrorStringOn not set.\n";
+	static const char err_msg2[] = "GetErrorString: ErrorOn not set.\n";
+	if (!this->error_on)
+	{
+		return err_msg2;
+	}
 	if (!this->ErrorStringOn)
 	{
 		return err_msg;
@@ -554,6 +564,12 @@ std::list< std::string > IPhreeqc::ListComponents(void)
 	{
 		this->Components.clear();
 		this->PhreeqcPtr->list_components(this->Components);
+		this->PhreeqcPtr->list_EquilibriumPhases(this->EquilibriumPhasesList);
+		this->PhreeqcPtr->list_GasComponents(this->GasComponentsList);
+		this->PhreeqcPtr->list_KineticReactions(this->KineticReactionsList);
+		this->PhreeqcPtr->list_SolidSolutions(this->SolidSolutionComponentsList,this->SolidSolutionNamesList);
+		this->PhreeqcPtr->list_Surfaces(this->SurfaceTypeList, this->SurfaceNamesList);
+		this->PhreeqcPtr->list_Exchangers(this->ExchangeNamesList);
 		this->UpdateComponents = false;
 	}
 	return this->Components;
@@ -585,7 +601,7 @@ int IPhreeqc::load_db(const char* filename)
 		this->PhreeqcPtr->phrq_io->push_istream(&ifs, false);
 		this->PhreeqcPtr->read_database();
 	}
-	catch (IPhreeqcStop)
+	catch (const IPhreeqcStop&)
 	{
 		this->close_input_files();
 	}
@@ -596,7 +612,7 @@ int IPhreeqc::load_db(const char* filename)
 		{
 			this->PhreeqcPtr->error_msg(errmsg, STOP); // throws IPhreeqcStop
 		}
-		catch (IPhreeqcStop)
+		catch (const IPhreeqcStop&)
 		{
 			// do nothing
 		}
@@ -648,7 +664,7 @@ int IPhreeqc::load_db_str(const char* input)
 		this->PhreeqcPtr->phrq_io->push_istream(&iss, false);
 		this->PhreeqcPtr->read_database();
 	}
-	catch (IPhreeqcStop)
+	catch (const IPhreeqcStop&)
 	{
 		this->close_input_files();
 	}
@@ -659,7 +675,7 @@ int IPhreeqc::load_db_str(const char* input)
 		{
 			this->PhreeqcPtr->error_msg(errmsg, STOP); // throws PhreeqcStop
 		}
-		catch (IPhreeqcStop)
+		catch (const IPhreeqcStop&)
 		{
 			// do nothing
 		}
@@ -737,7 +753,7 @@ int IPhreeqc::RunAccumulated(void)
 		// this may throw
 		this->do_run(sz_routine, &iss, NULL, NULL, NULL);
 	}
-	catch (IPhreeqcStop)
+	catch (const IPhreeqcStop&)
 	{
 		// do nothing
 	}
@@ -749,7 +765,7 @@ int IPhreeqc::RunAccumulated(void)
 		{
 			this->PhreeqcPtr->error_msg(errmsg.c_str(), STOP); // throws PhreeqcStop
 		}
-		catch (IPhreeqcStop)
+		catch (const IPhreeqcStop&)
 		{
 			// do nothing
 		}
@@ -762,7 +778,7 @@ int IPhreeqc::RunAccumulated(void)
 		{
 			this->PhreeqcPtr->error_msg(errmsg, STOP); // throws PhreeqcStop
 		}
-		catch (IPhreeqcStop)
+		catch (const IPhreeqcStop&)
 		{
 			// do nothing
 		}
@@ -808,7 +824,7 @@ int IPhreeqc::RunFile(const char* filename)
 		// this may throw
 		this->do_run(sz_routine, &ifs, NULL, NULL, NULL);
 	}
-	catch (IPhreeqcStop)
+	catch (const IPhreeqcStop&)
 	{
 		this->close_input_files();
 	}
@@ -820,7 +836,7 @@ int IPhreeqc::RunFile(const char* filename)
 		{
 			this->PhreeqcPtr->error_msg(errmsg.c_str(), STOP); // throws PhreeqcStop
 		}
-		catch (IPhreeqcStop)
+		catch (const IPhreeqcStop&)
 		{
 			// do nothing
 		}
@@ -833,7 +849,7 @@ int IPhreeqc::RunFile(const char* filename)
 		{
 			this->PhreeqcPtr->error_msg(errmsg, STOP); // throws PhreeqcStop
 		}
-		catch (IPhreeqcStop)
+		catch (const IPhreeqcStop&)
 		{
 			// do nothing
 		}
@@ -871,7 +887,7 @@ int IPhreeqc::RunString(const char* input)
 		// this may throw
 		this->do_run(sz_routine, &iss, NULL, NULL, NULL);
 	}
-	catch (IPhreeqcStop)
+	catch (const IPhreeqcStop&)
 	{
 		this->close_input_files();
 	}
@@ -883,7 +899,7 @@ int IPhreeqc::RunString(const char* input)
 		{
 			this->PhreeqcPtr->error_msg(errmsg.c_str(), STOP); // throws PhreeqcStop
 		}
-		catch (IPhreeqcStop)
+		catch (const IPhreeqcStop&)
 		{
 			// do nothing
 		}
@@ -896,7 +912,7 @@ int IPhreeqc::RunString(const char* input)
 		{
 			this->PhreeqcPtr->error_msg(errmsg, STOP); // throws PhreeqcStop
 		}
-		catch (IPhreeqcStop)
+		catch (const IPhreeqcStop&)
 		{
 			// do nothing
 		}
@@ -965,6 +981,11 @@ void IPhreeqc::SetErrorFileName(const char *filename)
 void IPhreeqc::SetErrorFileOn(bool bValue)
 {
 	this->ErrorFileOn = bValue;
+}
+
+void IPhreeqc::SetErrorOn(bool bValue)
+{
+	this->Set_error_on(bValue);
 }
 
 void IPhreeqc::SetErrorStringOn(bool bValue)
@@ -1137,7 +1158,6 @@ void IPhreeqc::check_database(const char* sz_routine)
 {
  	this->ErrorReporter->Clear();
 	this->WarningReporter->Clear();
-
 	std::map< int, CSelectedOutput* >::iterator it = this->SelectedOutputMap.begin();
 	for (; it != this->SelectedOutputMap.end(); ++it)
 	{
@@ -1192,7 +1212,11 @@ void IPhreeqc::do_run(const char* sz_routine, std::istream* pis, PFN_PRERUN_CALL
 /*
  *   set read callback
  */
+#if (__GNUC__ && (__cplusplus >= 201103L)) || (_MSC_VER >= 1600)
+	std::unique_ptr<std::istringstream> auto_iss=NULL;
+#else
 	std::auto_ptr<std::istringstream> auto_iss(0);
+#endif
 	if (!pis)
 	{
 		auto_iss.reset(new std::istringstream(this->GetAccumulatedLines()));
@@ -1244,14 +1268,14 @@ void IPhreeqc::do_run(const char* sz_routine, std::istream* pis, PFN_PRERUN_CALL
 		}
 		ASSERT(this->PhreeqcPtr->SelectedOutput_map.size() == this->SelectedOutputMap.size());
 		ASSERT(this->PhreeqcPtr->SelectedOutput_map.size() == this->SelectedOutputStringMap.size());
-		if (this->PhreeqcPtr->title_x != NULL)
+		if (!this->PhreeqcPtr->title_x.empty())
 		{
 			::sprintf(token, "TITLE");
 			this->PhreeqcPtr->dup_print(token, TRUE);
 			if (this->PhreeqcPtr->pr.headings == TRUE)
 			{
-				char *p = this->PhreeqcPtr->sformatf("%s\n\n", this->PhreeqcPtr->title_x);
-				this->PhreeqcPtr->output_msg(p);
+				this->PhreeqcPtr->output_msg(this->PhreeqcPtr->title_x.c_str());
+				this->PhreeqcPtr->output_msg("\n\n");
 			}
 		}
 
@@ -1305,7 +1329,6 @@ void IPhreeqc::do_run(const char* sz_routine, std::istream* pis, PFN_PRERUN_CALL
 						// another do_run without SELECTED_OUTPUT
 						//
 						ASSERT(!this->SelectedOutputFileNameMap[(*it).first].empty());
-						ASSERT(this->SelectedOutputFileNameMap[(*it).first] == this->PhreeqcPtr->SelectedOutput_map[(*it).first].Get_file_name());
 						std::string filename = this->SelectedOutputFileNameMap[(*it).first];
 						if (!punch_open(filename.c_str(), std::ios_base::out, (*it).first))
 						{
@@ -1752,7 +1775,7 @@ void IPhreeqc::fpunchf(const char *name, const char *format, double d)
 		ASSERT(this->SelectedOutputMap.find(this->PhreeqcPtr->current_selected_output->Get_n_user()) != this->SelectedOutputMap.end());
 		this->SelectedOutputMap[this->PhreeqcPtr->current_selected_output->Get_n_user()]->PushBackDouble(name, d);
 	}
-	catch (std::bad_alloc)
+	catch (const std::bad_alloc&)
 	{
 		this->PhreeqcPtr->malloc_error();
 	}
@@ -1771,7 +1794,7 @@ void IPhreeqc::fpunchf(const char *name, const char *format, char *s)
 		ASSERT(this->SelectedOutputMap.find(this->PhreeqcPtr->current_selected_output->Get_n_user()) != this->SelectedOutputMap.end());
 		this->SelectedOutputMap[this->PhreeqcPtr->current_selected_output->Get_n_user()]->PushBackString(name, s);
 	}
-	catch (std::bad_alloc)
+	catch (const std::bad_alloc&)
 	{
 		this->PhreeqcPtr->malloc_error();
 	}
@@ -1790,7 +1813,7 @@ void IPhreeqc::fpunchf(const char *name, const char *format, int i)
 		ASSERT(this->SelectedOutputMap.find(this->PhreeqcPtr->current_selected_output->Get_n_user()) != this->SelectedOutputMap.end());
 		this->SelectedOutputMap[this->PhreeqcPtr->current_selected_output->Get_n_user()]->PushBackLong(name, (long)i);
 	}
-	catch (std::bad_alloc)
+	catch (const std::bad_alloc&)
 	{
 		this->PhreeqcPtr->malloc_error();
 	}
@@ -1865,109 +1888,3 @@ std::string IPhreeqc::create_file_name(const char *prefix, const char *suffix)
 	oss << prefix << "." << this->Index << "." << suffix;
 	return oss.str();
 }
-
-// VITENS VIPHREEQC Extension Functions
-// Gas Phase
-
-double IPhreeqc::GetGasVolume(int gas_phase)
-{
-  return this->PhreeqcPtr->get_gas_volume(gas_phase);
-}
-double IPhreeqc::GetGasPressure(int gas_phase)
-{
-  return this->PhreeqcPtr->get_gas_pressure(gas_phase);
-}
-double IPhreeqc::GetGasTotalMoles(int gas_phase)
-{
-  return this->PhreeqcPtr->get_gas_total_moles(gas_phase);
-}
-std::string IPhreeqc::GetGasComponents(int gas_phase)
-{
-  return this->PhreeqcPtr->get_gas_components(gas_phase);
-}
-double IPhreeqc::GetGasComponentMoles(int gas_phase, const char *component)
-{
-  return this->PhreeqcPtr->get_gas_component_moles(gas_phase, component);
-}
-
-// VITENS VIPHREEQC Extension Functions
-// Surface
-std::string IPhreeqc::GetSurfaceJSON(int surface)
-{
-  return this->PhreeqcPtr->get_surface_json(surface);
-}
-
-// Solution
-double IPhreeqc::GetPH(int solution)
-{
-  return this->PhreeqcPtr->get_pH(solution);
-}
-double IPhreeqc::GetPe(int solution)
-{
-  return this->PhreeqcPtr->get_pe(solution);
-}
-double IPhreeqc::GetSC(int solution)
-{
-  return this->PhreeqcPtr->get_sc(solution);
-}
-double IPhreeqc::GetMu(int solution)
-{
-  return this->PhreeqcPtr->get_mu(solution);
-}
-double IPhreeqc::GetTemperature(int solution)
-{
-  return this->PhreeqcPtr->get_temperature(solution);
-}
-double IPhreeqc::GetMass(int solution)
-{
-  return this->PhreeqcPtr->get_mass(solution);
-}
-double IPhreeqc::GetTotal(int solution, const char *string)
-{
-  return this->PhreeqcPtr->get_total(solution, string);
-}
-double IPhreeqc::GetTotalElement(int solution, const char *string)
-{
-  return this->PhreeqcPtr->get_total_element(solution, string);
-}
-double IPhreeqc::GetActivity(int solution, const char *species)
-{
-  return this->PhreeqcPtr->get_activity(solution, species);
-}
-double IPhreeqc::GetTotalIon(int solution, const char *ion)
-{
-  return this->PhreeqcPtr->get_total_ion(solution, ion);
-}
-double IPhreeqc::GetMoles(int solution, const char *species)
-{
-  return this->PhreeqcPtr->get_moles(solution, species);
-}
-double IPhreeqc::GetMolality(int solution, const char *species)
-{
-  return this->PhreeqcPtr->get_molality(solution, species);
-}
-std::string IPhreeqc::GetSpecies(int solution)
-{
-  return this->PhreeqcPtr->get_species(solution);
-}
-std::string IPhreeqc::GetSpeciesMasters(int solution)
-{
-  return this->PhreeqcPtr->get_species_masters(solution);
-}
-double IPhreeqc::GetSI(int solution, const char *phase)
-{
-  return this->PhreeqcPtr->get_si(solution, phase);
-}
-std::string IPhreeqc::GetPhases(int solution)
-{
-  return this->PhreeqcPtr->get_phases(solution);
-}
-std::string IPhreeqc::GetElements(int solution)
-{
-  return this->PhreeqcPtr->get_elements(solution);
-}
-std::string IPhreeqc::GetSolutionList2(int id)
-{
-  return this->PhreeqcPtr->get_solution_list(id);
-}
-

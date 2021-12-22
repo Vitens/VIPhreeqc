@@ -7,7 +7,7 @@
 #include "Var.h"
 
 /**
- * @mainpage IPhreeqc Library Documentation (3.3.7-11094)
+ * @mainpage IPhreeqc Library Documentation (3.7.3-15968)
  *
  *  @htmlonly
  *  <table>
@@ -432,6 +432,25 @@ extern "C" {
  *  @endhtmlonly
  */
 	IPQ_DLL_EXPORT int         GetErrorFileOn(int id);
+
+/**
+ *  Retrieves the current value of the error on switch.
+ *  @param id            The instance id returned from @ref CreateIPhreeqc.
+ *  @return              Non-zero if errors are generated, 0 (zero) otherwise.
+ *  @see                 SetErrorOn
+ *  @par Fortran90 Interface:
+ *  @htmlonly
+ *  <CODE>
+ *  <PRE>
+ *  FUNCTION GetErrorOn(ID)
+ *    INTEGER(KIND=4),  INTENT(IN)  :: ID
+ *    LOGICAL(KIND=4)               :: GetErrorOn
+ *  END FUNCTION GetErrorOn
+ *  </PRE>
+ *  </CODE>
+ *  @endhtmlonly
+ */
+	IPQ_DLL_EXPORT int         GetErrorOn(int id);
 
 
 /**
@@ -1853,6 +1872,31 @@ Headings
 	IPQ_DLL_EXPORT IPQ_RESULT  SetErrorFileOn(int id, int error_on);
 
 /**
+ *  Sets the error switch on or off.  This switch controls whether or not
+ *  error messages are generated and displayed.  The initial setting after calling
+ *  @ref CreateIPhreeqc is on.
+ *  @param id                   The instance id returned from @ref CreateIPhreeqc.
+ *  @param error_on             If non-zero, writes errors to the error file and error string; if zero, no errors are written to the error file or stored in the error string.
+ *  @retval IPQ_OK              Success.
+ *  @retval IPQ_BADINSTANCE     The given id is invalid.
+ *  @see                        GetErrorOn, GetErrorStringLine, GetErrorStringLineCount, OutputErrorString
+ *  @par Fortran90 Interface:
+ *  @htmlonly
+ *  <CODE>
+ *  <PRE>
+ *  FUNCTION SetErrorOn(ID,ERR_ON)
+ *    INTEGER(KIND=4),  INTENT(IN)  :: ID
+ *    LOGICAL(KIND=4),  INTENT(IN)  :: ERR_ON
+ *    INTEGER(KIND=4)               :: SetErrorOn
+ *  END FUNCTION SetErrorOn
+ *  </PRE>
+ *  </CODE>
+ *  @endhtmlonly
+ */
+	IPQ_DLL_EXPORT IPQ_RESULT  SetErrorOn(int id, int error_on);
+
+
+/**
  *  Sets the error string switch on or off.  This switch controls whether or not the data normally sent
  *  to the error file are stored in a buffer for retrieval.  The initial setting after calling
  *  @ref CreateIPhreeqc is on.
@@ -2126,36 +2170,6 @@ Headings
 
 // TODO int CatchErrors(PFN_CATCH_CALLBACK pfn, void *cookie);
 
-// VITENS VIPHREEQC Extension Functions
-  // gas
-	IPQ_DLL_EXPORT double GetGasVolume(int id, int gas_phase);
-	IPQ_DLL_EXPORT double GetGasPressure(int id, int gas_phase);
-	IPQ_DLL_EXPORT double GetGasTotalMoles(int id, int gas_phase);
-    IPQ_DLL_EXPORT const char* GetGasComponents(int id, int solution);
-    IPQ_DLL_EXPORT double GetGasComponentMoles(int id, int solution, const char *component);
-
-  // surface
-	IPQ_DLL_EXPORT const char* GetSurfaceJSON(int id, int surface);
-
-  // solution
-	IPQ_DLL_EXPORT double GetPH(int id, int solution);
-	IPQ_DLL_EXPORT double GetPe(int id, int solution);
-	IPQ_DLL_EXPORT double GetSC(int id, int solution);
-	IPQ_DLL_EXPORT double GetMu(int id, int solution);
-	IPQ_DLL_EXPORT double GetTemperature(int id, int solution);
-	IPQ_DLL_EXPORT double GetMass(int id, int solution);
-	IPQ_DLL_EXPORT double GetTotal(int id, int solution, const char *string);
-	IPQ_DLL_EXPORT double GetTotalIon(int id, int solution, const char *string);
-  IPQ_DLL_EXPORT double GetTotalElement(int id, int solution, const char *string);
-  IPQ_DLL_EXPORT double GetMoles(int id, int solution, const char *species);
-  IPQ_DLL_EXPORT double GetActivity(int id, int solution, const char *species);
-  IPQ_DLL_EXPORT double GetMolality(int id, int solution, const char *species);
-  IPQ_DLL_EXPORT const char* GetSpecies(int id, int solution);
-  IPQ_DLL_EXPORT const char* GetSpeciesMasters(int id, int solution);
-  IPQ_DLL_EXPORT double GetSI(int id, int solution, const char *phase);
-  IPQ_DLL_EXPORT const char* GetPhases(int id, int solution);
-  IPQ_DLL_EXPORT const char* GetElements(int id, int solution);
-  IPQ_DLL_EXPORT const char* GetSolutionList(int id);
 
 #if defined(__cplusplus)
 }

@@ -14,11 +14,7 @@
 #include "Var.h"                    /* VRESULT */
 #include "PHRQ_io.h"
 
-#if defined(_WINDLL)
-#define IPQ_DLL_EXPORT __declspec(dllexport)
-#else
-#define IPQ_DLL_EXPORT
-#endif
+#include "PHRQ_exports.h"
 
 class Phreeqc;
 class IErrorReporter;
@@ -192,6 +188,14 @@ public:
 	 *  @see                    SetErrorFileOn
 	 */
 	bool                     GetErrorFileOn(void)const;
+
+	/**
+	 *  Retrieves the current value of the error switch.
+	 *  @retval true            Error messages are sent to the error file and to the string buffer
+	 *  @retval false           No errors are sent.
+	 *  @see                    SetErrorOn
+	 */
+	bool                     GetErrorOn(void)const;
 
 	/**
 	 *  Retrieves the error messages from the last call to @ref RunAccumulated, @ref RunFile, @ref RunString, @ref LoadDatabase, or @ref LoadDatabaseString.
@@ -768,11 +772,20 @@ public:
 	/**
 	 *  Sets the error file switch on or off.  This switch controls whether or not
 	 *  error messages are written to the <B><I>phreeqc.id.err</I></B> (where id is obtained from @ref GetId) file.
-	 *  The initial setting is false.
+	 *  The initial setting is true.
 	 *  @param bValue           If true, writes errors to the error file; if false, no errors are written to the error file.
 	 *  @see                    GetErrorStringLine, GetErrorStringLineCount, GetErrorFileOn, OutputErrorString
 	 */
 	void                     SetErrorFileOn(bool bValue);
+
+	/**
+	 *  Sets the error switch on or off.  This switch controls whether
+	 *  error messages are are generated and displayed.
+	 *  The initial setting is true.
+	 *  @param bValue           If true, error messages are sent to the error file and error string buffer; if false, no error messages are generated.
+	 *  @see                    GetErrorOn, GetErrorStringLine, GetErrorStringLineCount, GetErrorFileOn, OutputErrorString
+	 */
+	void                     SetErrorOn(bool bValue);
 
 	/**
 	 *  Sets the error string switch on or off.  This switch controls whether or not the data normally sent
@@ -857,111 +870,6 @@ public:
 	 *  @see                    GetSelectedOutputFileOn, GetSelectedOutputString, GetSelectedOutputStringOn, GetSelectedOutputStringLine, GetSelectedOutputStringLineCount, SetCurrentSelectedOutputUserNumber, SetSelectedOutputFileOn
 	 */
 	void                     SetSelectedOutputStringOn(bool bValue);
-
-  // Vitens VIPHREEQC Extension Functions
-  // gas functions
-  //
-  /**
-   * Returns the volume of the specified gas_phase
-   */
-  double                  GetGasVolume(int gas_phase);
-  /**
-   * Returns the pressure of the specified gas_phase
-   */
-  double                  GetGasPressure(int gas_phase);
-  /**
-   * Returns the total moles of the specified gas_phase
-   */
-  double                  GetGasTotalMoles(int gas_phase);
-  /**
-   * Returns a list of components in the gas phase
-   */
-  std::string             GetGasComponents(int gas_phase);
-
-  /**
-   * Returns the amount of moles in a gas component
-   */
-  double             GetGasComponentMoles(int gas_phase, const char* component);
-
-  // surface functions
-  /**
-   * Returns a JSON representation of the specified surface
-   */
-  std::string             GetSurfaceJSON(int surface);
-
-  // volume functions
-  /**
-   * Returns the pH of the specified solution
-   */
-  double                  GetPH(int solution);
-  /**
-   * Returns the pe of the specified solution
-   */
-  double                  GetPe(int solution);
-  /**
-   * Returns the specific conductance (in uS/cm) of the specified solution
-   */
-  double                  GetSC(int solution);
-  /**
-   * Returns the temperature (degrees Celsius) of the specified solution
-   */
-  double                  GetMu(int solution);
-  /**
-   * Returns the ionic strength (mol/kgw) of the specified solution
-   */
-  double                  GetTemperature(int solution);
-  /**
-   * Returns the mass (kg) of the specified solution
-   */
-  double                  GetMass(int solution);
-  /**
-   * Returns the amount (in mol) of an element (e.g. C(-4), Ca, etc.)
-   */
-  double                  GetTotal(int solution, const char *string);
-  /**
-   * Returns the total amount (in mol) of an element (e.g. C, Ca, etc.)
-   */
-  double                  GetTotalElement(int solution, const char *string);
-  /**
-   * Returns the amount of moles (in mol) of a species (e.g. Ca+2, OH-, etc.)
-   */
-  double                  GetActivity(int solution, const char *species);
-  /**
-   * Returns the activity of a ion (e.g. Ca+2, OH-, etc.)
-   */
-  double                  GetTotalIon(int solution, const char *string);
-  /**
-   * Returns the molality (in mol/kgW) of a species (e.g. Ca+2, OH-, etc.)
-   */
-  double                  GetMoles(int solution, const char *species);
-  /**
-   * Returns the molality (in mol/kgW) of a species (e.g. Ca+2, OH-, etc.)
-   */
-  double                  GetMolality(int solution, const char *species);
-  /**
-   * Returns a comma separated list of all the species in the selected solution
-   */
-  std::string             GetSpecies(int solution);
-  /**
-   * Returns a semicolon separated list of all the species and their master elements in the selected solution
-   */
-  std::string             GetSpeciesMasters(int solution);
-  /**
-   * Returns the Solubility Index of a phase in a solution
-   */
-  double                  GetSI(int solution, const char *phase);
-  /**
-   * Returns a comma separated list of all the phases in the selected solution
-   */
-  std::string             GetPhases(int solution);
-  /**
-   * Returns a comma separated list of all the elements in the selected solution
-   */
-  std::string             GetElements(int solution);
-  /**
-   * Returns a comma separated list of all the solutions in the current runstate
-   */
-  std::string             GetSolutionList2(int id);
 
 public:
 	// overrides
@@ -1050,6 +958,26 @@ protected:
 	std::vector< std::string > DumpLines;
 
 	std::list< std::string >   Components;
+	std::list< std::string >   EquilibriumPhasesList;
+	const std::list<std::string> &GetEquilibriumPhasesList() { return this->EquilibriumPhasesList; };
+	std::list< std::string >   GasComponentsList;
+	const std::list<std::string> &GetGasComponentsList() { return this->GasComponentsList; };
+	std::list< std::string >   KineticReactionsList;
+	const std::list<std::string> &GetKineticReactionsList() { return this->KineticReactionsList; };
+	std::list< std::string >   SolidSolutionComponentsList;
+	const std::list<std::string> &GetSolidSolutionComponentsList() { return this->SolidSolutionComponentsList; };
+	std::list< std::string >   SolidSolutionNamesList;
+	const std::list<std::string> &GetSolidSolutionNamesList() { return this->SolidSolutionNamesList; };
+	//std::list< std::string >   SurfaceSpeciesList;
+	//const std::list<std::string> &GetSurfaceSpeciesList() { return this->SurfaceSpeciesList; };
+	std::list< std::string >   SurfaceTypeList;
+	const std::list<std::string> &GetSurfaceTypeList() { return this->SurfaceTypeList; };
+	std::list< std::string >   SurfaceNamesList;
+	const std::list<std::string> &GetSurfaceNamesList() { return this->SurfaceNamesList; };
+	//std::list< std::string >   ExchangeSpeciesList;
+	//const std::list<std::string> &GetExchangeSpeciesList() { return this->ExchangeSpeciesList; };
+	std::list< std::string >   ExchangeNamesList;
+	const std::list<std::string> &GetExchangeNamesList() { return this->ExchangeNamesList; };
 
 	std::map< int, std::string > SelectedOutputFileNameMap;
 

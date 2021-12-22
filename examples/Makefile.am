@@ -2,14 +2,27 @@ EXTRA_DIST =\
 	CMakeLists.txt\
 	c/CMakeLists.txt\
 	c/advect/CMakeLists.txt\
+	c/advect/CMakeLists.txt.in\
+	c/advect/README.txt\
 	com/CMakeLists.txt\
 	com/README.txt\
 	com/excel/CMakeLists.txt\
 	com/python/CMakeLists.txt\
 	cpp/CMakeLists.txt\
 	cpp/advect/CMakeLists.txt\
+	cpp/advect/CMakeLists.txt.in\
+	cpp/advect/README.txt\
 	fortran/CMakeLists.txt\
-	fortran/advect/CMakeLists.txt
+	fortran/advect/CMakeLists.txt\
+	fortran/advect/CMakeLists.txt.in\
+	fortran/advect/README.txt\
+	using-cmake/CMakeLists.txt\
+	using-cmake/CMakeLists.txt.in\
+	using-cmake/ex2\
+	using-cmake/main.cpp\
+	using-cmake/phreeqc.dat\
+	using-cmake/post-install.cmake.in\
+	using-cmake/README.txt
 
 EXAMPLES_DIR = $(docdir)/examples
 

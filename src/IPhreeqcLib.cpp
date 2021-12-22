@@ -1,7 +1,6 @@
 #include <cassert>
 #include <iostream>
 #include <map>
-#include <sstream>
 
 #include "IPhreeqc.h"
 #include "IPhreeqc.hpp"
@@ -226,6 +225,24 @@ GetErrorFileOn(int id)
 	if (IPhreeqcPtr)
 	{
 		if (IPhreeqcPtr->GetErrorFileOn())
+		{
+			return 1;
+		}
+		else
+		{
+			return 0;
+		}
+	}
+	return IPQ_BADINSTANCE;
+}
+
+int
+GetErrorOn(int id)
+{
+	IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
+	if (IPhreeqcPtr)
+	{
+		if (IPhreeqcPtr->GetErrorOn())
 		{
 			return 1;
 		}
@@ -782,6 +799,7 @@ SetBasicCallback(int id, double (*fcn)(double x1, double x2, const char *str, vo
 	}
 	return IPQ_BADINSTANCE;
 }
+#if !defined(R_SO)
 #ifdef IPHREEQC_NO_FORTRAN_MODULE
 IPQ_RESULT
 SetBasicFortranCallback(int id, double (*fcn)(double *x1, double *x2, char *str, size_t l))
@@ -806,7 +824,8 @@ SetBasicFortranCallback(int id, double (*fcn)(double *x1, double *x2, const char
 	}
 	return IPQ_BADINSTANCE;
 }
-#endif
+#endif /* IPHREEQC_NO_FORTRAN_MODULE */
+#endif /* !defined(R_SO) */
 IPQ_RESULT
 SetCurrentSelectedOutputUserNumber(int id, int n)
 {
@@ -878,6 +897,18 @@ SetErrorFileOn(int id, int value)
 	if (IPhreeqcPtr)
 	{
 		IPhreeqcPtr->SetErrorFileOn(value != 0);
+		return IPQ_OK;
+	}
+	return IPQ_BADINSTANCE;
+}
+
+IPQ_RESULT
+SetErrorOn(int id, int value)
+{
+	IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
+	if (IPhreeqcPtr)
+	{
+		IPhreeqcPtr->SetErrorOn(value != 0);
 		return IPQ_OK;
 	}
 	return IPQ_BADINSTANCE;
@@ -1051,293 +1082,6 @@ IPhreeqcLib::GetInstance(int id)
 	mutex_unlock(&map_lock);
 	return instance;
 }
-
-/// VITENS VIPHREEQC Extension Functions
-// Gas
-//
-double
-GetGasVolume(int id, int gas_phase)
-{
-	IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
-	if (IPhreeqcPtr)
-	{
-    return IPhreeqcPtr->GetGasVolume(gas_phase);
-	}
-	return -99;
-}
-double
-GetGasPressure(int id, int gas_phase)
-{
-	IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
-	if (IPhreeqcPtr)
-	{
-    return IPhreeqcPtr->GetGasPressure(gas_phase);
-	}
-	return -99;
-}
-double
-GetGasTotalMoles(int id, int gas_phase)
-{
-	IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
-	if (IPhreeqcPtr)
-	{
-    return IPhreeqcPtr->GetGasTotalMoles(gas_phase);
-	}
-	return -99;
-}
-
-double 
-GetGasComponentMoles(int id, int gas_phase, const char *component)
-{
-	IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
-	if (IPhreeqcPtr)
-	{
-    return IPhreeqcPtr->GetGasComponentMoles(gas_phase, component);
-	}
-	return -99;
-}
-
-const char*
-GetGasComponents(int id, int gas_phase)
-{
-  static const char err_msg[] = "GetGasComponents: Invalid instance id.\n";
-  IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
-  if (IPhreeqcPtr)
-  {
-    static std::string str;
-    std::stringstream stream;
-    stream << IPhreeqcPtr->GetGasComponents(gas_phase);
-    str = stream.str();
-    return str.c_str();
-  }
-  return err_msg;
-}
-
-// Surface
-const char*
-GetSurfaceJSON(int id, int surface)
-{
-  static const char err_msg[] = "GetSurfaceJSON: Invalid instance id.\n";
-	IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
-	if (IPhreeqcPtr)
-	{
-    static std::string str;
-    std::stringstream stream;
-    stream << IPhreeqcPtr->GetSurfaceJSON(surface);
-    str = stream.str();
-    return str.c_str();
-	}
-	return err_msg;
-}
-
-// Solution
-double
-GetPH(int id, int solution)
-{
-	IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
-	if (IPhreeqcPtr)
-	{
-    return IPhreeqcPtr->GetPH(solution);
-	}
-	return -99;
-}
-double
-GetSC(int id, int solution)
-{
-	IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
-	if (IPhreeqcPtr)
-	{
-    return IPhreeqcPtr->GetSC(solution);
-	}
-	return -99;
-}
-double
-GetMu(int id, int solution)
-{
-	IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
-	if (IPhreeqcPtr)
-	{
-    return IPhreeqcPtr->GetMu(solution);
-	}
-	return -99;
-}
-double
-GetTemperature(int id, int solution)
-{
-	IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
-	if (IPhreeqcPtr)
-	{
-    return IPhreeqcPtr->GetTemperature(solution);
-	}
-	return -99;
-}
-double
-GetPe(int id, int solution)
-{
-	IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
-	if (IPhreeqcPtr)
-	{
-    return IPhreeqcPtr->GetPe(solution);
-	}
-	return -99;
-}
-double
-GetMass(int id, int solution)
-{
-	IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
-	if (IPhreeqcPtr)
-	{
-    return IPhreeqcPtr->GetMass(solution);
-	}
-	return -99;
-}
-double
-GetTotal(int id, int solution, const char *string)
-{
-	IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
-	if (IPhreeqcPtr)
-	{
-    return IPhreeqcPtr->GetTotal(solution, string);
-	}
-	return -99;
-}
-double
-GetTotalElement(int id, int solution, const char *string)
-{
-  IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
-  if (IPhreeqcPtr)
-  {
-    return IPhreeqcPtr->GetTotalElement(solution, string);
-  }
-  return -99;
-}
-double
-GetTotalIon(int id, int solution, const char *string)
-{
-  IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
-  if (IPhreeqcPtr)
-  {
-    return IPhreeqcPtr->GetTotalIon(solution, string);
-  }
-  return -99;
-}
-double
-GetMoles(int id, int solution, const char *species)
-{
-  IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
-  if (IPhreeqcPtr)
-  {
-    return IPhreeqcPtr->GetMoles(solution, species);
-  }
-  return -99;
-}
-double
-GetActivity(int id, int solution, const char *species)
-{
-  IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
-  if (IPhreeqcPtr)
-  {
-    return IPhreeqcPtr->GetActivity(solution, species);
-  }
-  return -99;
-}
-double
-GetMolality(int id, int solution, const char *species)
-{
-  IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
-  if (IPhreeqcPtr)
-  {
-    return IPhreeqcPtr->GetMolality(solution, species);
-  }
-  return -99;
-}
-const char *
-GetSpecies(int id, int solution)
-{
-  static const char err_msg[] = "GetSpecies: Invalid instance id.\n";
-  IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
-  if (IPhreeqcPtr)
-  {
-    static std::string str;
-    std::stringstream stream;
-    stream << IPhreeqcPtr->GetSpecies(solution);
-    str = stream.str();
-    return str.c_str();
-  }
-  return err_msg;
-}
-const char *
-GetSpeciesMasters(int id, int solution)
-{
-  static const char err_msg[] = "GetSpecies: Invalid instance id.\n";
-  IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
-  if (IPhreeqcPtr)
-  {
-    static std::string str;
-    std::stringstream stream;
-    stream << IPhreeqcPtr->GetSpeciesMasters(solution);
-    str = stream.str();
-    return str.c_str();
-  }
-  return err_msg;
-}
-double
-GetSI(int id, int solution, const char *phase)
-{
-  IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
-  if (IPhreeqcPtr)
-  {
-    return IPhreeqcPtr->GetSI(solution, phase);
-  }
-  return -99;
-}
-const char *
-GetPhases(int id, int solution)
-{
-  static const char err_msg[] = "GetPhases: Invalid instance id.\n";
-  IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
-  if (IPhreeqcPtr)
-  {
-    static std::string str;
-    std::stringstream stream;
-    stream << IPhreeqcPtr->GetPhases(solution);
-    str = stream.str();
-    return str.c_str();
-  }
-  return err_msg;
-}
-const char *
-GetElements(int id, int solution)
-{
-  static const char err_msg[] = "GetPhases: Invalid instance id.\n";
-  IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
-  if (IPhreeqcPtr)
-  {
-    static std::string str;
-    std::stringstream stream;
-    stream << IPhreeqcPtr->GetElements(solution);
-    str = stream.str();
-    return str.c_str();
-  }
-  return err_msg;
-}
-const char *
-GetSolutionList(int id)
-{
-  static const char err_msg[] = "GetSolutionList: Invalid instance id.\n";
-  IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
-  if (IPhreeqcPtr)
-  {
-    static std::string str;
-    std::stringstream stream;
-    stream << IPhreeqcPtr->GetSolutionList2(0);
-    str = stream.str();
-    return str.c_str();
-  }
-  return err_msg;
-}
-
-
 //// static method
 //void IPhreeqcLib::CleanupIPhreeqcInstances(void)
 //{

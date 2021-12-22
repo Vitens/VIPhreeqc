@@ -23,21 +23,9 @@ EXTRA_DIST=\
 	phreeqcpp/Form1.resX\
 	phreeqcpp/ZedGraph.dll	
 
-AM_CPPFLAGS=-I$(top_srcdir)/src -I$(top_srcdir)/src/phreeqcpp -I$(top_srcdir)/src/phreeqcpp/common -I$(top_srcdir)/src/phreeqcpp/PhreeqcKeywords $(BOOST_CPPFLAGS)
+AM_CPPFLAGS=-I$(top_srcdir)/src -I$(top_srcdir)/src/phreeqcpp -I$(top_srcdir)/src/phreeqcpp/common -I$(top_srcdir)/src/phreeqcpp/PhreeqcKeywords
 
-AM_LDFLAGS=-release 3.3.7 $(LDFLAGS_BOOST) $(LDFLAGS_BOOST_LIBS)
-
-LIBS += $(LIBS_BOOST)
-
-LDFLAGS_BOOST = \
-    $(BOOST_SYSTEM_LDFLAGS) \
-    $(BOOST_PROGRAM_OPTIONS_LDFLAGS)
-
-LIBS_BOOST = \
-    $(BOOST_SYSTEM_LIBS) \
-    $(BOOST_PROGRAM_OPTIONS_LIBS) \
-    $(BOOST_FILESYSTEM_LIBS)
-
+AM_LDFLAGS=-release 3.7.3
 
 # libtool libraries to build
 lib_LTLIBRARIES=libiphreeqc.la
@@ -60,6 +48,7 @@ libiphreeqc_la_SOURCES=\
 	phreeqcpp/common/Parser.h\
 	phreeqcpp/common/PHRQ_base.cxx\
 	phreeqcpp/common/PHRQ_base.h\
+	phreeqcpp/common/PHRQ_exports.h\
 	phreeqcpp/common/PHRQ_io.cpp\
 	phreeqcpp/common/PHRQ_io.h\
 	phreeqcpp/common/phrqtype.h\
@@ -79,7 +68,6 @@ libiphreeqc_la_SOURCES=\
 	phreeqcpp/Dictionary.h\
 	phreeqcpp/dumper.cpp\
 	phreeqcpp/dumper.h\
-	phreeqcpp/dw.cpp\
 	phreeqcpp/Exchange.cxx\
 	phreeqcpp/Exchange.h\
 	phreeqcpp/ExchComp.cxx\

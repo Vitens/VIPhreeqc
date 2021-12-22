@@ -10,6 +10,14 @@
 #include "phqalloc.h"
 #include "Dictionary.h"
 
+#if defined(PHREEQCI_GUI)
+#ifdef _DEBUG
+#define new DEBUG_NEW
+#undef THIS_FILE
+static char THIS_FILE[] = __FILE__;
+#endif
+#endif
+
 cxxSolutionIsotope::cxxSolutionIsotope(PHRQ_io *io)
 :
 PHRQ_base(io),
@@ -59,7 +67,11 @@ cxxSolutionIsotope::dump_xml(std::ostream & s_oss, unsigned int indent) const
 	s_oss << indent1;
 	s_oss << "iso_ratio=\"" << this->ratio << "\"" << "\n";
 
+#ifdef NPP
+	if (!isnan(this->ratio_uncertainty))
+#else
 	if (this->ratio_uncertainty != NAN)
+#endif
 	{
 		s_oss << indent1;
 		s_oss << "iso_ratio_uncertainty=\"" << this->

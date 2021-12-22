@@ -1,11 +1,17 @@
 # project
 project(example_advect_cpp CXX)
 
+configure_file(phreeqc.dat phreeqc.dat COPYONLY)
+configure_file(ic ic COPYONLY)
+configure_file(CMakeLists.txt.in CMakeLists.txt COPYONLY)
+
 # files
 SET(CPP_Advect_Files
+${IPhreeqc_BINARY_DIR}/examples/cpp/advect/CMakeLists.txt
 advect.cpp
 ic
 phreeqc.dat
+README.txt
 )
 
 # src

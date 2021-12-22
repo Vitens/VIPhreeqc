@@ -29,10 +29,10 @@ class cxxSolution:public cxxNumKeyword
 	void Set_new_def(bool p)  {this->new_def = p;}
 	LDBLE Get_patm() const    {return this->patm;}
 	void Set_patm(LDBLE p)    {this->patm = p;}
+	LDBLE Get_potV() const    {return this->potV;}
+	void Set_potV(LDBLE p)    {this->potV = p;}
 	LDBLE Get_tc() const      {return this->tc;}
 	void Set_tc(LDBLE l_tc)   {this->tc = l_tc;}
-	LDBLE Get_sc() const      {return this->sc;}
-	void Set_sc(LDBLE sc)     {this->sc = sc;}
 	LDBLE Get_ph() const      {return this->ph;}
 	void Set_ph(LDBLE pH)     {this->ph = pH;}
 	LDBLE Get_pe() const      {return this->pe;}
@@ -66,6 +66,7 @@ class cxxSolution:public cxxNumKeyword
 	cxxNameDouble & Get_species_gamma(void)             {return this->species_gamma;}
 	std::map<int, double> & Get_species_map(void)       {return this->species_map;}
 	std::map<int, double> & Get_log_gamma_map(void)     {return this->log_gamma_map;}
+	std::map<int, double>& Get_log_molalities_map(void) { return this->log_molalities_map; }
 	std::map < std::string, cxxSolutionIsotope > & Get_isotopes(void)             {return this->isotopes;}	
 	const std::map < std::string, cxxSolutionIsotope > & Get_isotopes(void)const  {return this->isotopes;}	
 	void Set_isotopes(const std::map < std::string, cxxSolutionIsotope > &iso ) {this->isotopes = iso;}	
@@ -116,21 +117,12 @@ class cxxSolution:public cxxNumKeyword
 	void Serialize(Dictionary & dictionary, std::vector < int >&ints, std::vector < double >&doubles);
 	void Deserialize(Dictionary & dictionary, std::vector < int >&ints, std::vector < double >&doubles, int &ii, int &dd);
 
-  // Vitens modification: speciation and master elements list
-  std::map <std::string, std::string> species_masters_list;
-  // Vitens modification: speciation and moles list
-  std::map <std::string, double> species_list;
-  // Vitens modification: speciation and activity list
-  std::map <std::string, double> species_activity_list;
-  // Vitens modification: phases and si list
-  std::map <std::string, double> phases_list;
-
   protected:
 	bool new_def;
 	LDBLE patm;
+	LDBLE potV;
 	LDBLE tc;
 	LDBLE ph;
-	LDBLE sc;
 	LDBLE pe;
 	LDBLE mu;
 	LDBLE ah2o;
@@ -150,6 +142,7 @@ class cxxSolution:public cxxNumKeyword
 	const static std::vector < std::string > vopts;
 	std::map<int, double> species_map;
 	std::map<int, double> log_gamma_map;
+	std::map<int, double> log_molalities_map;
 };
 
 #endif // !defined(SOLUTION_H_INCLUDED)
