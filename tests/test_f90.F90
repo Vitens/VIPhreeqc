@@ -16,6 +16,7 @@ FUNCTION F_MAIN()
   
   INTEGER(KIND=4) F_MAIN
   INTEGER(KIND=4) TestGetSet
+  INTEGER(KIND=4) TestGetSetInitOn
   INTEGER(KIND=4) TestGetSetName
   
   INTEGER(KIND=4),PARAMETER :: EXIT_SUCCESS = 0
@@ -57,12 +58,18 @@ FUNCTION F_MAIN()
      RETURN
   END IF
   
-  ! Error
+  ! Error file
   IF (TestGetSet(id,GetErrorFileOn,SetErrorFileOn).NE.0) THEN
      F_MAIN = EXIT_FAILURE
      RETURN
   END IF
-  
+
+  ! Error
+  IF (TestGetSetInitOn(id,GetErrorOn,SetErrorOn).NE.0) THEN
+     F_MAIN = EXIT_FAILURE
+     RETURN
+  END IF
+
   ! Log
   IF (TestGetSet(id,GetLogFileOn,SetLogFileOn).NE.0) THEN
      F_MAIN = EXIT_FAILURE
@@ -157,41 +164,104 @@ FUNCTION TestGetSet(id,getFunc,setFunc)
   END INTERFACE
   INTEGER(KIND=4),PARAMETER :: EXIT_SUCCESS = 0
   INTEGER(KIND=4),PARAMETER :: EXIT_FAILURE = 1
-  
+
   IF (getFunc(id)) THEN
      TestGetSet = EXIT_FAILURE
-     WRITE(*,*) "FAILURE" 
+     WRITE(*,*) "FAILURE"
      RETURN
   END IF
-  
+
   IF (setFunc(id,.TRUE.).NE.IPQ_OK) THEN
      TestGetSet = EXIT_FAILURE
-     WRITE(*,*) "FAILURE" 
+     WRITE(*,*) "FAILURE"
      RETURN
   END IF
-  
+
   IF (.NOT.getFunc(id)) THEN
      TestGetSet = EXIT_FAILURE
-     WRITE(*,*) "FAILURE" 
+     WRITE(*,*) "FAILURE"
      RETURN
   END IF
-  
+
   IF (setFunc(id,.FALSE.).NE.IPQ_OK) THEN
      TestGetSet = EXIT_FAILURE
-     WRITE(*,*) "FAILURE" 
+     WRITE(*,*) "FAILURE"
      RETURN
   END IF
 
   IF (getFunc(id)) THEN
      TestGetSet = EXIT_FAILURE
+     WRITE(*,*) "FAILURE"
+     RETURN
+  END IF
+
+  TestGetSet = EXIT_SUCCESS
+  RETURN
+
+END FUNCTION TestGetSet
+
+
+FUNCTION TestGetSetInitOn(id,getFunc,setFunc)
+#ifndef IPHREEQC_NO_FORTRAN_MODULE
+  USE IPhreeqc
+#endif
+
+  IMPLICIT NONE
+#ifdef IPHREEQC_NO_FORTRAN_MODULE
+  INCLUDE 'IPhreeqc.f90.inc'
+#endif
+  INTEGER(KIND=4) id
+  INTEGER(KIND=4) TestGetSetInitOn
+  INTERFACE
+     FUNCTION getFunc(id)
+       INTEGER(KIND=4), INTENT(in) :: id
+       LOGICAL(KIND=4) getFunc
+     END FUNCTION getFunc
+  END INTERFACE
+  INTERFACE
+     FUNCTION setFunc(id,flag)
+       INTEGER(KIND=4), INTENT(in) :: id
+       LOGICAL(KIND=4), INTENT(in) :: flag
+       INTEGER(KIND=4) setFunc
+     END FUNCTION setFunc
+  END INTERFACE
+  INTEGER(KIND=4),PARAMETER :: EXIT_SUCCESS = 0
+  INTEGER(KIND=4),PARAMETER :: EXIT_FAILURE = 1
+
+  IF (.NOT.(getFunc(id))) THEN
+     TestGetSetInitOn = EXIT_FAILURE
      WRITE(*,*) "FAILURE" 
      RETURN
   END IF
-  
-  TestGetSet = EXIT_SUCCESS
+
+  IF (setFunc(id,.TRUE.).NE.IPQ_OK) THEN
+     TestGetSetInitOn = EXIT_FAILURE
+     WRITE(*,*) "FAILURE" 
+     RETURN
+  END IF
+
+  IF (.NOT.getFunc(id)) THEN
+     TestGetSetInitOn = EXIT_FAILURE
+     WRITE(*,*) "FAILURE" 
+     RETURN
+  END IF
+
+  IF (setFunc(id,.FALSE.).NE.IPQ_OK) THEN
+     TestGetSetInitOn = EXIT_FAILURE
+     WRITE(*,*) "FAILURE" 
+     RETURN
+  END IF
+
+  IF (getFunc(id)) THEN
+     TestGetSetInitOn = EXIT_FAILURE
+     WRITE(*,*) "FAILURE" 
+     RETURN
+  END IF
+
+  TestGetSetInitOn = EXIT_SUCCESS
   RETURN
-  
-END FUNCTION TestGetSet
+
+END FUNCTION TestGetSetInitOn
 
 
 FUNCTION TestGetSetName(id,getFuncName,setFuncName)

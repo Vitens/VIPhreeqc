@@ -1,11 +1,7 @@
 #if !defined(NAMEDOUBLE_H_INCLUDED)
 #define NAMEDOUBLE_H_INCLUDED
 
-#if defined(_WINDLL)
-#define IPQ_DLL_EXPORT __declspec(dllexport)
-#else
-#define IPQ_DLL_EXPORT
-#endif
+#include "PHRQ_exports.h"
 
 #include <cassert>				// assert
 #include <map>					// std::map
@@ -32,11 +28,10 @@ class IPQ_DLL_EXPORT cxxNameDouble:public
 	};
 
 	cxxNameDouble();
-	cxxNameDouble(struct elt_list *);
-	cxxNameDouble(struct elt_list *, int count);
+	cxxNameDouble(const std::vector<class elt_list>& el);
 	cxxNameDouble(std::map < std::string, cxxISolutionComp > &comps);
 
-	cxxNameDouble(struct name_coef *nc, int count);
+	cxxNameDouble(class name_coef *nc, int count);
 	cxxNameDouble(const cxxNameDouble & old, LDBLE factor);
 	 ~cxxNameDouble();
 
@@ -45,7 +40,6 @@ class IPQ_DLL_EXPORT cxxNameDouble:public
 	void Multiply_activities_redox(std::string, LDBLE f);
 
 	void dump_xml(std::ostream & s_oss, unsigned int indent) const;
-	void dump_json(std::ostream & s_oss, unsigned int indent) const;
 	void dump_raw(std::ostream & s_oss, unsigned int indent) const;
 	CParser::STATUS_TYPE read_raw(CParser & parser, std::istream::pos_type & pos);
 	void add_extensive(const cxxNameDouble & old, LDBLE factor);

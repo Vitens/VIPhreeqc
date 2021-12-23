@@ -4,6 +4,7 @@
 typedef int (*getFunc)(int);
 typedef IPQ_RESULT (*setFunc)(int, int);
 int TestGetSet(int, getFunc, setFunc);
+int TestGetSetInitOn(int, getFunc, setFunc);
 
 int
 main(int argc, const char* argv[])
@@ -30,8 +31,14 @@ main(int argc, const char* argv[])
     return EXIT_FAILURE;
   }
 
-  /* Error */
+  /* Error file */
   if (TestGetSet(id, GetErrorFileOn, SetErrorFileOn))
+  {
+    return EXIT_FAILURE;
+  }
+
+  /* Error */
+  if (TestGetSetInitOn(id, GetErrorOn, SetErrorOn))
   {
     return EXIT_FAILURE;
   }
@@ -112,4 +119,30 @@ TestGetSet(int id, getFunc gf, setFunc sf)
   }
   
   return EXIT_SUCCESS;
+}
+
+int
+TestGetSetInitOn(int id, getFunc gf, setFunc sf)
+{
+    if (!gf(id))
+    {
+        return EXIT_FAILURE;
+    }
+
+    if (sf(id, 0) != IPQ_OK)
+    {
+        return EXIT_FAILURE;
+    }
+
+    if (gf(id))
+    {
+        return EXIT_FAILURE;
+    }
+
+    if (sf(id, 1) != IPQ_OK)
+    {
+        return EXIT_FAILURE;
+    }
+
+    return EXIT_SUCCESS;
 }

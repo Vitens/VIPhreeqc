@@ -289,6 +289,22 @@ LOGICAL FUNCTION GetErrorFileOn(id)
     return
 END FUNCTION GetErrorFileOn
 
+LOGICAL FUNCTION GetErrorOn(id)
+    USE ISO_C_BINDING
+    IMPLICIT NONE
+    INTERFACE
+        INTEGER(KIND=C_INT) FUNCTION GetErrorOnF(id) &
+            BIND(C, NAME='GetErrorOnF')
+            USE ISO_C_BINDING
+            IMPLICIT NONE
+            INTEGER(KIND=C_INT), INTENT(in) :: id
+        END FUNCTION GetErrorOnF
+    END INTERFACE
+    INTEGER, INTENT(in) :: id
+    GetErrorOn = (GetErrorOnF(id) .ne. 0)
+    return
+END FUNCTION GetErrorOn
+
 INTEGER FUNCTION GetErrorStringLineCount(id)
     USE ISO_C_BINDING
     IMPLICIT NONE
@@ -680,8 +696,8 @@ INTEGER FUNCTION GetSelectedOutputValue(id, row, col, vtype, dvalue, svalue, sle
     sz_fortran = sz
     GetSelectedOutputValue = GetSelectedOutputValueF(id, row, col, vtype, dvalue, svalue, sz)
     if (present(slength)) then
-        slength = 0
-        if (sz > sz_fortran) then
+        slength = sz_fortran
+        if (sz < sz_fortran) then
             slength = sz
         endif
     endif        
@@ -1048,6 +1064,26 @@ INTEGER FUNCTION SetErrorFileOn(id, error_file_on)
     SetErrorFileOn = SetErrorFileOnF(id, tf)
     return
 END FUNCTION SetErrorFileOn
+
+INTEGER FUNCTION SetErrorOn(id, error_on)
+    USE ISO_C_BINDING
+    IMPLICIT NONE
+    INTERFACE
+        INTEGER(KIND=C_INT) FUNCTION SetErrorOnF(id, error_on) &
+            BIND(C, NAME='SetErrorOnF')
+            USE ISO_C_BINDING
+            IMPLICIT NONE
+            INTEGER(KIND=C_INT), INTENT(in) :: id, error_on
+        END FUNCTION SetErrorOnF
+    END INTERFACE
+    INTEGER, INTENT(in) :: id
+    LOGICAL, INTENT(in) :: error_on
+    INTEGER :: tf = 0
+    tf = 0
+    if (error_on) tf = 1
+    SetErrorOn = SetErrorOnF(id, tf)
+    return
+END FUNCTION SetErrorOn
 
 INTEGER FUNCTION SetErrorStringOn(id, error_string_on)
     USE ISO_C_BINDING

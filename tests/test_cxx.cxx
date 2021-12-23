@@ -38,6 +38,30 @@ public:
 
       return EXIT_SUCCESS;
     }
+
+  int TestInitOn(void)
+  {
+      if (!(*_p.*_get)())
+      {
+          return EXIT_FAILURE;
+      }
+
+      (*_p.*_set)(false);
+
+      if ((*_p.*_get)())
+      {
+          return EXIT_FAILURE;
+      }
+
+      (*_p.*_set)(true);
+
+      if (!(*_p.*_get)())
+      {
+          return EXIT_FAILURE;
+      }
+
+      return EXIT_SUCCESS;
+  }
 };
 
 int
@@ -59,12 +83,20 @@ main(int argc, const char* argv[])
     return EXIT_FAILURE;
   }
 
-  // Error
-  TTestGetSet<IPhreeqc> testError(&iphreeqc, &IPhreeqc::GetErrorFileOn, &IPhreeqc::SetErrorFileOn);
-  if (testError.Test() != EXIT_SUCCESS)
+  // Error file
+  TTestGetSet<IPhreeqc> testErrorFile(&iphreeqc, &IPhreeqc::GetErrorFileOn, &IPhreeqc::SetErrorFileOn);
+  if (testErrorFile.Test() != EXIT_SUCCESS)
   {
     return EXIT_FAILURE;
   }
+
+  // Error
+  TTestGetSet<IPhreeqc> testError(&iphreeqc, &IPhreeqc::GetErrorOn, &IPhreeqc::SetErrorOn);
+  if (testError.TestInitOn() != EXIT_SUCCESS)
+  {
+    return EXIT_FAILURE;
+  }
+
 
   // Log
   TTestGetSet<IPhreeqc> testLog(&iphreeqc, &IPhreeqc::GetLogFileOn, &IPhreeqc::SetLogFileOn);

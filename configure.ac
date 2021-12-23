@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.61])
-AC_INIT([IPhreeqc], [3.3.7-11094], [charlton@usgs.gov])
+AC_INIT([IPhreeqc], [3.7.3-15968], [charlton@usgs.gov])
 AC_CONFIG_AUX_DIR([config])
 AC_CONFIG_MACRO_DIR([m4])
 
@@ -134,6 +134,7 @@ AC_CONFIG_FILES([
   Makefile
   doc/Makefile
   examples/Makefile
+  gtest/Makefile
   src/Makefile
   tests/Makefile
   tests/phreeqc.dat

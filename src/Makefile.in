@@ -153,32 +153,32 @@ am__libiphreeqc_la_SOURCES_DIST = CSelectedOutput.cpp \
 	phreeqcpp/basicsubs.cpp phreeqcpp/cl1.cpp \
 	phreeqcpp/common/Parser.cxx phreeqcpp/common/Parser.h \
 	phreeqcpp/common/PHRQ_base.cxx phreeqcpp/common/PHRQ_base.h \
-	phreeqcpp/common/PHRQ_io.cpp phreeqcpp/common/PHRQ_io.h \
-	phreeqcpp/common/phrqtype.h phreeqcpp/common/Utils.cxx \
-	phreeqcpp/common/Utils.h phreeqcpp/cvdense.cpp \
-	phreeqcpp/cvdense.h phreeqcpp/cvode.cpp phreeqcpp/cvode.h \
-	phreeqcpp/cxxKinetics.cxx phreeqcpp/cxxKinetics.h \
-	phreeqcpp/cxxMix.cxx phreeqcpp/cxxMix.h phreeqcpp/dense.cpp \
-	phreeqcpp/dense.h phreeqcpp/Dictionary.cpp \
-	phreeqcpp/Dictionary.h phreeqcpp/dumper.cpp phreeqcpp/dumper.h \
-	phreeqcpp/dw.cpp phreeqcpp/Exchange.cxx phreeqcpp/Exchange.h \
-	phreeqcpp/ExchComp.cxx phreeqcpp/ExchComp.h \
-	phreeqcpp/GasComp.cxx phreeqcpp/GasComp.h phreeqcpp/gases.cpp \
-	phreeqcpp/GasPhase.cxx phreeqcpp/GasPhase.h \
-	phreeqcpp/global_structures.h phreeqcpp/input.cpp \
-	phreeqcpp/integrate.cpp phreeqcpp/inverse.cpp \
-	phreeqcpp/ISolution.cxx phreeqcpp/ISolution.h \
-	phreeqcpp/ISolutionComp.cxx phreeqcpp/ISolutionComp.h \
-	phreeqcpp/isotopes.cpp phreeqcpp/kinetics.cpp \
-	phreeqcpp/KineticsComp.cxx phreeqcpp/KineticsComp.h \
-	phreeqcpp/mainsubs.cpp phreeqcpp/model.cpp phreeqcpp/NA.h \
-	phreeqcpp/NameDouble.cxx phreeqcpp/NameDouble.h \
-	phreeqcpp/NumKeyword.cxx phreeqcpp/NumKeyword.h \
-	phreeqcpp/nvector.cpp phreeqcpp/nvector.h \
-	phreeqcpp/nvector_serial.cpp phreeqcpp/nvector_serial.h \
-	phreeqcpp/parse.cpp phreeqcpp/PBasic.cpp phreeqcpp/PBasic.h \
-	phreeqcpp/phqalloc.cpp phreeqcpp/phqalloc.h \
-	phreeqcpp/Phreeqc.cpp phreeqcpp/Phreeqc.h \
+	phreeqcpp/common/PHRQ_exports.h phreeqcpp/common/PHRQ_io.cpp \
+	phreeqcpp/common/PHRQ_io.h phreeqcpp/common/phrqtype.h \
+	phreeqcpp/common/Utils.cxx phreeqcpp/common/Utils.h \
+	phreeqcpp/cvdense.cpp phreeqcpp/cvdense.h phreeqcpp/cvode.cpp \
+	phreeqcpp/cvode.h phreeqcpp/cxxKinetics.cxx \
+	phreeqcpp/cxxKinetics.h phreeqcpp/cxxMix.cxx \
+	phreeqcpp/cxxMix.h phreeqcpp/dense.cpp phreeqcpp/dense.h \
+	phreeqcpp/Dictionary.cpp phreeqcpp/Dictionary.h \
+	phreeqcpp/dumper.cpp phreeqcpp/dumper.h phreeqcpp/Exchange.cxx \
+	phreeqcpp/Exchange.h phreeqcpp/ExchComp.cxx \
+	phreeqcpp/ExchComp.h phreeqcpp/GasComp.cxx phreeqcpp/GasComp.h \
+	phreeqcpp/gases.cpp phreeqcpp/GasPhase.cxx \
+	phreeqcpp/GasPhase.h phreeqcpp/global_structures.h \
+	phreeqcpp/input.cpp phreeqcpp/integrate.cpp \
+	phreeqcpp/inverse.cpp phreeqcpp/ISolution.cxx \
+	phreeqcpp/ISolution.h phreeqcpp/ISolutionComp.cxx \
+	phreeqcpp/ISolutionComp.h phreeqcpp/isotopes.cpp \
+	phreeqcpp/kinetics.cpp phreeqcpp/KineticsComp.cxx \
+	phreeqcpp/KineticsComp.h phreeqcpp/mainsubs.cpp \
+	phreeqcpp/model.cpp phreeqcpp/NA.h phreeqcpp/NameDouble.cxx \
+	phreeqcpp/NameDouble.h phreeqcpp/NumKeyword.cxx \
+	phreeqcpp/NumKeyword.h phreeqcpp/nvector.cpp \
+	phreeqcpp/nvector.h phreeqcpp/nvector_serial.cpp \
+	phreeqcpp/nvector_serial.h phreeqcpp/parse.cpp \
+	phreeqcpp/PBasic.cpp phreeqcpp/PBasic.h phreeqcpp/phqalloc.cpp \
+	phreeqcpp/phqalloc.h phreeqcpp/Phreeqc.cpp phreeqcpp/Phreeqc.h \
 	phreeqcpp/PhreeqcKeywords/Keywords.cpp \
 	phreeqcpp/PhreeqcKeywords/Keywords.h \
 	phreeqcpp/PHRQ_io_output.cpp phreeqcpp/pitzer.cpp \
@@ -222,7 +222,7 @@ am_libiphreeqc_la_OBJECTS = CSelectedOutput.lo IPhreeqc.lo \
 	phreeqcpp/cvdense.lo phreeqcpp/cvode.lo \
 	phreeqcpp/cxxKinetics.lo phreeqcpp/cxxMix.lo \
 	phreeqcpp/dense.lo phreeqcpp/Dictionary.lo phreeqcpp/dumper.lo \
-	phreeqcpp/dw.lo phreeqcpp/Exchange.lo phreeqcpp/ExchComp.lo \
+	phreeqcpp/Exchange.lo phreeqcpp/ExchComp.lo \
 	phreeqcpp/GasComp.lo phreeqcpp/gases.lo phreeqcpp/GasPhase.lo \
 	phreeqcpp/input.lo phreeqcpp/integrate.lo phreeqcpp/inverse.lo \
 	phreeqcpp/ISolution.lo phreeqcpp/ISolutionComp.lo \
@@ -311,8 +311,8 @@ am__depfiles_remade = ./$(DEPDIR)/CSelectedOutput.Plo \
 	phreeqcpp/$(DEPDIR)/cvdense.Plo phreeqcpp/$(DEPDIR)/cvode.Plo \
 	phreeqcpp/$(DEPDIR)/cxxKinetics.Plo \
 	phreeqcpp/$(DEPDIR)/cxxMix.Plo phreeqcpp/$(DEPDIR)/dense.Plo \
-	phreeqcpp/$(DEPDIR)/dumper.Plo phreeqcpp/$(DEPDIR)/dw.Plo \
-	phreeqcpp/$(DEPDIR)/gases.Plo phreeqcpp/$(DEPDIR)/input.Plo \
+	phreeqcpp/$(DEPDIR)/dumper.Plo phreeqcpp/$(DEPDIR)/gases.Plo \
+	phreeqcpp/$(DEPDIR)/input.Plo \
 	phreeqcpp/$(DEPDIR)/integrate.Plo \
 	phreeqcpp/$(DEPDIR)/inverse.Plo \
 	phreeqcpp/$(DEPDIR)/isotopes.Plo \
@@ -473,7 +473,7 @@ INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
 LD = @LD@
 LDFLAGS = @LDFLAGS@
 LIBOBJS = @LIBOBJS@
-LIBS = @LIBS@ $(LIBS_BOOST)
+LIBS = @LIBS@
 LIBTOOL = @LIBTOOL@
 LIPO = @LIPO@
 LN_S = @LN_S@
@@ -582,17 +582,8 @@ EXTRA_DIST = \
 	phreeqcpp/Form1.resX\
 	phreeqcpp/ZedGraph.dll	
 
-AM_CPPFLAGS = -I$(top_srcdir)/src -I$(top_srcdir)/src/phreeqcpp -I$(top_srcdir)/src/phreeqcpp/common -I$(top_srcdir)/src/phreeqcpp/PhreeqcKeywords $(BOOST_CPPFLAGS)
-AM_LDFLAGS = -release 3.3.7 $(LDFLAGS_BOOST) $(LDFLAGS_BOOST_LIBS)
-LDFLAGS_BOOST = \
-    $(BOOST_SYSTEM_LDFLAGS) \
-    $(BOOST_PROGRAM_OPTIONS_LDFLAGS)
-
-LIBS_BOOST = \
-    $(BOOST_SYSTEM_LIBS) \
-    $(BOOST_PROGRAM_OPTIONS_LIBS) \
-    $(BOOST_FILESYSTEM_LIBS)
-
+AM_CPPFLAGS = -I$(top_srcdir)/src -I$(top_srcdir)/src/phreeqcpp -I$(top_srcdir)/src/phreeqcpp/common -I$(top_srcdir)/src/phreeqcpp/PhreeqcKeywords
+AM_LDFLAGS = -release 3.7.3
 
 # libtool libraries to build
 lib_LTLIBRARIES = libiphreeqc.la
@@ -605,32 +596,32 @@ libiphreeqc_la_SOURCES = CSelectedOutput.cpp CSelectedOutput.hxx \
 	phreeqcpp/basicsubs.cpp phreeqcpp/cl1.cpp \
 	phreeqcpp/common/Parser.cxx phreeqcpp/common/Parser.h \
 	phreeqcpp/common/PHRQ_base.cxx phreeqcpp/common/PHRQ_base.h \
-	phreeqcpp/common/PHRQ_io.cpp phreeqcpp/common/PHRQ_io.h \
-	phreeqcpp/common/phrqtype.h phreeqcpp/common/Utils.cxx \
-	phreeqcpp/common/Utils.h phreeqcpp/cvdense.cpp \
-	phreeqcpp/cvdense.h phreeqcpp/cvode.cpp phreeqcpp/cvode.h \
-	phreeqcpp/cxxKinetics.cxx phreeqcpp/cxxKinetics.h \
-	phreeqcpp/cxxMix.cxx phreeqcpp/cxxMix.h phreeqcpp/dense.cpp \
-	phreeqcpp/dense.h phreeqcpp/Dictionary.cpp \
-	phreeqcpp/Dictionary.h phreeqcpp/dumper.cpp phreeqcpp/dumper.h \
-	phreeqcpp/dw.cpp phreeqcpp/Exchange.cxx phreeqcpp/Exchange.h \
-	phreeqcpp/ExchComp.cxx phreeqcpp/ExchComp.h \
-	phreeqcpp/GasComp.cxx phreeqcpp/GasComp.h phreeqcpp/gases.cpp \
-	phreeqcpp/GasPhase.cxx phreeqcpp/GasPhase.h \
-	phreeqcpp/global_structures.h phreeqcpp/input.cpp \
-	phreeqcpp/integrate.cpp phreeqcpp/inverse.cpp \
-	phreeqcpp/ISolution.cxx phreeqcpp/ISolution.h \
-	phreeqcpp/ISolutionComp.cxx phreeqcpp/ISolutionComp.h \
-	phreeqcpp/isotopes.cpp phreeqcpp/kinetics.cpp \
-	phreeqcpp/KineticsComp.cxx phreeqcpp/KineticsComp.h \
-	phreeqcpp/mainsubs.cpp phreeqcpp/model.cpp phreeqcpp/NA.h \
-	phreeqcpp/NameDouble.cxx phreeqcpp/NameDouble.h \
-	phreeqcpp/NumKeyword.cxx phreeqcpp/NumKeyword.h \
-	phreeqcpp/nvector.cpp phreeqcpp/nvector.h \
-	phreeqcpp/nvector_serial.cpp phreeqcpp/nvector_serial.h \
-	phreeqcpp/parse.cpp phreeqcpp/PBasic.cpp phreeqcpp/PBasic.h \
-	phreeqcpp/phqalloc.cpp phreeqcpp/phqalloc.h \
-	phreeqcpp/Phreeqc.cpp phreeqcpp/Phreeqc.h \
+	phreeqcpp/common/PHRQ_exports.h phreeqcpp/common/PHRQ_io.cpp \
+	phreeqcpp/common/PHRQ_io.h phreeqcpp/common/phrqtype.h \
+	phreeqcpp/common/Utils.cxx phreeqcpp/common/Utils.h \
+	phreeqcpp/cvdense.cpp phreeqcpp/cvdense.h phreeqcpp/cvode.cpp \
+	phreeqcpp/cvode.h phreeqcpp/cxxKinetics.cxx \
+	phreeqcpp/cxxKinetics.h phreeqcpp/cxxMix.cxx \
+	phreeqcpp/cxxMix.h phreeqcpp/dense.cpp phreeqcpp/dense.h \
+	phreeqcpp/Dictionary.cpp phreeqcpp/Dictionary.h \
+	phreeqcpp/dumper.cpp phreeqcpp/dumper.h phreeqcpp/Exchange.cxx \
+	phreeqcpp/Exchange.h phreeqcpp/ExchComp.cxx \
+	phreeqcpp/ExchComp.h phreeqcpp/GasComp.cxx phreeqcpp/GasComp.h \
+	phreeqcpp/gases.cpp phreeqcpp/GasPhase.cxx \
+	phreeqcpp/GasPhase.h phreeqcpp/global_structures.h \
+	phreeqcpp/input.cpp phreeqcpp/integrate.cpp \
+	phreeqcpp/inverse.cpp phreeqcpp/ISolution.cxx \
+	phreeqcpp/ISolution.h phreeqcpp/ISolutionComp.cxx \
+	phreeqcpp/ISolutionComp.h phreeqcpp/isotopes.cpp \
+	phreeqcpp/kinetics.cpp phreeqcpp/KineticsComp.cxx \
+	phreeqcpp/KineticsComp.h phreeqcpp/mainsubs.cpp \
+	phreeqcpp/model.cpp phreeqcpp/NA.h phreeqcpp/NameDouble.cxx \
+	phreeqcpp/NameDouble.h phreeqcpp/NumKeyword.cxx \
+	phreeqcpp/NumKeyword.h phreeqcpp/nvector.cpp \
+	phreeqcpp/nvector.h phreeqcpp/nvector_serial.cpp \
+	phreeqcpp/nvector_serial.h phreeqcpp/parse.cpp \
+	phreeqcpp/PBasic.cpp phreeqcpp/PBasic.h phreeqcpp/phqalloc.cpp \
+	phreeqcpp/phqalloc.h phreeqcpp/Phreeqc.cpp phreeqcpp/Phreeqc.h \
 	phreeqcpp/PhreeqcKeywords/Keywords.cpp \
 	phreeqcpp/PhreeqcKeywords/Keywords.h \
 	phreeqcpp/PHRQ_io_output.cpp phreeqcpp/pitzer.cpp \
@@ -780,8 +771,6 @@ phreeqcpp/dense.lo: phreeqcpp/$(am__dirstamp) \
 phreeqcpp/Dictionary.lo: phreeqcpp/$(am__dirstamp) \
 	phreeqcpp/$(DEPDIR)/$(am__dirstamp)
 phreeqcpp/dumper.lo: phreeqcpp/$(am__dirstamp) \
-	phreeqcpp/$(DEPDIR)/$(am__dirstamp)
-phreeqcpp/dw.lo: phreeqcpp/$(am__dirstamp) \
 	phreeqcpp/$(DEPDIR)/$(am__dirstamp)
 phreeqcpp/Exchange.lo: phreeqcpp/$(am__dirstamp) \
 	phreeqcpp/$(DEPDIR)/$(am__dirstamp)
@@ -981,7 +970,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@phreeqcpp/$(DEPDIR)/cxxMix.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@phreeqcpp/$(DEPDIR)/dense.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@phreeqcpp/$(DEPDIR)/dumper.Plo@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@phreeqcpp/$(DEPDIR)/dw.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@phreeqcpp/$(DEPDIR)/gases.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@phreeqcpp/$(DEPDIR)/input.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@phreeqcpp/$(DEPDIR)/integrate.Plo@am__quote@ # am--include-marker
@@ -1338,7 +1326,6 @@ distclean: distclean-am
 	-rm -f phreeqcpp/$(DEPDIR)/cxxMix.Plo
 	-rm -f phreeqcpp/$(DEPDIR)/dense.Plo
 	-rm -f phreeqcpp/$(DEPDIR)/dumper.Plo
-	-rm -f phreeqcpp/$(DEPDIR)/dw.Plo
 	-rm -f phreeqcpp/$(DEPDIR)/gases.Plo
 	-rm -f phreeqcpp/$(DEPDIR)/input.Plo
 	-rm -f phreeqcpp/$(DEPDIR)/integrate.Plo
@@ -1467,7 +1454,6 @@ maintainer-clean: maintainer-clean-am
 	-rm -f phreeqcpp/$(DEPDIR)/cxxMix.Plo
 	-rm -f phreeqcpp/$(DEPDIR)/dense.Plo
 	-rm -f phreeqcpp/$(DEPDIR)/dumper.Plo
-	-rm -f phreeqcpp/$(DEPDIR)/dw.Plo
 	-rm -f phreeqcpp/$(DEPDIR)/gases.Plo
 	-rm -f phreeqcpp/$(DEPDIR)/input.Plo
 	-rm -f phreeqcpp/$(DEPDIR)/integrate.Plo

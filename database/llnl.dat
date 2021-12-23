@@ -1,4 +1,4 @@
-#  $Id: llnl.dat 11091 2016-04-21 15:20:05Z dlpark $
+#  $Id: llnl.dat 12758 2017-08-01 22:09:36Z dlpark $
 #Data are from 'thermo.com.V8.R6.230' prepared by Jim Johnson at
 #Lawrence Livermore National Laboratory, in Geochemist's Workbench
 #format. Converted to Phreeqc format by Greg Anderson with help from
@@ -860,7 +860,7 @@ Cyanide- = Cyanide-
         log_k            -228.6072
 	-delta_H	0	      	# Not possible to calculate enthalpy of reaction	C2H6
 #	Enthalpy of formation:	-0 kcal/mol
-        -analytic    0.10777E+02    0.72105E-01   -0.67489E+05   -0.13915E+02   -0.10531E+04
+        -analytic    -0.10777E+02    0.72105E-01   -0.67489E+05   -0.13915E+02   -0.10531E+04
 #       -Range:  0-300
 
  2.000 H+  + 2.0000 HCO3-  = C2H4 + 3.0000 O2

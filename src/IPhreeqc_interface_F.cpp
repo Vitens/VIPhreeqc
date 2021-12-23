@@ -4,6 +4,7 @@
 #include <memory.h>  /* memcpy */
 #include <assert.h>  /* assert */
 #include <stdio.h>   /* sprintf */
+#include <cstring>
 #include "phrqtype.h"
 #include "IPhreeqc.h"
 
@@ -30,13 +31,13 @@ padfstring(char *dest, const char *src, int* len)
 {
     int sofar, c_len;
 
-	c_len = (int)strlen(src);
+    c_len = (int)strlen(src);
     for (sofar = 0; (sofar < *len) && (*src != '\0'); ++sofar)
         *dest++ = *src++;
 
     while (sofar++ < *len)
         *dest++ = ' ';
-	*len = c_len;
+    *len = c_len;
 }
 
 IPQ_RESULT
@@ -142,6 +143,12 @@ int
 GetErrorFileOnF(int *id)
 {
 	return ::GetErrorFileOn(*id);
+}
+
+int
+GetErrorOnF(int *id)
+{
+	return ::GetErrorOn(*id);
 }
 
 /*
@@ -454,6 +461,12 @@ IPQ_RESULT
 SetErrorFileOnF(int *id, int* error_file_on)
 {
 	return ::SetErrorFileOn(*id, *error_file_on);
+}
+
+IPQ_RESULT
+SetErrorOnF(int *id, int* error_on)
+{
+	return ::SetErrorOn(*id, *error_on);
 }
 
 IPQ_RESULT

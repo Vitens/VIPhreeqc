@@ -237,6 +237,24 @@ GetErrorFileOn(int id)
 	return IPQ_BADINSTANCE;
 }
 
+int
+GetErrorOn(int id)
+{
+	IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
+	if (IPhreeqcPtr)
+	{
+		if (IPhreeqcPtr->GetErrorOn())
+		{
+			return 1;
+		}
+		else
+		{
+			return 0;
+		}
+	}
+	return IPQ_BADINSTANCE;
+}
+
 const char*
 GetErrorString(int id)
 {
@@ -782,6 +800,7 @@ SetBasicCallback(int id, double (*fcn)(double x1, double x2, const char *str, vo
 	}
 	return IPQ_BADINSTANCE;
 }
+#if !defined(R_SO)
 #ifdef IPHREEQC_NO_FORTRAN_MODULE
 IPQ_RESULT
 SetBasicFortranCallback(int id, double (*fcn)(double *x1, double *x2, char *str, size_t l))
@@ -806,7 +825,8 @@ SetBasicFortranCallback(int id, double (*fcn)(double *x1, double *x2, const char
 	}
 	return IPQ_BADINSTANCE;
 }
-#endif
+#endif /* IPHREEQC_NO_FORTRAN_MODULE */
+#endif /* !defined(R_SO) */
 IPQ_RESULT
 SetCurrentSelectedOutputUserNumber(int id, int n)
 {
@@ -878,6 +898,18 @@ SetErrorFileOn(int id, int value)
 	if (IPhreeqcPtr)
 	{
 		IPhreeqcPtr->SetErrorFileOn(value != 0);
+		return IPQ_OK;
+	}
+	return IPQ_BADINSTANCE;
+}
+
+IPQ_RESULT
+SetErrorOn(int id, int value)
+{
+	IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
+	if (IPhreeqcPtr)
+	{
+		IPhreeqcPtr->SetErrorOn(value != 0);
 		return IPQ_OK;
 	}
 	return IPQ_BADINSTANCE;
@@ -1114,21 +1146,21 @@ GetGasComponents(int id, int gas_phase)
 }
 
 // Surface
-const char*
-GetSurfaceJSON(int id, int surface)
-{
-  static const char err_msg[] = "GetSurfaceJSON: Invalid instance id.\n";
-	IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
-	if (IPhreeqcPtr)
-	{
-    static std::string str;
-    std::stringstream stream;
-    stream << IPhreeqcPtr->GetSurfaceJSON(surface);
-    str = stream.str();
-    return str.c_str();
-	}
-	return err_msg;
-}
+// const char*
+// GetSurfaceJSON(int id, int surface)
+// {
+//   static const char err_msg[] = "GetSurfaceJSON: Invalid instance id.\n";
+// 	IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
+// 	if (IPhreeqcPtr)
+// 	{
+//     static std::string str;
+//     std::stringstream stream;
+//     stream << IPhreeqcPtr->GetSurfaceJSON(surface);
+//     str = stream.str();
+//     return str.c_str();
+// 	}
+// 	return err_msg;
+// }
 
 // Solution
 double

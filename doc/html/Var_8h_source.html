@@ -50,153 +50,149 @@
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#ifndef __VAR_H_INC</span></div>
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#define __VAR_H_INC</span></div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;</div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#if defined(_WINDLL)</span></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#define IPQ_DLL_EXPORT __declspec(dllexport)</span></div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#else</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#define IPQ_DLL_EXPORT</span></div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#if defined(R_SO) || defined(NO_NAMELESS_UNION)</span></div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="preprocessor">#define VAR_UNION_NAME u</span></div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="preprocessor">#else</span></div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor">#define VAR_UNION_NAME</span></div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;</div>
-<div class="line"><a name="l00023"></a><span class="lineno"><a class="line" href="Var_8h.html#a815a9d7da02ab09239a410acc9f149a8">   23</a></span>&#160;<span class="keyword">typedef</span> <span class="keyword">enum</span> {</div>
-<div class="line"><a name="l00024"></a><span class="lineno"><a class="line" href="Var_8h.html#a815a9d7da02ab09239a410acc9f149a8a63434d0df2105b1ff0e5606206070d58">   24</a></span>&#160;        <a class="code" href="Var_8h.html#a815a9d7da02ab09239a410acc9f149a8a63434d0df2105b1ff0e5606206070d58">TT_EMPTY</a>  = 0,  </div>
-<div class="line"><a name="l00025"></a><span class="lineno"><a class="line" href="Var_8h.html#a815a9d7da02ab09239a410acc9f149a8a63aedd7b3e899b727bea4b28f41ca51d">   25</a></span>&#160;        <a class="code" href="Var_8h.html#a815a9d7da02ab09239a410acc9f149a8a63aedd7b3e899b727bea4b28f41ca51d">TT_ERROR</a>  = 1,  </div>
-<div class="line"><a name="l00026"></a><span class="lineno"><a class="line" href="Var_8h.html#a815a9d7da02ab09239a410acc9f149a8ada8fd1435d4c325f87001cab253c3753">   26</a></span>&#160;        <a class="code" href="Var_8h.html#a815a9d7da02ab09239a410acc9f149a8ada8fd1435d4c325f87001cab253c3753">TT_LONG</a>   = 2,  </div>
-<div class="line"><a name="l00027"></a><span class="lineno"><a class="line" href="Var_8h.html#a815a9d7da02ab09239a410acc9f149a8a0ef600753ba8f64e2fac5aef8737b4e3">   27</a></span>&#160;        <a class="code" href="Var_8h.html#a815a9d7da02ab09239a410acc9f149a8a0ef600753ba8f64e2fac5aef8737b4e3">TT_DOUBLE</a> = 3,  </div>
-<div class="line"><a name="l00028"></a><span class="lineno"><a class="line" href="Var_8h.html#a815a9d7da02ab09239a410acc9f149a8a3355cc282f3b7c2eea509d182247b0fa">   28</a></span>&#160;        <a class="code" href="Var_8h.html#a815a9d7da02ab09239a410acc9f149a8a3355cc282f3b7c2eea509d182247b0fa">TT_STRING</a> = 4   </div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;} <a class="code" href="Var_8h.html#a815a9d7da02ab09239a410acc9f149a8">VAR_TYPE</a>;</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;</div>
-<div class="line"><a name="l00033"></a><span class="lineno"><a class="line" href="Var_8h.html#abe1651cfc97cce44292d83b010652447">   33</a></span>&#160;<span class="keyword">typedef</span> <span class="keyword">enum</span> {</div>
-<div class="line"><a name="l00034"></a><span class="lineno"><a class="line" href="Var_8h.html#abe1651cfc97cce44292d83b010652447abee420449adcf56547290782ad1fdcd9">   34</a></span>&#160;        <a class="code" href="Var_8h.html#abe1651cfc97cce44292d83b010652447abee420449adcf56547290782ad1fdcd9">VR_OK</a>            =  0,  </div>
-<div class="line"><a name="l00035"></a><span class="lineno"><a class="line" href="Var_8h.html#abe1651cfc97cce44292d83b010652447af01e4416150546a738409440064e3caf">   35</a></span>&#160;        <a class="code" href="Var_8h.html#abe1651cfc97cce44292d83b010652447af01e4416150546a738409440064e3caf">VR_OUTOFMEMORY</a>   = -1,  </div>
-<div class="line"><a name="l00036"></a><span class="lineno"><a class="line" href="Var_8h.html#abe1651cfc97cce44292d83b010652447ad4c8fcd3865de0a8c3f218743071f867">   36</a></span>&#160;        <a class="code" href="Var_8h.html#abe1651cfc97cce44292d83b010652447ad4c8fcd3865de0a8c3f218743071f867">VR_BADVARTYPE</a>    = -2,  </div>
-<div class="line"><a name="l00037"></a><span class="lineno"><a class="line" href="Var_8h.html#abe1651cfc97cce44292d83b010652447aa468eb9d4cb64ae912c1dcf280bc8a47">   37</a></span>&#160;        <a class="code" href="Var_8h.html#abe1651cfc97cce44292d83b010652447aa468eb9d4cb64ae912c1dcf280bc8a47">VR_INVALIDARG</a>    = -3,  </div>
-<div class="line"><a name="l00038"></a><span class="lineno"><a class="line" href="Var_8h.html#abe1651cfc97cce44292d83b010652447a8b735df707eadfb9fb4c1f99c842946b">   38</a></span>&#160;        <a class="code" href="Var_8h.html#abe1651cfc97cce44292d83b010652447a8b735df707eadfb9fb4c1f99c842946b">VR_INVALIDROW</a>    = -4,  </div>
-<div class="line"><a name="l00039"></a><span class="lineno"><a class="line" href="Var_8h.html#abe1651cfc97cce44292d83b010652447ae91a04a29239012cb0e5fbafa4009435">   39</a></span>&#160;        <a class="code" href="Var_8h.html#abe1651cfc97cce44292d83b010652447ae91a04a29239012cb0e5fbafa4009435">VR_INVALIDCOL</a>    = -5   </div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;} <a class="code" href="Var_8h.html#abe1651cfc97cce44292d83b010652447">VRESULT</a>;</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;</div>
-<div class="line"><a name="l00044"></a><span class="lineno"><a class="line" href="structVAR.html">   44</a></span>&#160;<span class="keyword">typedef</span> <span class="keyword">struct </span>{</div>
-<div class="line"><a name="l00045"></a><span class="lineno"><a class="line" href="structVAR.html#a2338546d1f676afce516fe7dfaa43d63">   45</a></span>&#160;        <a class="code" href="Var_8h.html#a815a9d7da02ab09239a410acc9f149a8">VAR_TYPE</a> <a class="code" href="structVAR.html#a2338546d1f676afce516fe7dfaa43d63">type</a>;         </div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        <span class="keyword">union </span>{</div>
-<div class="line"><a name="l00047"></a><span class="lineno"><a class="line" href="structVAR.html#ad84d212017c8c9dae428988198ae8c7b">   47</a></span>&#160;                <span class="keywordtype">long</span>    <a class="code" href="structVAR.html#ad84d212017c8c9dae428988198ae8c7b">lVal</a>;      </div>
-<div class="line"><a name="l00048"></a><span class="lineno"><a class="line" href="structVAR.html#a2cd4d8a389a61384a7e7ac7c4a6408a0">   48</a></span>&#160;                <span class="keywordtype">double</span>  <a class="code" href="structVAR.html#a2cd4d8a389a61384a7e7ac7c4a6408a0">dVal</a>;      </div>
-<div class="line"><a name="l00049"></a><span class="lineno"><a class="line" href="structVAR.html#a5cdf2fa7a52a290e0b8abbe991b49a2b">   49</a></span>&#160;                <span class="keywordtype">char</span>*   <a class="code" href="structVAR.html#a5cdf2fa7a52a290e0b8abbe991b49a2b">sVal</a>;      </div>
-<div class="line"><a name="l00050"></a><span class="lineno"><a class="line" href="structVAR.html#ae6e05f208424516e5a801ccf45c105e2">   50</a></span>&#160;                <a class="code" href="Var_8h.html#abe1651cfc97cce44292d83b010652447">VRESULT</a> <a class="code" href="structVAR.html#ae6e05f208424516e5a801ccf45c105e2">vresult</a>;   </div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        } VAR_UNION_NAME;</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;} <a class="code" href="structVAR.html">VAR</a>;</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;</div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &quot;PHRQ_exports.h&quot;</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;</div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#if defined(R_SO) || defined(NO_NAMELESS_UNION)</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#define VAR_UNION_NAME u</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#else</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#define VAR_UNION_NAME</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;</div>
+<div class="line"><a name="l00019"></a><span class="lineno"><a class="line" href="Var_8h.html#a815a9d7da02ab09239a410acc9f149a8">   19</a></span>&#160;<span class="keyword">typedef</span> <span class="keyword">enum</span> {</div>
+<div class="line"><a name="l00020"></a><span class="lineno"><a class="line" href="Var_8h.html#a815a9d7da02ab09239a410acc9f149a8a63434d0df2105b1ff0e5606206070d58">   20</a></span>&#160;        <a class="code" href="Var_8h.html#a815a9d7da02ab09239a410acc9f149a8a63434d0df2105b1ff0e5606206070d58">TT_EMPTY</a>  = 0,  </div>
+<div class="line"><a name="l00021"></a><span class="lineno"><a class="line" href="Var_8h.html#a815a9d7da02ab09239a410acc9f149a8a63aedd7b3e899b727bea4b28f41ca51d">   21</a></span>&#160;        <a class="code" href="Var_8h.html#a815a9d7da02ab09239a410acc9f149a8a63aedd7b3e899b727bea4b28f41ca51d">TT_ERROR</a>  = 1,  </div>
+<div class="line"><a name="l00022"></a><span class="lineno"><a class="line" href="Var_8h.html#a815a9d7da02ab09239a410acc9f149a8ada8fd1435d4c325f87001cab253c3753">   22</a></span>&#160;        <a class="code" href="Var_8h.html#a815a9d7da02ab09239a410acc9f149a8ada8fd1435d4c325f87001cab253c3753">TT_LONG</a>   = 2,  </div>
+<div class="line"><a name="l00023"></a><span class="lineno"><a class="line" href="Var_8h.html#a815a9d7da02ab09239a410acc9f149a8a0ef600753ba8f64e2fac5aef8737b4e3">   23</a></span>&#160;        <a class="code" href="Var_8h.html#a815a9d7da02ab09239a410acc9f149a8a0ef600753ba8f64e2fac5aef8737b4e3">TT_DOUBLE</a> = 3,  </div>
+<div class="line"><a name="l00024"></a><span class="lineno"><a class="line" href="Var_8h.html#a815a9d7da02ab09239a410acc9f149a8a3355cc282f3b7c2eea509d182247b0fa">   24</a></span>&#160;        <a class="code" href="Var_8h.html#a815a9d7da02ab09239a410acc9f149a8a3355cc282f3b7c2eea509d182247b0fa">TT_STRING</a> = 4   </div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;} <a class="code" href="Var_8h.html#a815a9d7da02ab09239a410acc9f149a8">VAR_TYPE</a>;</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;</div>
+<div class="line"><a name="l00029"></a><span class="lineno"><a class="line" href="Var_8h.html#abe1651cfc97cce44292d83b010652447">   29</a></span>&#160;<span class="keyword">typedef</span> <span class="keyword">enum</span> {</div>
+<div class="line"><a name="l00030"></a><span class="lineno"><a class="line" href="Var_8h.html#abe1651cfc97cce44292d83b010652447abee420449adcf56547290782ad1fdcd9">   30</a></span>&#160;        <a class="code" href="Var_8h.html#abe1651cfc97cce44292d83b010652447abee420449adcf56547290782ad1fdcd9">VR_OK</a>            =  0,  </div>
+<div class="line"><a name="l00031"></a><span class="lineno"><a class="line" href="Var_8h.html#abe1651cfc97cce44292d83b010652447af01e4416150546a738409440064e3caf">   31</a></span>&#160;        <a class="code" href="Var_8h.html#abe1651cfc97cce44292d83b010652447af01e4416150546a738409440064e3caf">VR_OUTOFMEMORY</a>   = -1,  </div>
+<div class="line"><a name="l00032"></a><span class="lineno"><a class="line" href="Var_8h.html#abe1651cfc97cce44292d83b010652447ad4c8fcd3865de0a8c3f218743071f867">   32</a></span>&#160;        <a class="code" href="Var_8h.html#abe1651cfc97cce44292d83b010652447ad4c8fcd3865de0a8c3f218743071f867">VR_BADVARTYPE</a>    = -2,  </div>
+<div class="line"><a name="l00033"></a><span class="lineno"><a class="line" href="Var_8h.html#abe1651cfc97cce44292d83b010652447aa468eb9d4cb64ae912c1dcf280bc8a47">   33</a></span>&#160;        <a class="code" href="Var_8h.html#abe1651cfc97cce44292d83b010652447aa468eb9d4cb64ae912c1dcf280bc8a47">VR_INVALIDARG</a>    = -3,  </div>
+<div class="line"><a name="l00034"></a><span class="lineno"><a class="line" href="Var_8h.html#abe1651cfc97cce44292d83b010652447a8b735df707eadfb9fb4c1f99c842946b">   34</a></span>&#160;        <a class="code" href="Var_8h.html#abe1651cfc97cce44292d83b010652447a8b735df707eadfb9fb4c1f99c842946b">VR_INVALIDROW</a>    = -4,  </div>
+<div class="line"><a name="l00035"></a><span class="lineno"><a class="line" href="Var_8h.html#abe1651cfc97cce44292d83b010652447ae91a04a29239012cb0e5fbafa4009435">   35</a></span>&#160;        <a class="code" href="Var_8h.html#abe1651cfc97cce44292d83b010652447ae91a04a29239012cb0e5fbafa4009435">VR_INVALIDCOL</a>    = -5   </div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;} <a class="code" href="Var_8h.html#abe1651cfc97cce44292d83b010652447">VRESULT</a>;</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;</div>
+<div class="line"><a name="l00040"></a><span class="lineno"><a class="line" href="structVAR.html">   40</a></span>&#160;<span class="keyword">typedef</span> <span class="keyword">struct </span>{</div>
+<div class="line"><a name="l00041"></a><span class="lineno"><a class="line" href="structVAR.html#a2338546d1f676afce516fe7dfaa43d63">   41</a></span>&#160;        <a class="code" href="Var_8h.html#a815a9d7da02ab09239a410acc9f149a8">VAR_TYPE</a> <a class="code" href="structVAR.html#a2338546d1f676afce516fe7dfaa43d63">type</a>;         </div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        <span class="keyword">union </span>{</div>
+<div class="line"><a name="l00043"></a><span class="lineno"><a class="line" href="structVAR.html#ad84d212017c8c9dae428988198ae8c7b">   43</a></span>&#160;                <span class="keywordtype">long</span>    <a class="code" href="structVAR.html#ad84d212017c8c9dae428988198ae8c7b">lVal</a>;      </div>
+<div class="line"><a name="l00044"></a><span class="lineno"><a class="line" href="structVAR.html#a2cd4d8a389a61384a7e7ac7c4a6408a0">   44</a></span>&#160;                <span class="keywordtype">double</span>  <a class="code" href="structVAR.html#a2cd4d8a389a61384a7e7ac7c4a6408a0">dVal</a>;      </div>
+<div class="line"><a name="l00045"></a><span class="lineno"><a class="line" href="structVAR.html#a5cdf2fa7a52a290e0b8abbe991b49a2b">   45</a></span>&#160;                <span class="keywordtype">char</span>*   <a class="code" href="structVAR.html#a5cdf2fa7a52a290e0b8abbe991b49a2b">sVal</a>;      </div>
+<div class="line"><a name="l00046"></a><span class="lineno"><a class="line" href="structVAR.html#ae6e05f208424516e5a801ccf45c105e2">   46</a></span>&#160;                <a class="code" href="Var_8h.html#abe1651cfc97cce44292d83b010652447">VRESULT</a> <a class="code" href="structVAR.html#ae6e05f208424516e5a801ccf45c105e2">vresult</a>;   </div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        } VAR_UNION_NAME;</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;} <a class="code" href="structVAR.html">VAR</a>;</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="preprocessor">#if defined(__cplusplus)</span></div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="keyword">extern</span> <span class="stringliteral">&quot;C&quot;</span> {</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="preprocessor">#if defined(__cplusplus)</span></div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="keyword">extern</span> <span class="stringliteral">&quot;C&quot;</span> {</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;IPQ_DLL_EXPORT <span class="keywordtype">char</span>*   <a class="code" href="Var_8h.html#a4bc9504b10b2cce50efd0312703ac1f9">VarAllocString</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* pSrc);</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;IPQ_DLL_EXPORT <a class="code" href="Var_8h.html#abe1651cfc97cce44292d83b010652447">VRESULT</a> <a class="code" href="Var_8h.html#a697bc568210799b851797b8232d6ddea">VarClear</a>(<a class="code" href="structVAR.html">VAR</a>* pvar);</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;IPQ_DLL_EXPORT <a class="code" href="Var_8h.html#abe1651cfc97cce44292d83b010652447">VRESULT</a> <a class="code" href="Var_8h.html#a87ebbf36638bfb913ab9ab9acf87bb45">VarCopy</a>(<a class="code" href="structVAR.html">VAR</a>* pvarDest, <span class="keyword">const</span> <a class="code" href="structVAR.html">VAR</a>* pvarSrc);</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;IPQ_DLL_EXPORT <span class="keywordtype">void</span>    <a class="code" href="Var_8h.html#a323d0b3678b4187a3dbba35a5ded0f1f">VarFreeString</a>(<span class="keywordtype">char</span>* pSrc);</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;IPQ_DLL_EXPORT <span class="keywordtype">void</span>    <a class="code" href="Var_8h.html#a54f8cc0deea8289bec3aceceb71c9ef3">VarInit</a>(<a class="code" href="structVAR.html">VAR</a>* pvar);</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;IPQ_DLL_EXPORT <span class="keywordtype">char</span>*   <a class="code" href="Var_8h.html#a04e7151eeee1ea0166ee5f21b5716b8d">VarAllocString</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* pSrc);</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;IPQ_DLL_EXPORT <a class="code" href="Var_8h.html#abe1651cfc97cce44292d83b010652447">VRESULT</a> <a class="code" href="Var_8h.html#a9efd35113ea673d1d8ccc35e925e24c3">VarClear</a>(<a class="code" href="structVAR.html">VAR</a>* pvar);</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;IPQ_DLL_EXPORT <a class="code" href="Var_8h.html#abe1651cfc97cce44292d83b010652447">VRESULT</a> <a class="code" href="Var_8h.html#a2373a05a5353ec14b724af9b8d9afd47">VarCopy</a>(<a class="code" href="structVAR.html">VAR</a>* pvarDest, <span class="keyword">const</span> <a class="code" href="structVAR.html">VAR</a>* pvarSrc);</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;IPQ_DLL_EXPORT <span class="keywordtype">void</span>    <a class="code" href="Var_8h.html#acc4671afebca8e1a6de49036c77f8b38">VarFreeString</a>(<span class="keywordtype">char</span>* pSrc);</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;IPQ_DLL_EXPORT <span class="keywordtype">void</span>    <a class="code" href="Var_8h.html#ab5c037cee2a568202c55755814a8dec1">VarInit</a>(<a class="code" href="structVAR.html">VAR</a>* pvar);</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;<span class="preprocessor">#if defined(__cplusplus)</span></div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;}</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;</div>
 <div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;<span class="preprocessor">#if defined(__cplusplus)</span></div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;}</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;<span class="preprocessor">#include &lt;ostream&gt;</span> <span class="comment">// std::ostream</span></div>
 <div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;<span class="preprocessor">#if defined(__cplusplus)</span></div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;<span class="preprocessor">#include &lt;ostream&gt;</span> <span class="comment">// std::ostream</span></div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;<span class="keyword">inline</span> std::ostream&amp; operator&lt;&lt; (std::ostream &amp;os, <span class="keyword">const</span> <a class="code" href="Var_8h.html#a815a9d7da02ab09239a410acc9f149a8">VAR_TYPE</a>&amp; vt)</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;{</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;        <span class="keywordflow">switch</span>(vt)</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;        {</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="Var_8h.html#a815a9d7da02ab09239a410acc9f149a8a63434d0df2105b1ff0e5606206070d58">TT_EMPTY</a>:</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;                os &lt;&lt; <span class="stringliteral">&quot;TT_EMPTY&quot;</span>;</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;                <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="Var_8h.html#a815a9d7da02ab09239a410acc9f149a8a63aedd7b3e899b727bea4b28f41ca51d">TT_ERROR</a>:</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;                os &lt;&lt; <span class="stringliteral">&quot;TT_ERROR&quot;</span>;</div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;                <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="Var_8h.html#a815a9d7da02ab09239a410acc9f149a8ada8fd1435d4c325f87001cab253c3753">TT_LONG</a>:</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;                os &lt;&lt; <span class="stringliteral">&quot;TT_LONG&quot;</span>;</div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;                <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="Var_8h.html#a815a9d7da02ab09239a410acc9f149a8a0ef600753ba8f64e2fac5aef8737b4e3">TT_DOUBLE</a>:</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;                os &lt;&lt; <span class="stringliteral">&quot;TT_DOUBLE&quot;</span>;</div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;                <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="Var_8h.html#a815a9d7da02ab09239a410acc9f149a8a3355cc282f3b7c2eea509d182247b0fa">TT_STRING</a>:</div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;                os &lt;&lt; <span class="stringliteral">&quot;TT_STRING&quot;</span>;</div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;                <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;        <span class="keywordflow">default</span>:</div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;                os &lt;&lt; (int)vt;</div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;                <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;        }</div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;        <span class="keywordflow">return</span> os;</div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;}</div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;</div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;<span class="keyword">inline</span> std::ostream&amp; operator&lt;&lt; (std::ostream &amp;os, <span class="keyword">const</span> <a class="code" href="Var_8h.html#abe1651cfc97cce44292d83b010652447">VRESULT</a>&amp; vr)</div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;{</div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;        <span class="keywordflow">switch</span>(vr)</div>
-<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;        {</div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="Var_8h.html#abe1651cfc97cce44292d83b010652447abee420449adcf56547290782ad1fdcd9">VR_OK</a>:</div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;                os &lt;&lt; <span class="stringliteral">&quot;VR_OK&quot;</span>;</div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;                <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="Var_8h.html#abe1651cfc97cce44292d83b010652447af01e4416150546a738409440064e3caf">VR_OUTOFMEMORY</a>:</div>
-<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;                os &lt;&lt; <span class="stringliteral">&quot;VR_OUTOFMEMORY&quot;</span>;</div>
-<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;                <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="Var_8h.html#abe1651cfc97cce44292d83b010652447ad4c8fcd3865de0a8c3f218743071f867">VR_BADVARTYPE</a>:</div>
-<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;                os &lt;&lt; <span class="stringliteral">&quot;VR_BADVARTYPE&quot;</span>;</div>
-<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;                <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="Var_8h.html#abe1651cfc97cce44292d83b010652447aa468eb9d4cb64ae912c1dcf280bc8a47">VR_INVALIDARG</a>:</div>
-<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;                os &lt;&lt; <span class="stringliteral">&quot;VR_INVALIDARG&quot;</span>;</div>
-<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;                <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="Var_8h.html#abe1651cfc97cce44292d83b010652447a8b735df707eadfb9fb4c1f99c842946b">VR_INVALIDROW</a>:</div>
-<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;                os &lt;&lt; <span class="stringliteral">&quot;VR_INVALIDROW&quot;</span>;</div>
-<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;                <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="Var_8h.html#abe1651cfc97cce44292d83b010652447ae91a04a29239012cb0e5fbafa4009435">VR_INVALIDCOL</a>:</div>
-<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;                os &lt;&lt; <span class="stringliteral">&quot;VR_INVALIDCOL&quot;</span>;</div>
-<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;                <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;        <span class="keywordflow">default</span>:</div>
-<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;                os &lt;&lt; (int)vr;</div>
-<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;                <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;        }</div>
-<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;        <span class="keywordflow">return</span> os;</div>
-<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;}</div>
-<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* __cplusplus */</span><span class="preprocessor"></span></div>
-<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;</div>
-<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* __VAR_H_INC */</span><span class="preprocessor"></span></div>
-<div class="ttc" id="structVAR_html_a2338546d1f676afce516fe7dfaa43d63"><div class="ttname"><a href="structVAR.html#a2338546d1f676afce516fe7dfaa43d63">VAR::type</a></div><div class="ttdeci">VAR_TYPE type</div><div class="ttdef"><b>Definition:</b> Var.h:45</div></div>
-<div class="ttc" id="structVAR_html_a2cd4d8a389a61384a7e7ac7c4a6408a0"><div class="ttname"><a href="structVAR.html#a2cd4d8a389a61384a7e7ac7c4a6408a0">VAR::dVal</a></div><div class="ttdeci">double dVal</div><div class="ttdef"><b>Definition:</b> Var.h:48</div></div>
-<div class="ttc" id="Var_8h_html_abe1651cfc97cce44292d83b010652447af01e4416150546a738409440064e3caf"><div class="ttname"><a href="Var_8h.html#abe1651cfc97cce44292d83b010652447af01e4416150546a738409440064e3caf">VR_OUTOFMEMORY</a></div><div class="ttdef"><b>Definition:</b> Var.h:35</div></div>
-<div class="ttc" id="Var_8h_html_a4bc9504b10b2cce50efd0312703ac1f9"><div class="ttname"><a href="Var_8h.html#a4bc9504b10b2cce50efd0312703ac1f9">VarAllocString</a></div><div class="ttdeci">char * VarAllocString(const char *pSrc)</div></div>
-<div class="ttc" id="Var_8h_html_abe1651cfc97cce44292d83b010652447ad4c8fcd3865de0a8c3f218743071f867"><div class="ttname"><a href="Var_8h.html#abe1651cfc97cce44292d83b010652447ad4c8fcd3865de0a8c3f218743071f867">VR_BADVARTYPE</a></div><div class="ttdef"><b>Definition:</b> Var.h:36</div></div>
-<div class="ttc" id="Var_8h_html_a323d0b3678b4187a3dbba35a5ded0f1f"><div class="ttname"><a href="Var_8h.html#a323d0b3678b4187a3dbba35a5ded0f1f">VarFreeString</a></div><div class="ttdeci">void VarFreeString(char *pSrc)</div></div>
-<div class="ttc" id="Var_8h_html_a697bc568210799b851797b8232d6ddea"><div class="ttname"><a href="Var_8h.html#a697bc568210799b851797b8232d6ddea">VarClear</a></div><div class="ttdeci">VRESULT VarClear(VAR *pvar)</div></div>
-<div class="ttc" id="Var_8h_html_a815a9d7da02ab09239a410acc9f149a8ada8fd1435d4c325f87001cab253c3753"><div class="ttname"><a href="Var_8h.html#a815a9d7da02ab09239a410acc9f149a8ada8fd1435d4c325f87001cab253c3753">TT_LONG</a></div><div class="ttdef"><b>Definition:</b> Var.h:26</div></div>
-<div class="ttc" id="Var_8h_html_a815a9d7da02ab09239a410acc9f149a8a3355cc282f3b7c2eea509d182247b0fa"><div class="ttname"><a href="Var_8h.html#a815a9d7da02ab09239a410acc9f149a8a3355cc282f3b7c2eea509d182247b0fa">TT_STRING</a></div><div class="ttdef"><b>Definition:</b> Var.h:28</div></div>
-<div class="ttc" id="Var_8h_html_abe1651cfc97cce44292d83b010652447ae91a04a29239012cb0e5fbafa4009435"><div class="ttname"><a href="Var_8h.html#abe1651cfc97cce44292d83b010652447ae91a04a29239012cb0e5fbafa4009435">VR_INVALIDCOL</a></div><div class="ttdef"><b>Definition:</b> Var.h:39</div></div>
-<div class="ttc" id="Var_8h_html_a815a9d7da02ab09239a410acc9f149a8a63434d0df2105b1ff0e5606206070d58"><div class="ttname"><a href="Var_8h.html#a815a9d7da02ab09239a410acc9f149a8a63434d0df2105b1ff0e5606206070d58">TT_EMPTY</a></div><div class="ttdef"><b>Definition:</b> Var.h:24</div></div>
-<div class="ttc" id="structVAR_html"><div class="ttname"><a href="structVAR.html">VAR</a></div><div class="ttdoc">Datatype used to store SELECTED_OUTPUT values. </div><div class="ttdef"><b>Definition:</b> Var.h:44</div></div>
-<div class="ttc" id="structVAR_html_ae6e05f208424516e5a801ccf45c105e2"><div class="ttname"><a href="structVAR.html#ae6e05f208424516e5a801ccf45c105e2">VAR::vresult</a></div><div class="ttdeci">VRESULT vresult</div><div class="ttdef"><b>Definition:</b> Var.h:50</div></div>
-<div class="ttc" id="Var_8h_html_a815a9d7da02ab09239a410acc9f149a8a63aedd7b3e899b727bea4b28f41ca51d"><div class="ttname"><a href="Var_8h.html#a815a9d7da02ab09239a410acc9f149a8a63aedd7b3e899b727bea4b28f41ca51d">TT_ERROR</a></div><div class="ttdef"><b>Definition:</b> Var.h:25</div></div>
-<div class="ttc" id="Var_8h_html_a54f8cc0deea8289bec3aceceb71c9ef3"><div class="ttname"><a href="Var_8h.html#a54f8cc0deea8289bec3aceceb71c9ef3">VarInit</a></div><div class="ttdeci">void VarInit(VAR *pvar)</div></div>
-<div class="ttc" id="structVAR_html_a5cdf2fa7a52a290e0b8abbe991b49a2b"><div class="ttname"><a href="structVAR.html#a5cdf2fa7a52a290e0b8abbe991b49a2b">VAR::sVal</a></div><div class="ttdeci">char * sVal</div><div class="ttdef"><b>Definition:</b> Var.h:49</div></div>
-<div class="ttc" id="Var_8h_html_abe1651cfc97cce44292d83b010652447abee420449adcf56547290782ad1fdcd9"><div class="ttname"><a href="Var_8h.html#abe1651cfc97cce44292d83b010652447abee420449adcf56547290782ad1fdcd9">VR_OK</a></div><div class="ttdef"><b>Definition:</b> Var.h:34</div></div>
-<div class="ttc" id="Var_8h_html_a815a9d7da02ab09239a410acc9f149a8a0ef600753ba8f64e2fac5aef8737b4e3"><div class="ttname"><a href="Var_8h.html#a815a9d7da02ab09239a410acc9f149a8a0ef600753ba8f64e2fac5aef8737b4e3">TT_DOUBLE</a></div><div class="ttdef"><b>Definition:</b> Var.h:27</div></div>
-<div class="ttc" id="structVAR_html_ad84d212017c8c9dae428988198ae8c7b"><div class="ttname"><a href="structVAR.html#ad84d212017c8c9dae428988198ae8c7b">VAR::lVal</a></div><div class="ttdeci">long lVal</div><div class="ttdef"><b>Definition:</b> Var.h:47</div></div>
-<div class="ttc" id="Var_8h_html_a815a9d7da02ab09239a410acc9f149a8"><div class="ttname"><a href="Var_8h.html#a815a9d7da02ab09239a410acc9f149a8">VAR_TYPE</a></div><div class="ttdeci">VAR_TYPE</div><div class="ttdoc">Enumeration used to determine the type of data stored in a VAR. </div><div class="ttdef"><b>Definition:</b> Var.h:23</div></div>
-<div class="ttc" id="Var_8h_html_abe1651cfc97cce44292d83b010652447aa468eb9d4cb64ae912c1dcf280bc8a47"><div class="ttname"><a href="Var_8h.html#abe1651cfc97cce44292d83b010652447aa468eb9d4cb64ae912c1dcf280bc8a47">VR_INVALIDARG</a></div><div class="ttdef"><b>Definition:</b> Var.h:37</div></div>
-<div class="ttc" id="Var_8h_html_abe1651cfc97cce44292d83b010652447"><div class="ttname"><a href="Var_8h.html#abe1651cfc97cce44292d83b010652447">VRESULT</a></div><div class="ttdeci">VRESULT</div><div class="ttdoc">Enumeration used to return error codes. </div><div class="ttdef"><b>Definition:</b> Var.h:33</div></div>
-<div class="ttc" id="Var_8h_html_abe1651cfc97cce44292d83b010652447a8b735df707eadfb9fb4c1f99c842946b"><div class="ttname"><a href="Var_8h.html#abe1651cfc97cce44292d83b010652447a8b735df707eadfb9fb4c1f99c842946b">VR_INVALIDROW</a></div><div class="ttdef"><b>Definition:</b> Var.h:38</div></div>
-<div class="ttc" id="Var_8h_html_a87ebbf36638bfb913ab9ab9acf87bb45"><div class="ttname"><a href="Var_8h.html#a87ebbf36638bfb913ab9ab9acf87bb45">VarCopy</a></div><div class="ttdeci">VRESULT VarCopy(VAR *pvarDest, const VAR *pvarSrc)</div></div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;<span class="keyword">inline</span> std::ostream&amp; operator&lt;&lt; (std::ostream &amp;os, <span class="keyword">const</span> <a class="code" href="Var_8h.html#a815a9d7da02ab09239a410acc9f149a8">VAR_TYPE</a>&amp; vt)</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;{</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;        <span class="keywordflow">switch</span>(vt)</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;        {</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="Var_8h.html#a815a9d7da02ab09239a410acc9f149a8a63434d0df2105b1ff0e5606206070d58">TT_EMPTY</a>:</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;                os &lt;&lt; <span class="stringliteral">&quot;TT_EMPTY&quot;</span>;</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;                <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="Var_8h.html#a815a9d7da02ab09239a410acc9f149a8a63aedd7b3e899b727bea4b28f41ca51d">TT_ERROR</a>:</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;                os &lt;&lt; <span class="stringliteral">&quot;TT_ERROR&quot;</span>;</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;                <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="Var_8h.html#a815a9d7da02ab09239a410acc9f149a8ada8fd1435d4c325f87001cab253c3753">TT_LONG</a>:</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;                os &lt;&lt; <span class="stringliteral">&quot;TT_LONG&quot;</span>;</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;                <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="Var_8h.html#a815a9d7da02ab09239a410acc9f149a8a0ef600753ba8f64e2fac5aef8737b4e3">TT_DOUBLE</a>:</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;                os &lt;&lt; <span class="stringliteral">&quot;TT_DOUBLE&quot;</span>;</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;                <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="Var_8h.html#a815a9d7da02ab09239a410acc9f149a8a3355cc282f3b7c2eea509d182247b0fa">TT_STRING</a>:</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;                os &lt;&lt; <span class="stringliteral">&quot;TT_STRING&quot;</span>;</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;                <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;        <span class="keywordflow">default</span>:</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;                os &lt;&lt; (int)vt;</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;                <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;        }</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;        <span class="keywordflow">return</span> os;</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;}</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;<span class="keyword">inline</span> std::ostream&amp; operator&lt;&lt; (std::ostream &amp;os, <span class="keyword">const</span> <a class="code" href="Var_8h.html#abe1651cfc97cce44292d83b010652447">VRESULT</a>&amp; vr)</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;{</div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;        <span class="keywordflow">switch</span>(vr)</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;        {</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="Var_8h.html#abe1651cfc97cce44292d83b010652447abee420449adcf56547290782ad1fdcd9">VR_OK</a>:</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;                os &lt;&lt; <span class="stringliteral">&quot;VR_OK&quot;</span>;</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;                <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="Var_8h.html#abe1651cfc97cce44292d83b010652447af01e4416150546a738409440064e3caf">VR_OUTOFMEMORY</a>:</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;                os &lt;&lt; <span class="stringliteral">&quot;VR_OUTOFMEMORY&quot;</span>;</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;                <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="Var_8h.html#abe1651cfc97cce44292d83b010652447ad4c8fcd3865de0a8c3f218743071f867">VR_BADVARTYPE</a>:</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;                os &lt;&lt; <span class="stringliteral">&quot;VR_BADVARTYPE&quot;</span>;</div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;                <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="Var_8h.html#abe1651cfc97cce44292d83b010652447aa468eb9d4cb64ae912c1dcf280bc8a47">VR_INVALIDARG</a>:</div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;                os &lt;&lt; <span class="stringliteral">&quot;VR_INVALIDARG&quot;</span>;</div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;                <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="Var_8h.html#abe1651cfc97cce44292d83b010652447a8b735df707eadfb9fb4c1f99c842946b">VR_INVALIDROW</a>:</div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;                os &lt;&lt; <span class="stringliteral">&quot;VR_INVALIDROW&quot;</span>;</div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;                <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="Var_8h.html#abe1651cfc97cce44292d83b010652447ae91a04a29239012cb0e5fbafa4009435">VR_INVALIDCOL</a>:</div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;                os &lt;&lt; <span class="stringliteral">&quot;VR_INVALIDCOL&quot;</span>;</div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;                <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;        <span class="keywordflow">default</span>:</div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;                os &lt;&lt; (int)vr;</div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;                <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;        }</div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;        <span class="keywordflow">return</span> os;</div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;}</div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* __cplusplus */</span><span class="preprocessor"></span></div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;</div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* __VAR_H_INC */</span><span class="preprocessor"></span></div>
+<div class="ttc" id="structVAR_html_a2338546d1f676afce516fe7dfaa43d63"><div class="ttname"><a href="structVAR.html#a2338546d1f676afce516fe7dfaa43d63">VAR::type</a></div><div class="ttdeci">VAR_TYPE type</div><div class="ttdef"><b>Definition:</b> Var.h:41</div></div>
+<div class="ttc" id="structVAR_html_a2cd4d8a389a61384a7e7ac7c4a6408a0"><div class="ttname"><a href="structVAR.html#a2cd4d8a389a61384a7e7ac7c4a6408a0">VAR::dVal</a></div><div class="ttdeci">double dVal</div><div class="ttdef"><b>Definition:</b> Var.h:44</div></div>
+<div class="ttc" id="Var_8h_html_abe1651cfc97cce44292d83b010652447af01e4416150546a738409440064e3caf"><div class="ttname"><a href="Var_8h.html#abe1651cfc97cce44292d83b010652447af01e4416150546a738409440064e3caf">VR_OUTOFMEMORY</a></div><div class="ttdef"><b>Definition:</b> Var.h:31</div></div>
+<div class="ttc" id="Var_8h_html_abe1651cfc97cce44292d83b010652447ad4c8fcd3865de0a8c3f218743071f867"><div class="ttname"><a href="Var_8h.html#abe1651cfc97cce44292d83b010652447ad4c8fcd3865de0a8c3f218743071f867">VR_BADVARTYPE</a></div><div class="ttdef"><b>Definition:</b> Var.h:32</div></div>
+<div class="ttc" id="Var_8h_html_a815a9d7da02ab09239a410acc9f149a8ada8fd1435d4c325f87001cab253c3753"><div class="ttname"><a href="Var_8h.html#a815a9d7da02ab09239a410acc9f149a8ada8fd1435d4c325f87001cab253c3753">TT_LONG</a></div><div class="ttdef"><b>Definition:</b> Var.h:22</div></div>
+<div class="ttc" id="Var_8h_html_a04e7151eeee1ea0166ee5f21b5716b8d"><div class="ttname"><a href="Var_8h.html#a04e7151eeee1ea0166ee5f21b5716b8d">VarAllocString</a></div><div class="ttdeci">IPQ_DLL_EXPORT char * VarAllocString(const char *pSrc)</div></div>
+<div class="ttc" id="Var_8h_html_a2373a05a5353ec14b724af9b8d9afd47"><div class="ttname"><a href="Var_8h.html#a2373a05a5353ec14b724af9b8d9afd47">VarCopy</a></div><div class="ttdeci">IPQ_DLL_EXPORT VRESULT VarCopy(VAR *pvarDest, const VAR *pvarSrc)</div></div>
+<div class="ttc" id="Var_8h_html_a815a9d7da02ab09239a410acc9f149a8a3355cc282f3b7c2eea509d182247b0fa"><div class="ttname"><a href="Var_8h.html#a815a9d7da02ab09239a410acc9f149a8a3355cc282f3b7c2eea509d182247b0fa">TT_STRING</a></div><div class="ttdef"><b>Definition:</b> Var.h:24</div></div>
+<div class="ttc" id="Var_8h_html_abe1651cfc97cce44292d83b010652447ae91a04a29239012cb0e5fbafa4009435"><div class="ttname"><a href="Var_8h.html#abe1651cfc97cce44292d83b010652447ae91a04a29239012cb0e5fbafa4009435">VR_INVALIDCOL</a></div><div class="ttdef"><b>Definition:</b> Var.h:35</div></div>
+<div class="ttc" id="Var_8h_html_a815a9d7da02ab09239a410acc9f149a8a63434d0df2105b1ff0e5606206070d58"><div class="ttname"><a href="Var_8h.html#a815a9d7da02ab09239a410acc9f149a8a63434d0df2105b1ff0e5606206070d58">TT_EMPTY</a></div><div class="ttdef"><b>Definition:</b> Var.h:20</div></div>
+<div class="ttc" id="structVAR_html"><div class="ttname"><a href="structVAR.html">VAR</a></div><div class="ttdoc">Datatype used to store SELECTED_OUTPUT values. </div><div class="ttdef"><b>Definition:</b> Var.h:40</div></div>
+<div class="ttc" id="Var_8h_html_acc4671afebca8e1a6de49036c77f8b38"><div class="ttname"><a href="Var_8h.html#acc4671afebca8e1a6de49036c77f8b38">VarFreeString</a></div><div class="ttdeci">IPQ_DLL_EXPORT void VarFreeString(char *pSrc)</div></div>
+<div class="ttc" id="structVAR_html_ae6e05f208424516e5a801ccf45c105e2"><div class="ttname"><a href="structVAR.html#ae6e05f208424516e5a801ccf45c105e2">VAR::vresult</a></div><div class="ttdeci">VRESULT vresult</div><div class="ttdef"><b>Definition:</b> Var.h:46</div></div>
+<div class="ttc" id="Var_8h_html_a815a9d7da02ab09239a410acc9f149a8a63aedd7b3e899b727bea4b28f41ca51d"><div class="ttname"><a href="Var_8h.html#a815a9d7da02ab09239a410acc9f149a8a63aedd7b3e899b727bea4b28f41ca51d">TT_ERROR</a></div><div class="ttdef"><b>Definition:</b> Var.h:21</div></div>
+<div class="ttc" id="structVAR_html_a5cdf2fa7a52a290e0b8abbe991b49a2b"><div class="ttname"><a href="structVAR.html#a5cdf2fa7a52a290e0b8abbe991b49a2b">VAR::sVal</a></div><div class="ttdeci">char * sVal</div><div class="ttdef"><b>Definition:</b> Var.h:45</div></div>
+<div class="ttc" id="Var_8h_html_ab5c037cee2a568202c55755814a8dec1"><div class="ttname"><a href="Var_8h.html#ab5c037cee2a568202c55755814a8dec1">VarInit</a></div><div class="ttdeci">IPQ_DLL_EXPORT void VarInit(VAR *pvar)</div></div>
+<div class="ttc" id="Var_8h_html_abe1651cfc97cce44292d83b010652447abee420449adcf56547290782ad1fdcd9"><div class="ttname"><a href="Var_8h.html#abe1651cfc97cce44292d83b010652447abee420449adcf56547290782ad1fdcd9">VR_OK</a></div><div class="ttdef"><b>Definition:</b> Var.h:30</div></div>
+<div class="ttc" id="Var_8h_html_a815a9d7da02ab09239a410acc9f149a8a0ef600753ba8f64e2fac5aef8737b4e3"><div class="ttname"><a href="Var_8h.html#a815a9d7da02ab09239a410acc9f149a8a0ef600753ba8f64e2fac5aef8737b4e3">TT_DOUBLE</a></div><div class="ttdef"><b>Definition:</b> Var.h:23</div></div>
+<div class="ttc" id="structVAR_html_ad84d212017c8c9dae428988198ae8c7b"><div class="ttname"><a href="structVAR.html#ad84d212017c8c9dae428988198ae8c7b">VAR::lVal</a></div><div class="ttdeci">long lVal</div><div class="ttdef"><b>Definition:</b> Var.h:43</div></div>
+<div class="ttc" id="Var_8h_html_a815a9d7da02ab09239a410acc9f149a8"><div class="ttname"><a href="Var_8h.html#a815a9d7da02ab09239a410acc9f149a8">VAR_TYPE</a></div><div class="ttdeci">VAR_TYPE</div><div class="ttdoc">Enumeration used to determine the type of data stored in a VAR. </div><div class="ttdef"><b>Definition:</b> Var.h:19</div></div>
+<div class="ttc" id="Var_8h_html_abe1651cfc97cce44292d83b010652447aa468eb9d4cb64ae912c1dcf280bc8a47"><div class="ttname"><a href="Var_8h.html#abe1651cfc97cce44292d83b010652447aa468eb9d4cb64ae912c1dcf280bc8a47">VR_INVALIDARG</a></div><div class="ttdef"><b>Definition:</b> Var.h:33</div></div>
+<div class="ttc" id="Var_8h_html_abe1651cfc97cce44292d83b010652447"><div class="ttname"><a href="Var_8h.html#abe1651cfc97cce44292d83b010652447">VRESULT</a></div><div class="ttdeci">VRESULT</div><div class="ttdoc">Enumeration used to return error codes. </div><div class="ttdef"><b>Definition:</b> Var.h:29</div></div>
+<div class="ttc" id="Var_8h_html_abe1651cfc97cce44292d83b010652447a8b735df707eadfb9fb4c1f99c842946b"><div class="ttname"><a href="Var_8h.html#abe1651cfc97cce44292d83b010652447a8b735df707eadfb9fb4c1f99c842946b">VR_INVALIDROW</a></div><div class="ttdef"><b>Definition:</b> Var.h:34</div></div>
+<div class="ttc" id="Var_8h_html_a9efd35113ea673d1d8ccc35e925e24c3"><div class="ttname"><a href="Var_8h.html#a9efd35113ea673d1d8ccc35e925e24c3">VarClear</a></div><div class="ttdeci">IPQ_DLL_EXPORT VRESULT VarClear(VAR *pvar)</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Apr 21 2016 11:12:29 for IPhreeqc by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Dec 2 2021 10:29:05 for IPhreeqc by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.8
 </small></address>

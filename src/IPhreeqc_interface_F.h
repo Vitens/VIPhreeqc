@@ -1,11 +1,7 @@
 #ifndef __IPHREEQC_INTERFACE__H
 #define __IPHREEQC_INTERFACE__H
 
-#if defined(_WINDLL)
-#define IPQ_DLL_EXPORT __declspec(dllexport)
-#else
-#define IPQ_DLL_EXPORT
-#endif
+#include "PHRQ_exports.h"
 
 #ifdef SKIP
 #if defined(FC_FUNC)
@@ -25,6 +21,7 @@
 #define GetDumpStringOnF                    FC_FUNC (getdumpstringonf,                    GETDUMPSTRINGONF)
 #define GetErrorFileNameF                   FC_FUNC (geterrorfilenamef,                   GETERRORFILENAMEF)
 #define GetErrorFileOnF                     FC_FUNC (geterrorfileonf,                     GETERRORFILEONF)
+#define GetErrorOnF                         FC_FUNC (geterroronf,                         GETERRORONF)
 #define GetErrorStringLineF                 FC_FUNC (geterrorstringlinef,                 GETERRORSTRINGLINEF)
 #define GetErrorStringLineCountF            FC_FUNC (geterrorstringlinecountf,            GETERRORSTRINGLINECOUNTF)
 #define GetErrorStringOnF                   FC_FUNC (geterrorstringonf,                   GETERRORSTRINGONF)
@@ -66,6 +63,7 @@
 #define SetDumpStringOnF                    FC_FUNC (setdumpstringonf,                    SETDUMPSTRINGONF)
 #define SetErrorFileNameF                   FC_FUNC (seterrorfilenamef,                   SETERRORFILENAMEF)
 #define SetErrorFileOnF                     FC_FUNC (seterrorfileonf,                     SETERRORFILEONF)
+#define SetErrorOnF                         FC_FUNC (seterroronf,                         SETERRORONF)
 #define SetErrorStringOnF                   FC_FUNC (seterrorstringonf,                   SETERRORSTRINGONF)
 #define SetLogFileNameF                     FC_FUNC (setlogfilenamef,                     SETLOGFILENAMEF)
 #define SetLogFileOnF                       FC_FUNC (setlogfileonf,                       SETLOGFILEONF)
@@ -99,6 +97,7 @@ extern "C" {
   IPQ_DLL_EXPORT int        GetDumpStringOnF(int *id);
   IPQ_DLL_EXPORT void       GetErrorFileNameF(int *id, char* filename, int* filename_length);
   IPQ_DLL_EXPORT int        GetErrorFileOnF(int *id);
+  IPQ_DLL_EXPORT int        GetErrorOnF(int *id);
   IPQ_DLL_EXPORT void       GetErrorStringLineF(int *id, int* n, char* line, int* line_length);
   IPQ_DLL_EXPORT int        GetErrorStringLineCountF(int *id);
   IPQ_DLL_EXPORT int        GetErrorStringOnF(int *id);
@@ -144,6 +143,7 @@ extern "C" {
   IPQ_DLL_EXPORT IPQ_RESULT SetDumpStringOnF(int *id, int* dump_string_on);
   IPQ_DLL_EXPORT IPQ_RESULT SetErrorFileNameF(int *id, char* fname);
   IPQ_DLL_EXPORT IPQ_RESULT SetErrorFileOnF(int *id, int* error_file_on);
+  IPQ_DLL_EXPORT IPQ_RESULT SetErrorOnF(int *id, int* error_on);
   IPQ_DLL_EXPORT IPQ_RESULT SetErrorStringOnF(int *id, int* error_string_on);
   IPQ_DLL_EXPORT IPQ_RESULT SetLogFileNameF(int *id, char* fname);
   IPQ_DLL_EXPORT IPQ_RESULT SetLogFileOnF(int *id, int* log_file_on);
