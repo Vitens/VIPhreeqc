@@ -33,6 +33,11 @@ SET(EXTRA_LIBS ${EXTRA_LIBS} IPhreeqc)
 
 # link 
 target_link_libraries(test_c ${EXTRA_LIBS})
+if (MSVC AND BUILD_SHARED_LIBS AND BUILD_CLR_LIBS)
+  # Setup references for /CLR
+  set_target_properties(test_c PROPERTIES VS_DOTNET_REFERENCES "${CMAKE_CURRENT_SOURCE_DIR}/../src/phreeqcpp/ZedGraph.dll")
+endif()
+
 
 # test compile and run
 add_test(TestCompileAndRunC test_c)
@@ -63,6 +68,10 @@ SET(EXTRA_LIBS ${EXTRA_LIBS} IPhreeqc)
 
 # link 
 target_link_libraries(test_cxx ${EXTRA_LIBS})
+if (MSVC AND BUILD_SHARED_LIBS AND BUILD_CLR_LIBS)
+  # Setup references for /CLR
+  set_target_properties(test_cxx PROPERTIES VS_DOTNET_REFERENCES "${CMAKE_CURRENT_SOURCE_DIR}/../src/phreeqcpp/ZedGraph.dll")
+endif()
 
 # test compile and run
 add_test(TestCompileAndRunCXX test_cxx)

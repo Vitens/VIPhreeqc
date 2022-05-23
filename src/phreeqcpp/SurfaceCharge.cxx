@@ -13,6 +13,13 @@
 #include "phqalloc.h"
 #include "Dictionary.h"
 
+#if defined(PHREEQCI_GUI)
+#ifdef _DEBUG
+#define new DEBUG_NEW
+#undef THIS_FILE
+static char THIS_FILE[] = __FILE__;
+#endif
+#endif
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -70,33 +77,6 @@ cxxSurfaceCharge::dump_xml(std::ostream & s_oss, unsigned int indent) const
 	s_oss << "<diffuse_layer_totals " << "\n";
 	this->diffuse_layer_totals.dump_xml(s_oss, indent + 1);
 
-}
-
-void
-cxxSurfaceCharge::dump_json(std::ostream & s_oss, unsigned int indent) const
-{
-	s_oss.precision(DBL_DIG - 1);
-
-	// Surf_Charge element and attributes
-	s_oss << "\"specific_area\": " << "\"" << this->specific_area << "\",\n";
-	s_oss << "\"grams\": " << "\"" << this->grams << "\",\n";
-	s_oss << "\"charge_balance\":" << "\"" << this->charge_balance << "\",\n";
-	s_oss << "\"mass_water\": " << "\"" << this->mass_water << "\",\n";
-	s_oss << "\"la_psi\": " << "\"" << this->la_psi << "\",\n";
-	s_oss << "\"capacitance1\": " << "\"" << this->capacitance[1] << "\",\n";
-	s_oss << "\"capacitance0\": " << "\"" << this->capacitance[0] << "\",\n";
-	
-	// totals
-	s_oss << "\"diffuse_layer_totals\": ";
-	
-	s_oss << "{";
-	this->diffuse_layer_totals.dump_json(s_oss, indent + 1);
-	s_oss << "},\n";
-
-	s_oss << "\"sigma0\": " << "\"" << this->sigma0 << "\",\n";
-	s_oss << "\"sigma1\": " << "\"" << this->sigma1 << "\",\n";
-	s_oss << "\"sigma2\": " << "\"" << this->sigma2 << "\",\n";
-	s_oss << "\"sigmaddl\": " << "\"" << this->sigmaddl << "\"\n";
 }
 
 void

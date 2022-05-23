@@ -1,13 +1,20 @@
 # project
 if (IPHREEQC_FORTRAN_TESTING AND IPHREEQC_ENABLE_MODULE)
   project(example_advect_f90 Fortran)
+
+  configure_file(phreeqc.dat phreeqc.dat COPYONLY)
+  configure_file(ic ic COPYONLY)
 endif()
+
+configure_file(CMakeLists.txt.in CMakeLists.txt COPYONLY)
 
 # files
 SET(FORTRAN_Advect_Files
+${IPhreeqc_BINARY_DIR}/examples/fortran/advect/CMakeLists.txt
 advect.F90
 ic
 phreeqc.dat
+README.txt
 )
 
 if (IPHREEQC_FORTRAN_TESTING AND IPHREEQC_ENABLE_MODULE)

@@ -148,6 +148,14 @@
 
 
        INTERFACE
+        FUNCTION GetErrorOn(ID)
+         INTEGER(KIND=4),  INTENT(IN)  :: ID
+         LOGICAL(KIND=4)               :: GetErrorOn
+        END FUNCTION GetErrorOn
+       END INTERFACE
+
+
+       INTERFACE
         SUBROUTINE GetErrorStringLine(ID,N,LINE)
          INTEGER(KIND=4),  INTENT(IN)  :: ID
          INTEGER(KIND=4),  INTENT(IN)  :: N

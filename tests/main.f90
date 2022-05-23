@@ -15,10 +15,17 @@
     program test_f90
 
     implicit none
-    
+
+    INTEGER(KIND=4),PARAMETER :: EXIT_SUCCESS = 0
+    INTEGER(KIND=4),PARAMETER :: EXIT_FAILURE = 1
+
     integer(KIND=4) F_MAIN
     integer(KIND=4) I
-    
+
     I = F_MAIN()
+
+    if (I .NE. EXIT_SUCCESS) then
+      STOP EXIT_FAILURE
+    endif
 
     end program test_f90
