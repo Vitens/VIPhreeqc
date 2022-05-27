@@ -1,6 +1,7 @@
 os:
 - linux
 - osx
+dist: focal
 language: cpp
 script: ls
 before_script: autoreconf --force --install
