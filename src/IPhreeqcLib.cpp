@@ -1274,6 +1274,16 @@ GetActivity(int id, int solution, const char *species)
   return -99;
 }
 double
+GetDiffusion(int id, int solution, const char *species)
+{
+  IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
+  if (IPhreeqcPtr)
+  {
+    return IPhreeqcPtr->GetDiffusion(solution, species);
+  }
+  return -99;
+}
+double
 GetMolality(int id, int solution, const char *species)
 {
   IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);

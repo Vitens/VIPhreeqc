@@ -1969,6 +1969,10 @@ double IPhreeqc::GetMolality(int solution, const char *species)
 {
   return this->PhreeqcPtr->get_molality(solution, species);
 }
+double IPhreeqc::GetDiffusion(int solution, const char *species)
+{
+  return this->PhreeqcPtr->diff_c(species);
+}
 std::string IPhreeqc::GetSpecies(int solution)
 {
   return this->PhreeqcPtr->get_species(solution);

@@ -83,6 +83,10 @@ The following functions are implemented in addition to the standard IPhreeqc fun
    */
   double                  GetMolality(int solution, const char *species);
   /**
+   * Return the diffusion coefficient of a species
+   */
+  double                  GetDiffusion(int solution, const char *species);
+  /**
    * Returns a comma separated list of all the species in the selected solution
    */
   std::string             GetSpecies(int solution);

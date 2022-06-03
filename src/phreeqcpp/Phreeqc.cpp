@@ -296,6 +296,14 @@ double Phreeqc::get_molality(int solution, const char *species) {
   }
   return 0.0;
 }
+double Phreeqc::get_diffusion(int solution, const char *species) {
+  cxxSolution * sol = find_solution(solution);
+  // no solution found
+  if(sol == NULL) { return -999; }
+  // try to find species
+	return 123.0;
+  return 0.0;
+}
 std::string Phreeqc::get_species(int solution) {
   cxxSolution * sol = find_solution(solution);
   // no solution found

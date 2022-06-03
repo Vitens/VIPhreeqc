@@ -1105,6 +1105,7 @@ public:
   double get_moles(int solution, const char *species);
   double get_activity(int solution, const char *species);
   double get_molality(int solution, const char *species);
+  double get_diffusion(int solution, const char *species);
   std::string get_species(int solution);
   std::string get_species_masters(int solution);
   std::string get_phases(int solution);
