@@ -1292,15 +1292,40 @@ xsolution_save(int n_user)
     }
   }
 
+
+
+
+
   // vitens modification: Store phases
+	LDBLE si, iap, lk, la_eminus;
+
+	if (state == INITIAL_SOLUTION)
+	{
+		iap = 0;
+		for (size_t tok = 1; tok < pe_x[default_pe_x].Get_tokens().size() - 1; tok++)
+		{
+			iap += pe_x[default_pe_x].Get_tokens()[tok].coef * pe_x[default_pe_x].Get_tokens()[tok].s->la;
+			/* fprintf(output,"\t%s\t%f\t%f\n", rxn_ptr->s->name, rxn_ptr->coef, rxn_ptr->s->la ); */
+		}
+		lk = k_calc(pe_x[default_pe_x].Get_logk(), tk_x, patm_x * PASCAL_PER_ATM);
+		la_eminus = lk + iap;
+		/* fprintf(output,"\t%s\t%f\n", "pe", si ); */
+	}
+	else
+	{
+		la_eminus = s_eminus->la;
+	}
+
+
+
   for (int i =0; i < phases.size(); i++) {
 
     // calculate iap and si
     // Logic copied from print.cpp lines 1248-1276
-    LDBLE si, iap, lk, la_eminus;
     class rxn_token *rxn_ptr;
     CReaction *reaction_ptr;
 
+		
 		if (phases[i]->in == FALSE || phases[i]->type != SOLID)
 			continue;
 		/* check for solids and gases in equation */
