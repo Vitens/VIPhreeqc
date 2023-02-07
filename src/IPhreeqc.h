@@ -2178,6 +2178,9 @@ Headings
     IPQ_DLL_EXPORT const char* GetGasComponents(int id, int solution);
     IPQ_DLL_EXPORT double GetGasComponentMoles(int id, int solution, const char *component);
 
+ // equilibrium phases
+	IPQ_DLL_EXPORT const char* GetEquilibriumPhaseComponents(int id, int phase);
+	IPQ_DLL_EXPORT double GetEquilibriumPhaseComponentMoles(int id, int solution, const char *component);
   // surface
 	// IPQ_DLL_EXPORT const char* GetSurfaceJSON(int id, int surface);
 
