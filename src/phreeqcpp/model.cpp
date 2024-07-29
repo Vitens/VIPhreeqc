@@ -2657,6 +2657,9 @@ calc_gas_pressures(void)
 					gas_unknown->moles / gas_phase_ptr->Get_total_p();
 				phase_ptr->fraction_x =
 					phase_ptr->moles_x / gas_unknown->moles;
+				// does this fix the problem?
+				gas_phase_ptr->Set_total_moles(gas_phase_ptr->Get_total_moles() +
+					phase_ptr->moles_x);
 			}
 			else
 			{
