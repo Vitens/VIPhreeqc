@@ -2191,6 +2191,8 @@ Headings
 	IPQ_DLL_EXPORT double GetMu(int id, int solution);
 	IPQ_DLL_EXPORT double GetTemperature(int id, int solution);
 	IPQ_DLL_EXPORT double GetMass(int id, int solution);
+	IPQ_DLL_EXPORT double GetVolume(int id, int solution);
+	IPQ_DLL_EXPORT double GetDensity(int id, int solution);
 	IPQ_DLL_EXPORT double GetTotal(int id, int solution, const char *string);
 	IPQ_DLL_EXPORT double GetTotalIon(int id, int solution, const char *string);
   IPQ_DLL_EXPORT double GetTotalElement(int id, int solution, const char *string);

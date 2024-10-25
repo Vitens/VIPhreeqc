@@ -1253,6 +1253,26 @@ GetMass(int id, int solution)
 	return -99;
 }
 double
+GetVolume(int id, int solution)
+{
+	IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
+	if (IPhreeqcPtr)
+	{
+    return IPhreeqcPtr->GetVolume(solution);
+	}
+	return -99;
+}
+double
+GetDensity(int id, int solution)
+{
+	IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
+	if (IPhreeqcPtr)
+	{
+    return IPhreeqcPtr->GetDensity(solution);
+	}
+	return -99;
+}
+double
 GetTotal(int id, int solution, const char *string)
 {
 	IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);

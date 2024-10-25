@@ -1949,6 +1949,14 @@ double IPhreeqc::GetMass(int solution)
 {
   return this->PhreeqcPtr->get_mass(solution);
 }
+double IPhreeqc::GetVolume(int solution)
+{
+	return this->PhreeqcPtr->get_volume(solution);
+}
+double IPhreeqc::GetDensity(int solution)
+{
+	return this->PhreeqcPtr->get_density(solution);
+}
 double IPhreeqc::GetTotal(int solution, const char *string)
 {
   return this->PhreeqcPtr->get_total(solution, string);

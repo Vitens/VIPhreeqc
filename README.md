@@ -74,6 +74,14 @@ The following functions are implemented in addition to the standard IPhreeqc fun
    */
   double                  GetMass(int solution);
   /**
+   * Returns the volume (l) of the specified solution
+   */
+  double                  GetVolume(int solution);
+  /**
+   * Returns the density (kg/l) of the specified solution
+   */
+  double                  GetDensity(int solution);
+  /**
    * Returns the amount (in mol) of an element (e.g. C(-4), Ca, etc.)
    */
   double                  GetTotal(int solution, const char *string);

@@ -264,12 +264,29 @@ double Phreeqc::get_temperature(int solution) {
   }
   return -999;
 }
+
 double Phreeqc::get_mass(int solution) {
   cxxSolution * sol = find_solution(solution);
   if(sol != NULL) {
     return sol->Get_mass_water();
   }
   return -999;
+}
+
+double Phreeqc::get_volume(int solution) {
+	cxxSolution * sol = find_solution(solution);
+	if(sol != NULL) {
+		return sol->Get_soln_vol();
+	}
+	return -999;
+}
+
+double Phreeqc::get_density(int solution) {
+	cxxSolution * sol = find_solution(solution);
+	if(sol != NULL) {
+		return sol->Get_density();
+	}
+	return -999;
 }
 
 double Phreeqc::get_total(int solution, const char *string) {

@@ -939,6 +939,14 @@ public:
    */
   double                  GetMass(int solution);
   /**
+   * Return the density (kg/l) of the specified solution
+   */
+  double                  GetDensity(int solution);
+  /**
+   * Returns the volume (l) of the specified solution
+   */
+  double                  GetVolume(int solution);
+  /**
    * Returns the amount (in mol) of an element (e.g. C(-4), Ca, etc.)
    */
   double                  GetTotal(int solution, const char *string);

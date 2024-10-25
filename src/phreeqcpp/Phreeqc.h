@@ -1103,6 +1103,8 @@ public:
   double get_mu(int);
   double get_temperature(int);
   double get_mass(int);
+	double get_volume(int);
+	double get_density(int);
   double get_total(int solution, const char *string);
   double get_total_element(int solution, const char *string);
   double get_total_ion(int solution, const char *string);
