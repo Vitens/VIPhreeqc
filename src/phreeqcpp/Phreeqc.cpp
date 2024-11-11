@@ -97,6 +97,12 @@ cxxGasPhase * Phreeqc::find_gas_phase(int id){
   }
 }
 
+cxxPPassemblage * Phreeqc::find_equilibrium_phase(int id){
+  {
+    return Utilities::Rxn_find(Rxn_pp_assemblage_map, id);
+  }
+}
+
 std::string Phreeqc::get_solution_list(int id) {
 
   std::string output;
@@ -110,6 +116,46 @@ std::string Phreeqc::get_solution_list(int id) {
   if (output.size() > 0)  output.resize(output.size() - 1);
   return output;
 }
+// solid phase options
+std::string Phreeqc::get_equilibrium_phase_components(int eqphase) {
+
+	cxxPPassemblage * phase = find_equilibrium_phase(eqphase);
+	if(phase == NULL) { return "-999"; }
+
+	std::string output;
+
+
+	std::map<std::string, cxxPPassemblageComp>::iterator it;
+	it =  phase->Get_pp_assemblage_comps().begin();
+
+	for(; it != phase->Get_pp_assemblage_comps().end(); it++) {
+		output += it->second.Get_name() + ",";
+	}
+
+// remove last character (comma)
+  if (output.size() > 0)  output.resize(output.size() - 1);
+  return output;
+}
+
+double Phreeqc::get_equilibrium_phase_component_moles(int eqphase, const char *component) {
+
+	cxxPPassemblage * phase = find_equilibrium_phase(eqphase);
+	if(phase == NULL) { return -999; }
+
+	std::map<std::string, cxxPPassemblageComp>::iterator it;
+	it =  phase->Get_pp_assemblage_comps().begin();
+
+	for(; it != phase->Get_pp_assemblage_comps().end(); it++) {
+		if(!strcmp(it->second.Get_name().c_str(), component)) {
+			return it->second.Get_moles();
+		}
+	}
+
+	return -99;
+}
+
+
+
 
 // gas phase options
 double Phreeqc::get_gas_volume(int gasphase) {
@@ -218,12 +264,29 @@ double Phreeqc::get_temperature(int solution) {
   }
   return -999;
 }
+
 double Phreeqc::get_mass(int solution) {
   cxxSolution * sol = find_solution(solution);
   if(sol != NULL) {
     return sol->Get_mass_water();
   }
   return -999;
+}
+
+double Phreeqc::get_volume(int solution) {
+	cxxSolution * sol = find_solution(solution);
+	if(sol != NULL) {
+		return sol->Get_soln_vol();
+	}
+	return -999;
+}
+
+double Phreeqc::get_density(int solution) {
+	cxxSolution * sol = find_solution(solution);
+	if(sol != NULL) {
+		return sol->Get_density();
+	}
+	return -999;
 }
 
 double Phreeqc::get_total(int solution, const char *string) {

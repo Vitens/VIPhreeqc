@@ -1081,6 +1081,7 @@ public:
   // VITENS VIPHREEQC Extension functions
   cxxSolution * find_solution(int);
   cxxGasPhase * find_gas_phase(int);
+  cxxPPassemblage * find_equilibrium_phase(int);
   cxxSurface * find_surface(int);
   // gas phase functions
   double get_gas_volume(int);
@@ -1089,6 +1090,9 @@ public:
   std::string get_gas_components(int);
   double get_gas_component_moles(int, const char *component);
   
+	// equilibrium phase functions
+  std::string get_equilibrium_phase_components(int);
+  double get_equilibrium_phase_component_moles(int, const char *component);
   // surface functions
   // std::string get_surface_json(int surface);
   
@@ -1099,6 +1103,8 @@ public:
   double get_mu(int);
   double get_temperature(int);
   double get_mass(int);
+	double get_volume(int);
+	double get_density(int);
   double get_total(int solution, const char *string);
   double get_total_element(int solution, const char *string);
   double get_total_ion(int solution, const char *string);

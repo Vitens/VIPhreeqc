@@ -896,6 +896,17 @@ public:
    */
   double             GetGasComponentMoles(int gas_phase, const char* component);
 
+	// equilibrium phase functions
+
+  /**
+   * Returns a list of components in the equilibrium phase
+   */
+  std::string             GetEquilibriumPhaseComponents(int eq_phase);
+  /**
+   * Returns the amount of moles of an equilibrium phase component
+   */
+  double             GetEquilibriumPhaseComponentMoles(int eq_phase, const char* component);
+
   // surface functions
   /**
    * Returns a JSON representation of the specified surface
@@ -927,6 +938,14 @@ public:
    * Returns the mass (kg) of the specified solution
    */
   double                  GetMass(int solution);
+  /**
+   * Return the density (kg/l) of the specified solution
+   */
+  double                  GetDensity(int solution);
+  /**
+   * Returns the volume (l) of the specified solution
+   */
+  double                  GetVolume(int solution);
   /**
    * Returns the amount (in mol) of an element (e.g. C(-4), Ca, etc.)
    */

@@ -37,6 +37,17 @@ The following functions are implemented in addition to the standard IPhreeqc fun
    */
   double             GetGasComponentMoles(int gas_phase, const char* component);
 
+  // equilibrium phase functions
+  /**
+   * Returns a list of components in the equilibrium phase
+   */
+  std::string             GetEquilibriumPhaseComponents(int eq_phase);
+  /**
+   * Returns the amount of moles in a equilibrium phase component
+   */
+  double             GetEquilibriumPhaseComponentMoles(int eq_phase, const char* component);
+
+
   // volume functions
   /**
    * Returns the pH of the specified solution
@@ -62,6 +73,14 @@ The following functions are implemented in addition to the standard IPhreeqc fun
    * Returns the mass (kg) of the specified solution
    */
   double                  GetMass(int solution);
+  /**
+   * Returns the volume (l) of the specified solution
+   */
+  double                  GetVolume(int solution);
+  /**
+   * Returns the density (kg/l) of the specified solution
+   */
+  double                  GetDensity(int solution);
   /**
    * Returns the amount (in mol) of an element (e.g. C(-4), Ca, etc.)
    */

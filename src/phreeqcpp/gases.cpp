@@ -636,6 +636,7 @@ calc_fixed_volume_gas_pressures(void)
 	if (use.Get_gas_phase_ptr() == NULL)
 		return (OK);
 	cxxGasPhase *gas_phase_ptr = use.Get_gas_phase_ptr();
+
 	gas_phase_ptr->Set_total_moles(0);
 
 	for (i = 0; i < gas_unknowns.size(); i++)

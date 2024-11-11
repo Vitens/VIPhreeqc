@@ -1145,6 +1145,35 @@ GetGasComponents(int id, int gas_phase)
   return err_msg;
 }
 
+// equilibrium phase
+const char*
+GetEquilibriumPhaseComponents(int id, int eq_phase)
+{
+  static const char err_msg[] = "GetEquilibriumPhaseComponents: Invalid instance id.\n";
+  IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
+  if (IPhreeqcPtr)
+  {
+    static std::string str;
+    std::stringstream stream;
+    stream << IPhreeqcPtr->GetEquilibriumPhaseComponents(eq_phase);
+    str = stream.str();
+    return str.c_str();
+  }
+  return err_msg;
+}
+
+double 
+GetEquilibriumPhaseComponentMoles(int id, int eq_phase, const char *component)
+{
+	IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
+	if (IPhreeqcPtr)
+	{
+    return IPhreeqcPtr->GetEquilibriumPhaseComponentMoles(eq_phase, component);
+	}
+	return -99;
+}
+
+
 // Surface
 // const char*
 // GetSurfaceJSON(int id, int surface)
@@ -1220,6 +1249,26 @@ GetMass(int id, int solution)
 	if (IPhreeqcPtr)
 	{
     return IPhreeqcPtr->GetMass(solution);
+	}
+	return -99;
+}
+double
+GetVolume(int id, int solution)
+{
+	IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
+	if (IPhreeqcPtr)
+	{
+    return IPhreeqcPtr->GetVolume(solution);
+	}
+	return -99;
+}
+double
+GetDensity(int id, int solution)
+{
+	IPhreeqc* IPhreeqcPtr = IPhreeqcLib::GetInstance(id);
+	if (IPhreeqcPtr)
+	{
+    return IPhreeqcPtr->GetDensity(solution);
 	}
 	return -99;
 }

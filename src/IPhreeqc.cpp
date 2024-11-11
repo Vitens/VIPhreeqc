@@ -1913,12 +1913,16 @@ double IPhreeqc::GetGasComponentMoles(int gas_phase, const char *component)
   return this->PhreeqcPtr->get_gas_component_moles(gas_phase, component);
 }
 
-// VITENS VIPHREEQC Extension Functions
-// Surface
-// std::string IPhreeqc::GetSurfaceJSON(int surface)
-// {
-//   return this->PhreeqcPtr->get_surface_json(surface);
-// }
+// equilibrium phases
+std::string IPhreeqc::GetEquilibriumPhaseComponents(int eq_phase)
+{
+  return this->PhreeqcPtr->get_equilibrium_phase_components(eq_phase);
+}
+double IPhreeqc::GetEquilibriumPhaseComponentMoles(int eq_phase, const char *component)
+{
+  return this->PhreeqcPtr->get_equilibrium_phase_component_moles(eq_phase, component);
+}
+
 
 // Solution
 double IPhreeqc::GetPH(int solution)
@@ -1944,6 +1948,14 @@ double IPhreeqc::GetTemperature(int solution)
 double IPhreeqc::GetMass(int solution)
 {
   return this->PhreeqcPtr->get_mass(solution);
+}
+double IPhreeqc::GetVolume(int solution)
+{
+	return this->PhreeqcPtr->get_volume(solution);
+}
+double IPhreeqc::GetDensity(int solution)
+{
+	return this->PhreeqcPtr->get_density(solution);
 }
 double IPhreeqc::GetTotal(int solution, const char *string)
 {
