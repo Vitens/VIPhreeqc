@@ -23,7 +23,7 @@ void ExtractWrite(int cell)
 		switch (vt[j]) {
 		case TT_DOUBLE:
 			dv[j] = v.dVal;
-			sprintf(sv[j], "%23.15e", v.dVal);
+			snprintf(sv[j], sizeof(sv[j]), "%23.15e", v.dVal);
 			break;
 		case TT_STRING:
 			strcpy(sv[j], v.sVal);

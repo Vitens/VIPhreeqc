@@ -36,8 +36,10 @@ cxxSurface::cxxSurface(PHRQ_io *io)
 	dl_type = NO_DL;
 	sites_units = SITES_ABSOLUTE;
 	only_counter_ions = false;
+	correct_D = false;
 	thickness = 1e-8;
 	debye_lengths = 0.0;
+	calc_DDL_viscosity = false;
 	DDL_viscosity = 1.0;
 	DDL_limit = 0.8;
 	transport = false;
@@ -55,8 +57,10 @@ cxxNumKeyword(io)
 	dl_type = NO_DL;
 	sites_units = SITES_ABSOLUTE;
 	only_counter_ions = false;
+	correct_D = false;
 	thickness = 1e-8;
 	debye_lengths = 0.0;
+	calc_DDL_viscosity = false;
 	DDL_viscosity = 1.0;
 	DDL_limit = 0.8;
 	transport = false;
@@ -128,6 +132,8 @@ cxxSurface::dump_raw(std::ostream & s_oss, unsigned int indent, int *n_out) cons
 	s_oss << indent1;
 	s_oss << "-only_counter_ions         " << this->only_counter_ions << "\n";
 	s_oss << indent1;
+	s_oss << "-correct_D                " << this->correct_D << "\n";
+	s_oss << indent1;
 	s_oss << "-thickness                 " << this->thickness << "\n";
 	s_oss << indent1;
 	s_oss << "-debye_lengths             " << this->debye_lengths << "\n";
@@ -189,6 +195,7 @@ cxxSurface::read_raw(CParser & parser, bool check)
 	this->Set_tidied(true);
 
 	bool only_counter_ions_defined(false);
+	//bool correct_D_defined(false);
 	bool thickness_defined(false);
 	bool type_defined(false);
 	bool dl_type_defined(false);
@@ -390,7 +397,7 @@ cxxSurface::read_raw(CParser & parser, bool check)
 		case 11:				// DDL_viscosity
 			if (!(parser.get_iss() >> this->DDL_viscosity))
 			{
-				this->DDL_viscosity = 0.0;
+				this->DDL_viscosity = 1.0;
 				parser.incr_input_error();
 				parser.error_msg("Expected numeric value for DDL_viscosity.",
 								 PHRQ_io::OT_CONTINUE);
@@ -468,6 +475,17 @@ cxxSurface::read_raw(CParser & parser, bool check)
 					PHRQ_io::OT_CONTINUE);
 			}
 			break;
+		case 19:				// correct_D
+			if (!(parser.get_iss() >> this->correct_D))
+			{
+				this->correct_D = false;
+				parser.incr_input_error();
+				parser.
+					error_msg("Expected boolean value for correct_D.",
+						PHRQ_io::OT_CONTINUE);
+			}
+			//correct_D_defined = true;
+			break;
 		}
 		if (opt == CParser::OPT_EOF || opt == CParser::OPT_KEYWORD)
 			break;
@@ -482,6 +500,13 @@ cxxSurface::read_raw(CParser & parser, bool check)
 				error_msg("Only_counter_ions not defined for SURFACE_RAW input.",
 				PHRQ_io::OT_CONTINUE);
 		}
+		//if (correct_D_defined == false)
+		//{
+		//	parser.incr_input_error();
+		//	parser.
+		//		error_msg("correct_D not defined for SURFACE_RAW input.",
+		//		PHRQ_io::OT_CONTINUE);
+		//}
 		if (thickness_defined == false)
 		{
 			parser.incr_input_error();
@@ -559,6 +584,7 @@ cxxSurface::add(const cxxSurface & addee_in, LDBLE extensive)
 	if (this->surface_comps.size() == 0)
 	{
 		this->only_counter_ions = addee.only_counter_ions;
+		this->correct_D = addee.correct_D;
 		this->dl_type = addee.dl_type;
 		this->type = addee.type;
 		this->sites_units = addee.sites_units;
@@ -730,6 +756,7 @@ cxxSurface::Serialize(Dictionary & dictionary, std::vector < int >&ints,
 	doubles.push_back(this->debye_lengths);
 	doubles.push_back(this->DDL_viscosity);
 	doubles.push_back(this->DDL_limit);
+	ints.push_back(this->correct_D ? 1 : 0);
 	ints.push_back(this->transport ? 1 : 0);
 	this->totals.Serialize(dictionary, ints, doubles);
 	ints.push_back(this->solution_equilibria ? 1 : 0);
@@ -776,6 +803,7 @@ cxxSurface::Deserialize(Dictionary & dictionary, std::vector < int >&ints,
 	this->debye_lengths = doubles[dd++];
 	this->DDL_viscosity = doubles[dd++];
 	this->DDL_limit = doubles[dd++];
+	this->correct_D = (ints[ii++] != 0);
 	this->transport = (ints[ii++] != 0);
 	this->totals.Deserialize(dictionary, ints, doubles, ii, dd);
 	this->solution_equilibria = (ints[ii++] != 0);
@@ -803,6 +831,7 @@ const std::vector< std::string >::value_type temp_vopts[] = {
 	std::vector< std::string >::value_type("solution_equilibria"),	// 15
 	std::vector< std::string >::value_type("n_solution"),	        // 16
 	std::vector< std::string >::value_type("totals"), 	            // 17
-	std::vector< std::string >::value_type("tidied") 	            // 18
-};									   
+	std::vector< std::string >::value_type("tidied"),	            // 18
+	std::vector< std::string >::value_type("correct_d")	            // 19
+};
 const std::vector< std::string > cxxSurface::vopts(temp_vopts, temp_vopts + sizeof temp_vopts / sizeof temp_vopts[0]);	

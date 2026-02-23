@@ -674,7 +674,7 @@ build_ss_assemblage(void)
 		/* include mole fraction */
 		store_mb(&(x[i]->phase->log10_fraction_x), &(x[i]->f), 1.0);
 
-		/* include activity coeficient */
+		/* include activity coefficient */
 		store_mb(&(x[i]->phase->log10_lambda), &(x[i]->f), 1.0);
 /*
  *   Put coefficients into mass action equations
@@ -1942,6 +1942,10 @@ convert_units(cxxSolution *solution_ptr)
 		strstr(initial_data_ptr->Get_units().c_str(), "/l") != NULL)
 	{
 		mass_water_aq_x = 1.0 - 1e-3 * sum_solutes;
+		if (density_iterations > 0)
+		{
+			mass_water_aq_x = kgw_kgs;
+		}
 		if (mass_water_aq_x <= 0)
 		{
 			error_string = sformatf( "Solute mass exceeds solution mass in conversion from /kgs to /kgw.\n"
@@ -1980,14 +1984,15 @@ get_list_master_ptrs(const char* cptr, class master *master_ptr)
  *   Output: space is allocated and a list of master species pointers is
  *           returned.
  */
-	int j, l, count_list;
+	//int j, l, count_list;
+	int j, l;
 	char token[MAX_LENGTH];
 	std::vector<class master*> master_ptr_list;
 	class master *master_ptr0;
 /*
  *   Make list of master species pointers
  */
-	count_list = 0;
+	//count_list = 0;
 	//master_ptr_list = unknown_alloc_master();
 	master_ptr0 = master_ptr;
 	if (master_ptr0 == master_ptr->s->primary)
@@ -2147,7 +2152,8 @@ mb_for_species_aq(int n)
  *                             by coef, usually moles.
  *        mb_unknowns.coef - coefficient of s[n] in equation or relation
  */
-	int i, j;
+	//int i, j;
+	int i;
 	class master *master_ptr;
 	class unknown *unknown_ptr;
 
@@ -2223,7 +2229,7 @@ mb_for_species_aq(int n)
  */
 	if (use.Get_surface_ptr() != NULL && s[n]->type < H2O && dl_type_x != cxxSurface::NO_DL)
 	{
-		j = 0;
+		//j = 0;
 		for (i = 0; i < count_unknowns; i++)
 		{
 			if (x[i]->type == SURFACE_CB)
@@ -2235,7 +2241,7 @@ mb_for_species_aq(int n)
 
 				store_mb_unknowns(unknown_ptr, s_diff_layer[n][charge_ptr->Get_name()].Get_g_moles_address(),
 								  s[n]->z, s_diff_layer[n][charge_ptr->Get_name()].Get_dg_g_moles_address());
-				j++;
+				//j++;
 			}
 		}
 	}
@@ -3837,36 +3843,37 @@ calc_PR(std::vector<class phase *> phase_ptrs, LDBLE P, LDBLE TK, LDBLE V_m)
 				continue;
 			a_aa = sqrt(phase_ptr->pr_a * phase_ptr->pr_alpha *
 				        phase_ptr1->pr_a * phase_ptr1->pr_alpha);
-			if (!strcmp(phase_ptr->name, "H2O(g)"))
-			{
-				if (!strcmp(phase_ptr1->name, "CO2(g)"))
-					a_aa *= 0.81; // Soreide and Whitson, 1992, FPE 77, 217
-				else if (!strcmp(phase_ptr1->name, "H2S(g)") || !strcmp(phase_ptr1->name, "H2Sg(g)"))
-					a_aa *= 0.81;
-				else if (!strcmp(phase_ptr1->name, "CH4(g)") || !strcmp(phase_ptr1->name, "Mtg(g)") || !strcmp(phase_ptr1->name, "Methane(g)"))
-					a_aa *= 0.51;
-				else if (!strcmp(phase_ptr1->name, "N2(g)") || !strcmp(phase_ptr1->name, "Ntg(g)"))
-					a_aa *= 0.51;
-				else if (!strcmp(phase_ptr1->name, "Ethane(g)"))
-					a_aa *= 0.51;
-				else if (!strcmp(phase_ptr1->name, "Propane(g)"))
-					a_aa *= 0.45;
-			}
-			if (!strcmp(phase_ptr1->name, "H2O(g)"))
-			{
-				if (!strcmp(phase_ptr->name, "CO2(g)"))
-					a_aa *= 0.81;
-				else if (!strcmp(phase_ptr->name, "H2S(g)") || !strcmp(phase_ptr->name, "H2Sg(g)"))
-					a_aa *= 0.81;
-				else if (!strcmp(phase_ptr->name, "CH4(g)") || !strcmp(phase_ptr->name, "Mtg(g)") || !strcmp(phase_ptr->name, "Methane(g)"))
-					a_aa *= 0.51;
-				else if (!strcmp(phase_ptr->name, "N2(g)") || !strcmp(phase_ptr->name, "Ntg(g)"))
-					a_aa *= 0.51;
-				else if (!strcmp(phase_ptr->name, "Ethane(g)"))
-					a_aa *= 0.51;
-				else if (!strcmp(phase_ptr->name, "Propane(g)"))
-					a_aa *= 0.45;
-			}
+			a_aa *= calc_gas_binary_parameter(phase_ptr->name, phase_ptr1->name);
+			//if (!strcmp(phase_ptr->name, "H2O(g)"))
+			//{
+			//	if (!strcmp(phase_ptr1->name, "CO2(g)"))
+			//		a_aa *= 0.81; // Soreide and Whitson, 1992, FPE 77, 217
+			//	else if (!strcmp(phase_ptr1->name, "H2S(g)") || !strcmp(phase_ptr1->name, "H2Sg(g)"))
+			//		a_aa *= 0.81;
+			//	else if (!strcmp(phase_ptr1->name, "CH4(g)") || !strcmp(phase_ptr1->name, "Mtg(g)") || !strcmp(phase_ptr1->name, "Methane(g)"))
+			//		a_aa *= 0.51;
+			//	else if (!strcmp(phase_ptr1->name, "N2(g)") || !strcmp(phase_ptr1->name, "Ntg(g)"))
+			//		a_aa *= 0.51;
+			//	else if (!strcmp(phase_ptr1->name, "Ethane(g)"))
+			//		a_aa *= 0.51;
+			//	else if (!strcmp(phase_ptr1->name, "Propane(g)"))
+			//		a_aa *= 0.45;
+			//}
+			//if (!strcmp(phase_ptr1->name, "H2O(g)"))
+			//{
+			//	if (!strcmp(phase_ptr->name, "CO2(g)"))
+			//		a_aa *= 0.81;
+			//	else if (!strcmp(phase_ptr->name, "H2S(g)") || !strcmp(phase_ptr->name, "H2Sg(g)"))
+			//		a_aa *= 0.81;
+			//	else if (!strcmp(phase_ptr->name, "CH4(g)") || !strcmp(phase_ptr->name, "Mtg(g)") || !strcmp(phase_ptr->name, "Methane(g)"))
+			//		a_aa *= 0.51;
+			//	else if (!strcmp(phase_ptr->name, "N2(g)") || !strcmp(phase_ptr->name, "Ntg(g)"))
+			//		a_aa *= 0.51;
+			//	else if (!strcmp(phase_ptr->name, "Ethane(g)"))
+			//		a_aa *= 0.51;
+			//	else if (!strcmp(phase_ptr->name, "Propane(g)"))
+			//		a_aa *= 0.45;
+			//}
 			a_aa_sum += phase_ptr->fraction_x * phase_ptr1->fraction_x * a_aa;
 			a_aa_sum2 += phase_ptr1->fraction_x * a_aa;
 		}
@@ -3940,7 +3947,8 @@ calc_PR(std::vector<class phase *> phase_ptrs, LDBLE P, LDBLE TK, LDBLE V_m)
 		}
 		if (P <= 0) // iterations = -1
 			P = 1;
-	} else
+	}
+	else
 	{
 		if (P < 1e-10)
 			P = 1e-10;
@@ -3994,16 +4002,16 @@ calc_PR(std::vector<class phase *> phase_ptrs, LDBLE P, LDBLE TK, LDBLE V_m)
 		{
 			phi = B_r * (rz - 1) - log(rz - B) + A / (2.828427 * B) * (B_r - 2.0 * phase_ptr->pr_aa_sum2 / a_aa_sum) *
 				log((rz + 2.41421356 * B) / (rz - 0.41421356 * B));
-			//phi = (phi > 4.44 ? 4.44 : (phi < -3 ? -3 : phi));
+			phi = (phi > 4.44 ? 4.44 : (phi < -4.6 ? -4.6 : phi));
 			//if (phi > 4.44)
 			//	phi = 4.44;
 		}
 		else
-			phi = -3.0; // fugacity coefficient = 0.05
-		//if (/*!strcmp(phase_ptr->name, "H2O(g)") && */phi < -3)
+			phi = -4.6; // fugacity coefficient = 0.01
+		//if (!strcmp(phase_ptr->name, "H2O(g)") && phi < -4.6)
 		//{
 		////	 avoid such phi...
-		//	phi = -3;
+		//	phi = -4.6;
 		//}
 		phase_ptr->pr_phi = exp(phi);
 		phase_ptr->pr_si_f = phi / LOG_10;
@@ -4472,7 +4480,7 @@ setup_solution(void)
 		(ph_unknown == charge_balance_unknown)
 		&& (alkalinity_unknown != NULL))
 	{
-		error_msg("pH adustment cannot attain charge balance"
+		error_msg("pH adjustment cannot attain charge balance"
 				  " when alkalinity is fixed.", CONTINUE);
 		input_error++;
 	}
@@ -5401,6 +5409,53 @@ calc_vm(LDBLE tc, LDBLE pa)
 	return OK;
 }
 
+LDBLE Phreeqc::calc_vm0(const char * species_name, LDBLE tc, LDBLE pa, LDBLE mu)
+{
+	/*
+	 *  Calculate molar volume of an aqueous species at tc, pa and mu
+	 */
+	if (llnl_temp.size() > 0) return OK;
+	class species *s_ptr;
+	LDBLE g = 0;
+	s_ptr = s_search(species_name);
+	if (s_ptr == s_h2o)
+		return 18.016 / rho_0;
+	if (s_ptr != NULL && s_ptr->in != FALSE && s_ptr->type < EMINUS && s_ptr->logk[vma1])
+	{
+		LDBLE pb_s = 2600. + pa * 1.01325, TK_s = tc + 45.15, sqrt_mu = sqrt(mu);
+		/* supcrt volume at I = 0... */
+		g = s_ptr->logk[vma1] + s_ptr->logk[vma2] / pb_s +
+			(s_ptr->logk[vma3] + s_ptr->logk[vma4] / pb_s) / TK_s -
+			s_ptr->logk[wref] * QBrn;
+		if (s_ptr->z)
+		{
+			/* the ionic strength term * I^0.5... */
+			if (s_ptr->logk[b_Av] < 1e-5)
+				g += s_ptr->z * s_ptr->z * 0.5 * DH_Av * sqrt_mu;
+			else
+			{
+				/* limit the Debye-Hueckel slope by b... */
+				/* pitzer... */
+				//s_ptr->rxn_x.logk[vm_tc] += s_ptr->z * s_ptr->z * 0.5 * DH_Av *
+				//	log(1 + s_ptr->logk[b_Av] * sqrt(mu_x)) / s_ptr->logk[b_Av];
+				/* extended DH... */
+				g += s_ptr->z * s_ptr->z * 0.5 * DH_Av *
+					sqrt_mu / (1 + s_ptr->logk[b_Av] * DH_B * sqrt_mu);
+			}
+			/* plus the volume terms * I... */
+			if (s_ptr->logk[vmi1] != 0.0 || s_ptr->logk[vmi2] != 0.0 || s_ptr->logk[vmi3] != 0.0)
+			{
+				LDBLE bi = s_ptr->logk[vmi1] + s_ptr->logk[vmi2] / TK_s + s_ptr->logk[vmi3] * TK_s;
+				if (s_ptr->logk[vmi4] == 1.0)
+					g += bi * mu;
+				else
+					g += bi * pow(mu, s_ptr->logk[vmi4]);
+			}
+		}
+	}
+	return g;
+}
+
 /* ---------------------------------------------------------------------- */
 int Phreeqc::
 k_temp(LDBLE tc, LDBLE pa) /* pa - pressure in atm */
@@ -5410,8 +5465,15 @@ k_temp(LDBLE tc, LDBLE pa) /* pa - pressure in atm */
  *  Calculates log k's for all species and pure_phases
  */
 
-	if (tc == current_tc && pa == current_pa && ((fabs(mu_x - current_mu) < 1e-3 * mu_x) || !mu_terms_in_logk))
+	// if (tc == current_tc && pa == current_pa && ((fabs(mu_x - current_mu) < 1e-3 * mu_x) || !mu_terms_in_logk))
+	// 	return OK;
+	if (tc != current_tc) goto proceed;
+	if (pa != current_pa) goto proceed;
+	if (fabs(mu_x - current_mu) > 1e-3 * mu_x) goto proceed;
+	if (mu_terms_in_logk) goto proceed;
 		return OK;
+
+proceed:
 
 	int i;
 	LDBLE tempk = tc + 273.15;

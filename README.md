@@ -3,10 +3,9 @@
 </p>
 
 
-| Platform | **Status** |
+| Build Type | **Status** |
 |---|---|
-| **Mac/Linux** | [![Build Status](https://travis-ci.org/Vitens/VIPhreeqc.svg?branch=master)](https://travis-ci.org/Vitens/VIPhreeqc)|
-| **Windows** | [![Build status](https://ci.appveyor.com/api/projects/status/livettljrd43y2we?svg=true)](https://ci.appveyor.com/project/AbelHeinsbroek/viphreeqc) |
+| CMake Multi Platform (**Windows** and **Linux**) | [![CMake on multiple platforms](https://github.com/DocMT/VIPhreeqc/actions/workflows/cmake-multi-platform.yml/badge.svg)](https://github.com/DocMT/VIPhreeqc/actions/workflows/cmake-multi-platform.yml) |
 
 Extension of the IPhreeqc 3.3.7 module ([Parkhurst&Appello](http://wwwbrr.cr.usgs.gov/projects/GWC_coupled/phreeqc/)).
 This extension aims to add more flexibility to the IPhreeqc module by exposing more information to the C extension. Instead of relying on SELECTED_OUTPUT this extensions enables users to directly gather information such as the pH, SC, speciation, element totals etc. of solutions.

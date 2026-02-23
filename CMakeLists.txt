@@ -1,9 +1,12 @@
 # CMAKE_MSVC_RUNTIME_LIBRARY requires 3.15
-cmake_minimum_required(VERSION 3.15)
+cmake_minimum_required(VERSION 3.21)
+
+# for debugging only - comment or uncomment as necessary see https://github.com/ninja-build/ninja/issues/900#issuecomment-417917630
+# set(CMAKE_VERBOSE_MAKEFILE ON CACHE BOOL "ON")
 
 project (
   IPhreeqc
-  VERSION 3.6.3
+  VERSION 3.8.7
   LANGUAGES CXX C
   )
 
@@ -26,7 +29,7 @@ if (STANDALONE_BUILD)
   endif()
 endif()
 
-# overide docdir on windows
+# override docdir on windows
 if (WIN32 AND NOT CMAKE_INSTALL_DOCDIR)
   set(CMAKE_INSTALL_DOCDIR "" CACHE PATH "documentation root (doc)")
   set(CMAKE_INSTALL_DOCDIR "doc")
@@ -36,7 +39,7 @@ endif()
 include(GNUInstallDirs)
 
 if (STANDALONE_BUILD AND MSVC)
-  option (IPHREEQC_STATIC_RUNTIME "Build with a static runtime" OFF)  
+  option (IPHREEQC_STATIC_RUNTIME "Build with a static runtime" OFF)
   if (IPHREEQC_STATIC_RUNTIME)
     # compile with static runtime
     set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
@@ -61,7 +64,9 @@ endif()
 set_source_files_properties(src/Var.c PROPERTIES LANGUAGE CXX)
 
 if (STANDALONE_BUILD)
-  option(BUILD_SHARED_LIBS "Build Shared Libraries" OFF)
+  if(NOT EMSCRIPTEN) # EMSCRIPTEN does not support LIB_TYPE SHARED, instead set -sSIDE_MODULE=1 or -sSIDE_MODULE=2
+    option(BUILD_SHARED_LIBS "Build Shared Libraries" OFF)
+  endif()
   set(LIB_TYPE STATIC)
 endif()
 
@@ -70,12 +75,63 @@ if (STANDALONE_BUILD)
     option(BUILD_CLR_LIBS "Build CLR Libraries" OFF)
   endif()
 endif()
-
-if (BUILD_SHARED_LIBS)
-  set(LIB_TYPE SHARED)
+if(NOT EMSCRIPTEN)
+  if (BUILD_SHARED_LIBS)
+    set(LIB_TYPE SHARED)
+  endif()
 endif()
 
 add_library(IPhreeqc ${LIB_TYPE} src/IPhreeqc.cpp)
+
+# EMSCRIPTEN - Build for phreeqpython with pyodide or build WASM module with Emscripten
+if(EMSCRIPTEN)
+  option (IPHREEQC_ES6_MODULES "Build VIPhreeqc WASM ES6 module" OFF)
+  target_link_options(IPhreeqc PRIVATE -O3 -g0 -fwasm-exceptions -sSIDE_MODULE=1 -sENVIRONMENT=web,worker )
+  target_compile_options(IPhreeqc PRIVATE -O3 -fwasm-exceptions)
+  set_target_properties(IPhreeqc PROPERTIES PREFIX "")
+  set_target_properties(IPhreeqc PROPERTIES OUTPUT_NAME "viphreeqc")
+  set_target_properties(IPhreeqc PROPERTIES SUFFIX ".so")
+  set_target_properties(IPhreeqc PROPERTIES POSITION_INDEPENDENT_CODE ON)
+  if (IPHREEQC_ES6_MODULES)
+    set(CMAKE_EXECUTABLE_SUFFIX ".mjs")
+    add_executable(WASMIPhreeqc src/wasm.cpp)
+    set_target_properties(WASMIPhreeqc PROPERTIES POSITION_INDEPENDENT_CODE ON)
+    target_link_libraries(IPhreeqc PRIVATE embind)
+    target_link_libraries(WASMIPhreeqc PRIVATE IPhreeqc embind)
+    target_compile_options(WASMIPhreeqc PRIVATE -O3 -g0 -fwasm-exceptions)
+    target_link_options(WASMIPhreeqc PRIVATE -fwasm-exceptions -sMODULARIZE=1 -sEXPORT_ES6=1 -sEXPORT_NAME='VIPhreeqc' -sLZ4=1 -sWASM=1 -sALLOW_MEMORY_GROWTH=1 -sMALLOC=emmalloc -sENVIRONMENT=web,worker -sMAIN_MODULE=1 --preload-file ${CMAKE_CURRENT_BINARY_DIR}/database@/database -O3 )
+    target_include_directories(WASMIPhreeqc 
+    PUBLIC
+      $<BUILD_INTERFACE:${IPhreeqc_SOURCE_DIR}/src>
+      $<BUILD_INTERFACE:${IPhreeqc_SOURCE_DIR}/src/phreeqcpp>
+      $<BUILD_INTERFACE:${IPhreeqc_SOURCE_DIR}/src/phreeqcpp/common>
+      $<BUILD_INTERFACE:${IPhreeqc_SOURCE_DIR}/src/phreeqcpp/PhreeqcKeywords>
+      $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+    )
+    set(EXAMPLE_DEPLOY_DIR "${CMAKE_BINARY_DIR}/examples/html/wasm")
+    add_custom_command(
+      TARGET WASMIPhreeqc POST_BUILD
+      COMMAND ${CMAKE_COMMAND} -E copy
+              $<TARGET_FILE:WASMIPhreeqc>
+              "${EXAMPLE_DEPLOY_DIR}/"
+      COMMENT "Copy *.js file to the example/html/wasm directory"
+    )
+    add_custom_command(
+      TARGET WASMIPhreeqc POST_BUILD
+      COMMAND ${CMAKE_COMMAND} -E copy
+              "$<TARGET_FILE_DIR:WASMIPhreeqc>/$<TARGET_FILE_BASE_NAME:WASMIPhreeqc>.wasm"
+              "${EXAMPLE_DEPLOY_DIR}/"
+      COMMENT "Copy *.wasm file to the example/html/wasm directory"
+    )
+    add_custom_command(
+      TARGET WASMIPhreeqc POST_BUILD
+      COMMAND ${CMAKE_COMMAND} -E copy
+              "$<TARGET_FILE_DIR:WASMIPhreeqc>/$<TARGET_FILE_BASE_NAME:WASMIPhreeqc>.data"
+              "${EXAMPLE_DEPLOY_DIR}/"
+      COMMENT "Copy *.data file to the example/html/wasm directory"
+    )
+  endif()
+endif()
 
 target_sources(IPhreeqc
   PRIVATE
@@ -259,6 +315,9 @@ if (NOT IPHREEQC_ENABLE_MODULE)
   )
 endif()
 
+# c++14
+target_compile_features(IPhreeqc PUBLIC cxx_std_14)
+
 if (${CMAKE_CXX_COMPILER_ID} STREQUAL MSVC)
   target_compile_options(IPhreeqc PRIVATE /wd4251 /wd4275 /wd4793)
 endif()
@@ -268,6 +327,12 @@ endif()
 if (MSVC_VERSION EQUAL 1400 OR MSVC_VERSION GREATER 1400)
   target_compile_definitions(IPhreeqc PUBLIC _CRT_SECURE_NO_DEPRECATE)
   target_compile_definitions(IPhreeqc PUBLIC _SCL_SECURE_NO_WARNINGS)
+endif()
+
+if (WIN32 AND BUILD_SHARED_LIBS)
+  # Required to build IMPLIB
+  # (Seems to be automatically set when using Visual Studio as the generator)
+  target_compile_definitions(IPhreeqc PRIVATE _WINDLL)
 endif()
 
 # Allow user to override POSTFIX properties (but mandate them so that
@@ -331,7 +396,7 @@ set_target_properties(IPhreeqc PROPERTIES
 if (STANDALONE_BUILD)
 
   include(CMakePackageConfigHelpers)
-  
+
   configure_package_config_file(IPhreeqcConfig.cmake.in
     ${CMAKE_CURRENT_BINARY_DIR}/IPhreeqcConfig.cmake
     INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/IPhreeqc
@@ -341,11 +406,11 @@ if (STANDALONE_BUILD)
     VERSION ${IPhreeqc_VERSION}
     COMPATIBILITY SameMajorVersion
     )
-  
+
   install(FILES ${CMAKE_CURRENT_BINARY_DIR}/IPhreeqcConfig.cmake ${CMAKE_CURRENT_BINARY_DIR}/IPhreeqcConfigVersion.cmake
     DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/IPhreeqc
     )
-  
+
   install(TARGETS  IPhreeqc
     EXPORT   IPhreeqcTargets
     LIBRARY  DESTINATION ${CMAKE_INSTALL_LIBDIR}
@@ -357,8 +422,8 @@ if (STANDALONE_BUILD)
     FILE IPhreeqcTargets.cmake
     NAMESPACE IPhreeqc::
     DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/IPhreeqc
-    )  
-  
+    )
+
   install(FILES ${IPhreeqc_Headers} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
   if (WIN32)
     install(FILES ${IPhreeqc_SRC} DESTINATION src)
@@ -374,7 +439,7 @@ if (BUILD_CLR_LIBS)
   if (NOT BUILD_SHARED_LIBS)
     message(FATAL_ERROR "BUILD_CLR_LIBS requires that BUILD_SHARED_LIBS be set")
   endif()
-  
+
   if (IPHREEQC_STATIC_RUNTIME)
     message(FATAL_ERROR "BUILD_CLR_LIBS and IPHREEQC_STATIC_RUNTIME are mutually exclusive")
   endif()
@@ -395,64 +460,77 @@ endif()
 include (CTest)
 
 if (STANDALONE_BUILD)
-  
+
   add_subdirectory(database)
-  add_subdirectory(doc)
   add_subdirectory(examples)
+  if(NOT EMSCRIPTEN)
+    add_subdirectory(doc)
   
-  if (BUILD_TESTING)
-    add_subdirectory(tests)
-  endif()
-  
-  
-  if (BUILD_TESTING)  # may need to add MSVC version check
-    include(FetchContent)
-    
-    FetchContent_Declare(
-      googletest
-      URL https://github.com/google/googletest/archive/release-1.8.1.tar.gz
-      URL_HASH MD5=2e6fbeb6a91310a16efe181886c59596
-      )
-    
-    mark_as_advanced(
-      FETCHCONTENT_BASE_DIR
-      FETCHCONTENT_FULLY_DISCONNECTED
-      FETCHCONTENT_QUIET
-      FETCHCONTENT_SOURCE_DIR_GOOGLETEST
-      FETCHCONTENT_UPDATES_DISCONNECTED
-      FETCHCONTENT_UPDATES_DISCONNECTED_GOOGLETEST
-      )
-
-    # Prevent GoogleTest from overriding our compiler/linker options
-    # when building with Visual Studio
-    set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-    
-    set(BUILD_GTEST ON CACHE BOOL "" FORCE)
-    set(BUILD_GMOCK OFF CACHE BOOL "" FORCE)
-    
-    set(INSTALL_GTEST OFF CACHE BOOL "" FORCE)
-    set(INSTALL_GMOCK OFF CACHE BOOL "" FORCE)
-
-    mark_as_advanced(
-      BUILD_GTEST
-      BUILD_GMOCK
-      INSTALL_GTEST
-      INSTALL_GMOCK
-      gmock_build_tests
-      gtest_build_tests
-      gtest_build_samples
-      gtest_disable_pthreads
-      gtest_force_shared_crt
-      gtest_hide_internal_symbols
-      )
-    
-    FetchContent_GetProperties(googletest)
-    if (NOT googletest_POPULATED)
-      FetchContent_Populate(googletest)
-      add_subdirectory(${googletest_SOURCE_DIR} ${googletest_BINARY_DIR})
+    if (BUILD_TESTING)
+      add_subdirectory(tests)
     endif()
+  
 
-    add_subdirectory(gtest)
+    if (BUILD_TESTING)  # may need to add MSVC version check
+	  # GoogleTest requires at least C++17
+	  set(CMAKE_CXX_STANDARD 17)
+	  set(CMAKE_CXX_STANDARD_REQUIRED ON)
+      include(FetchContent)
+
+      # Avoid warning about DOWNLOAD_EXTRACT_TIMESTAMP in CMake 3.24:
+      if (CMAKE_VERSION VERSION_GREATER_EQUAL "3.24.0")
+        cmake_policy(SET CMP0135 NEW)
+      endif()    
+
+      FetchContent_Declare(
+        googletest
+        URL https://github.com/google/googletest/archive/52eb8108c5bdec04579160ae17225d66034bd723.zip
+        )
+      # For Windows: Prevent overriding the parent project's compiler/linker settings
+      set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+      mark_as_advanced(
+        FETCHCONTENT_BASE_DIR
+        FETCHCONTENT_FULLY_DISCONNECTED
+        FETCHCONTENT_QUIET
+        FETCHCONTENT_SOURCE_DIR_GOOGLETEST
+        FETCHCONTENT_UPDATES_DISCONNECTED
+        FETCHCONTENT_UPDATES_DISCONNECTED_GOOGLETEST
+        )
+
+      # Prevent GoogleTest from overriding our compiler/linker options
+      # when building with Visual Studio
+      set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+
+      set(BUILD_GTEST ON CACHE BOOL "" FORCE)
+      set(BUILD_GMOCK ON CACHE BOOL "" FORCE)
+
+      set(INSTALL_GTEST OFF CACHE BOOL "" FORCE)
+      set(INSTALL_GMOCK OFF CACHE BOOL "" FORCE)
+
+      mark_as_advanced(
+        BUILD_GTEST
+        BUILD_GMOCK
+        INSTALL_GTEST
+        INSTALL_GMOCK
+        gmock_build_tests
+        gtest_build_tests
+        gtest_build_samples
+        gtest_disable_pthreads
+        gtest_force_shared_crt
+        gtest_hide_internal_symbols
+        )
+
+      FetchContent_GetProperties(googletest)
+      if (NOT googletest_POPULATED)
+        # Always build googletest static
+        set(SAVE_BUILD_SHARED_LIBS ${BUILD_SHARED_LIBS})
+        set(BUILD_SHARED_LIBS OFF)
+        FetchContent_MakeAvailable(googletest)
+        set(BUILD_SHARED_LIBS ${SAVE_BUILD_SHARED_LIBS})
+      endif()
+
+      add_subdirectory(gtest)
+    endif()
   endif()
 endif()
 

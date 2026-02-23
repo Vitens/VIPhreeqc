@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <string.h>
-#include <math.h>
+#include <cmath>
 #include <stdlib.h>
 #include "Phreeqc.h"
 #include "phqalloc.h"
@@ -142,7 +142,7 @@ cl1(int k, int l, int m, int n,
 /*        AT LEAST NKLMD COLUMNS USED FOR WORKSPACE. */
 /* S      INTEGER ARRAY OF SIZE AT LEAST KLMD, USED FOR */
 /*        WORKSPACE. */
-/*      DOUBLE PRECISION DBLE */
+/*      real(kind=8) DBLE */
 /*      REAL */
 
 /* INITIALIZATION. */
@@ -460,7 +460,7 @@ cl1(int k, int l, int m, int n,
 #endif
 	if (kk < 0)
 	{
-/* no positive value found in L340 or bypass intermediate verticies */
+/* no positive value found in L340 or bypass intermediate vertices */
 		*l_kode = 2;
 		goto L590;
 	}

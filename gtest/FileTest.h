@@ -25,6 +25,7 @@ public:
 	bool Exists(void);
 	int Delete(void);
 	size_t Size(void);
+	size_t LineCount(void);
 
 protected:
 	std::string _fn;

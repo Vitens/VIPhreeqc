@@ -10,7 +10,17 @@
 #include "Utils.h"
 #include "Parser.h"
 #include "float.h"
-#include "math.h"
+#include <cmath>
+
+#if defined(_MSC_VER) && (_MSC_VER <= 1400) // VS2005
+#  define nullptr NULL
+#endif
+
+#if __cplusplus < 201103L // Check if C++ standard is pre-C++11
+#  ifndef nullptr
+#    define nullptr NULL
+#  endif
+#endif
 
 #if defined(PHREEQCI_GUI)
 #ifdef _DEBUG
@@ -145,7 +155,7 @@ Utilities::convert_time(double t, std::string in, std::string out)
 	{
 		t = t * 3600. * 24. * 365.25;
 	}
-	// convert to ouput units
+	// convert to output units
 	if (out.substr(0,1) == "m")
 	{
 		t = t / 60.;
@@ -180,6 +190,65 @@ Utilities::safe_exp(LDBLE t)
 		return pow(2, DBL_MIN_EXP + 50.0);
 	}
 	return exp(t);
+}
+size_t Utilities::
+strcpy_safe(char* dest, size_t max, const char* src)
+{
+	size_t lsrc = 0;
+	try
+	{
+		if (dest == nullptr || src == nullptr)
+		{
+#if !defined(R_SO)
+			std::cerr << "nullptr in Utilities::strcpy_safe." << std::endl;
+#endif
+			throw;
+		}
+		lsrc = strlen(src);
+		if (lsrc + 1 > max)
+		{
+#if !defined(R_SO)
+			std::cerr << "Buffer overrun in Utilities::strcpy_safe." << std::endl;
+#endif
+			throw;
+		}
+		memcpy(dest, src, (lsrc + 1) * sizeof(char));
+	}
+	catch (...)
+	{
+		throw;
+	}
+	return lsrc;
+}
+size_t Utilities::
+strcat_safe(char* dest, size_t max, const char* src)
+{
+	size_t ldest = 0, lsrc = 0;
+	try
+	{
+		if (dest == nullptr || src == nullptr)
+		{
+#if !defined(R_SO)
+			std::cerr << "nullptr in Utilities::strcat_safe." << std::endl;
+#endif
+			throw;
+		}
+		lsrc = strlen(src);
+		ldest = strlen(dest);
+		if (ldest + lsrc + 1 > max)
+		{
+#if !defined(R_SO)
+			std::cerr << "Buffer overrun in Utilities::strcat_safe." << std::endl;
+#endif
+			throw;
+		}
+		memcpy(&dest[ldest], src, (lsrc + 1) * sizeof(char));
+	}
+	catch (...)
+	{
+		throw;
+	}
+	return ldest + lsrc;
 }
 //+NAN LDBLE: 7ff8000000000000
 //-NAN LDBLE: fff8000000000000

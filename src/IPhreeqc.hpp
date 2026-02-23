@@ -911,7 +911,7 @@ public:
   /**
    * Returns a JSON representation of the specified surface
    */
-  std::string             GetSurfaceJSON(int surface);
+  //std::string             GetSurfaceJSON(int surface);
 
   // volume functions
   /**

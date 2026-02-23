@@ -139,6 +139,7 @@ clean_up(void)
 	}
 	logk.clear();
 	save_values.clear();
+	save_strings.clear();
 	/* working pe*/
 	pe_x.clear();
 	/*species_list*/
@@ -1561,6 +1562,7 @@ s_init(class species *s_ptr)
 	s_ptr->dw_t = 0.0;
 	s_ptr->dw_a = 0.0;
 	s_ptr->dw_a2 = 0.0;
+	s_ptr->dw_a3 = 0.0;
 	s_ptr->erm_ddl = 1.0;
 	s_ptr->equiv = 0;
 	s_ptr->alk = 0.0;
@@ -2486,7 +2488,7 @@ unknown_delete(int i)
 /* ---------------------------------------------------------------------- */
 {
 /*
- *   Delete unknow from list x
+ *   Delete unknown from list x
  */
 	unknown_free(x[i]);
 	x.erase(x.begin() + (size_t)i);
@@ -2634,7 +2636,7 @@ logk_init(class logk *logk_ptr)
  */
 	logk_ptr->name = NULL;
 /*
- *   set varibles = 0
+ *   set variables = 0
  */
 	logk_ptr->lk = 0.0;
 	for (i = 0; i < MAX_LOG_K_INDICES; i++)

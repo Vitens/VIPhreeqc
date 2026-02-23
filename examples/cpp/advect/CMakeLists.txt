@@ -25,7 +25,7 @@ add_executable(example_advect_cpp ${CPP_Advect_SRC})
 # library dependencies
 SET(EXTRA_LIBS ${EXTRA_LIBS} IPhreeqc)
 
-# link 
+# link
 target_link_libraries(example_advect_cpp ${EXTRA_LIBS})
 
 # install directory

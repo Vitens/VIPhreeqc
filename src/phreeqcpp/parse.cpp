@@ -1,5 +1,6 @@
 #include "Phreeqc.h"
 #include "phqalloc.h"
+#include "Utils.h"
 
 #if defined(PHREEQCI_GUI)
 #ifdef _DEBUG
@@ -133,7 +134,7 @@ parse_eq(char* eqn, std::vector<class elt_list>& new_elt_list, int association)
 	 *   Get elements in species or mineral formula
 	 */
 	count_elts = 0;
-	strcpy(token, trxn.token[0].name);
+	Utilities::strcpy_safe(token, MAX_LENGTH, trxn.token[0].name);
 	replace("(s)", "", token);
 	replace("(S)", "", token);
 	replace("(g)", "", token);
@@ -259,7 +260,7 @@ check_eqn(int association)
 
 /* ---------------------------------------------------------------------- */
 int Phreeqc::
-get_charge(char *charge, LDBLE * l_z)
+get_charge(char *charge, size_t charge_size, LDBLE * l_z)
 /* ---------------------------------------------------------------------- */
 /*
  *   Function takes character string and calculates the charge on
@@ -367,7 +368,7 @@ get_charge(char *charge, LDBLE * l_z)
  */
 	if (abs(i) > 1)
 	{
-		if (sprintf(charge, "%-+d", i) == EOF)
+		if (snprintf(charge, charge_size, "%-+d", i) == EOF)
 		{
 			error_string = sformatf(
 					"Error converting charge to character string, %s.",

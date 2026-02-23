@@ -6,6 +6,8 @@
 #include <stdio.h>
 #endif
 
+#include "Phreeqc.h" /* snprintf */
+
 #if defined(_WIN32) || defined(__CYGWIN32__)
 bool FileExists(const char *szPathName)
 {
@@ -19,7 +21,7 @@ bool FileExists(const char *szPathName)
 	if (fileHandle == INVALID_HANDLE_VALUE)
 	{
 		char buffer[100];
-		sprintf(buffer, "Could not open file (error %d)\n", GetLastError());
+		snprintf(buffer, sizeof(buffer), "Could not open file (error %d)\n", GetLastError());
 		retValue = false;
 	}
 	else
@@ -150,4 +152,20 @@ int FileTest::Delete(void)
 size_t FileTest::Size(void)
 {
 	return ::FileSize(_fn.c_str());
+}
+
+size_t FileTest::LineCount(void)
+{
+	size_t nlines = 0;
+	if (::FileExists(_fn.c_str()))
+	{
+		std::ifstream ifs(_fn.c_str(), std::ifstream::in);
+		std::string line;
+		while (std::getline(ifs, line))
+		{
+			++nlines;
+		}
+		ifs.close();
+	}
+	return nlines;
 }

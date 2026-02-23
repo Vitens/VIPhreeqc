@@ -7,8 +7,9 @@ EXTRA_DIST =\
 	iso.dat\
 	kinn20140218\
 	missing_e.dat\
-	multi_punch\
 	multi_punch_no_set\
+	multi_punch\
+	phreeqc.dat.90a6449\
 	phreeqc.dat.old\
 	TestCVar.cpp\
 	TestIPhreeqc.cpp\

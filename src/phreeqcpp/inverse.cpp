@@ -31,7 +31,7 @@ inverse_models(void)
  *   for any marked "new".
  */
 	int n/*, print1*/;
-	char string[MAX_LENGTH];
+	char string[MAX_LENGTH] = "";
 	if (count_inverse <= 0) return OK;
 	// Revert to previous headings after inverse modeling
 	std::vector<std::string> old_headings;
@@ -54,10 +54,10 @@ inverse_models(void)
  */
 			if (inverse[n].pat != NULL)
 			{
-				strcpy(string, inverse[n].pat);
+				Utilities::strcpy_safe(string, MAX_LENGTH, inverse[n].pat);
 				if (replace(".pat", ".pat", string) != TRUE)
 				{
-					strcat(string, ".pat");
+					Utilities::strcat_safe(string, MAX_LENGTH, ".pat");
 				}
 				netpath_file = fopen(string, "w");
 				if (netpath_file == NULL)
@@ -74,7 +74,7 @@ inverse_models(void)
 				fprintf(netpath_file, "2.14               # File format\n");
 			}
 /*
- *  Fill in stucture "use".  
+ *  Fill in structure "use".
  */
 			use.Set_inverse_in(true);
 			use.Set_inverse_ptr(&inverse[n]);
@@ -371,7 +371,7 @@ setup_inverse(class inverse *inv_ptr)
 			f = -1.0;
 		}
 		column = i;
-		sprintf(token, "soln %d", i);
+		snprintf(token, sizeof(token), "soln %d", i);
 		col_name[column] = string_hsave(token);
 		for (j = 0; j < (int)master.size(); j++)
 		{
@@ -538,7 +538,7 @@ setup_inverse(class inverse *inv_ptr)
 			{
 				my_array[(size_t)row * max_column_count + (size_t)column] = 0.0;
 			}
-			sprintf(token, "%s %d", row_name[row], j);
+			snprintf(token, sizeof(token), "%s %d", row_name[row], j);
 			col_name[column] = string_hsave(token);
 			column++;
 		}
@@ -549,13 +549,13 @@ setup_inverse(class inverse *inv_ptr)
 
 	for (i = 0; i < inv_ptr->count_solns; i++)
 	{
-		sprintf(token, "ph %d", i);
+		snprintf(token, sizeof(token), "ph %d", i);
 		col_name[column] = string_hsave(token);
 		column++;
 	}
 /*   put names in col_name for water */
 
-	sprintf(token, "water");
+	snprintf(token, sizeof(token), "water");
 	col_name[column] = string_hsave(token);
 	column++;
 
@@ -564,7 +564,7 @@ setup_inverse(class inverse *inv_ptr)
 	{
 		for (j = 0; j < inv_ptr->isotope_unknowns.size(); j++)
 		{
-			sprintf(token, "%d%s %d",
+			snprintf(token, sizeof(token), "%d%s %d",
 					(int) inv_ptr->isotope_unknowns[j].isotope_number,
 					inv_ptr->isotope_unknowns[j].elt_name, i);
 			col_name[column] = string_hsave(token);
@@ -581,7 +581,7 @@ setup_inverse(class inverse *inv_ptr)
 		{
 			for (j = 0; j < inv_ptr->isotopes.size(); j++)
 			{
-				sprintf(token, "%d%s %s",
+				snprintf(token, sizeof(token), "%d%s %s",
 						(int) inv_ptr->isotopes[j].isotope_number,
 						inv_ptr->isotopes[j].elt_name,
 						inv_ptr->phases[i].phase->name);
@@ -649,7 +649,7 @@ setup_inverse(class inverse *inv_ptr)
 				my_array[count_rows * max_column_count + (size_t)column] = 0.0;
 			}
 		}
-		sprintf(token, "%s %d", "charge", i);
+		snprintf(token, sizeof(token), "%s %d", "charge", i);
 		row_name[count_rows] = string_hsave(token);
 		count_rows++;
 	}
@@ -672,7 +672,7 @@ setup_inverse(class inverse *inv_ptr)
 			my_array[count_rows * max_column_count + (size_t)column] =
 				inv_ptr->dalk_dc[i];
 		}
-		sprintf(token, "%s %d", "dAlk", i);
+		snprintf(token, sizeof(token), "%s %d", "dAlk", i);
 		row_name[count_rows] = string_hsave(token);
 		count_rows++;
 	}
@@ -688,7 +688,7 @@ setup_inverse(class inverse *inv_ptr)
 		for (size_t j = 0; j < inv_ptr->isotopes.size(); j++)
 		{
 			isotope_balance_equation(inv_ptr, (int)count_rows, (int)j);
-			sprintf(token, "%d%s", (int) inv_ptr->isotopes[j].isotope_number,
+			snprintf(token, sizeof(token), "%d%s", (int) inv_ptr->isotopes[j].isotope_number,
 					inv_ptr->isotopes[j].elt_name);
 			row_name[count_rows] = string_hsave(token);
 			count_rows++;
@@ -761,7 +761,7 @@ setup_inverse(class inverse *inv_ptr)
 			}
 			my_array[count_rows * max_column_count + (size_t)column] = 1.0 * f;
 			my_array[count_rows * max_column_count + (size_t)i] = -coef * f;
-			sprintf(token, "%s %s", inv_ptr->elts[j].master->elt->name, "eps+");
+			snprintf(token, sizeof(token), "%s %s", inv_ptr->elts[j].master->elt->name, "eps+");
 			row_name[count_rows] = string_hsave(token);
 			count_rows++;
 
@@ -795,7 +795,7 @@ setup_inverse(class inverse *inv_ptr)
 
 			my_array[count_rows * max_column_count + (size_t)i] = -coef * f;
 			my_array[count_rows * max_column_count + (size_t)column] = -1.0 * f;
-			sprintf(token, "%s %s", inv_ptr->elts[j].master->elt->name,
+			snprintf(token, sizeof(token), "%s %s", inv_ptr->elts[j].master->elt->name,
 					"eps-");
 			row_name[count_rows] = string_hsave(token);
 			count_rows++;
@@ -821,7 +821,7 @@ setup_inverse(class inverse *inv_ptr)
 
 			my_array[count_rows * max_column_count + (size_t)column] = 1.0;
 			my_array[count_rows * max_column_count + (size_t)i] = -coef;
-			sprintf(token, "%s %s", "pH", "eps+");
+			snprintf(token, sizeof(token), "%s %s", "pH", "eps+");
 			row_name[count_rows] = string_hsave(token);
 			count_rows++;
 
@@ -829,7 +829,7 @@ setup_inverse(class inverse *inv_ptr)
 
 			my_array[count_rows * max_column_count + (size_t)column] = -1.0;
 			my_array[count_rows * max_column_count + (size_t)i] = -coef;
-			sprintf(token, "%s %s", "pH", "eps-");
+			snprintf(token, sizeof(token), "%s %s", "pH", "eps-");
 			row_name[count_rows] = string_hsave(token);
 			count_rows++;
 		}
@@ -845,7 +845,7 @@ setup_inverse(class inverse *inv_ptr)
 /* set upper limit of change in positive direction */
 		my_array[count_rows * max_column_count + (size_t)column] = 1.0;
 		my_array[count_rows * max_column_count + count_unknowns] = coef;
-		sprintf(token, "%s %s", "water", "eps+");
+		snprintf(token, sizeof(token), "%s %s", "water", "eps+");
 		row_name[count_rows] = string_hsave(token);
 		count_rows++;
 
@@ -853,7 +853,7 @@ setup_inverse(class inverse *inv_ptr)
 
 		my_array[count_rows * max_column_count + (size_t)column] = -1.0;
 		my_array[count_rows * max_column_count + count_unknowns] = coef;
-		sprintf(token, "%s %s", "water", "eps-");
+		snprintf(token, sizeof(token), "%s %s", "water", "eps-");
 		row_name[count_rows] = string_hsave(token);
 		count_rows++;
 	}
@@ -890,7 +890,7 @@ setup_inverse(class inverse *inv_ptr)
 /* set upper limit of change in positive direction */
 						my_array[count_rows * max_column_count + (size_t)column] = 1.0;
 						my_array[count_rows * max_column_count + (size_t)i] = -coef;
-						sprintf(token, "%d%s %s",
+						snprintf(token, sizeof(token), "%d%s %s",
 								(int) kit->second.Get_isotope_number(),
 								kit->second.Get_elt_name().c_str(), "eps+");
 						row_name[count_rows] = string_hsave(token);
@@ -900,7 +900,7 @@ setup_inverse(class inverse *inv_ptr)
 
 						my_array[count_rows * max_column_count + (size_t)column] = -1.0;
 						my_array[count_rows * max_column_count + (size_t)i] = -coef;
-						sprintf(token, "%d%s %s",
+						snprintf(token, sizeof(token), "%d%s %s",
 								(int) kit->second.Get_isotope_number(),
 								kit->second.Get_elt_name().c_str(), "eps-");
 						row_name[count_rows] = string_hsave(token);
@@ -1777,7 +1777,7 @@ print_model(class inverse *inv_ptr)
 						d2 = 0.0;
 					if (equal(d3, 0.0, MIN_TOTAL_INVERSE) == TRUE)
 						d3 = 0.0;
-					sprintf(token, "%d%s",
+					snprintf(token, sizeof(token), "%d%s",
 							(int) inv_ptr->isotope_unknowns[j].
 							isotope_number,
 							inv_ptr->isotope_unknowns[j].elt_name);
@@ -1853,7 +1853,7 @@ print_model(class inverse *inv_ptr)
 						d2 = 0.0;
 					if (equal(d3, 0.0, 1e-7) == TRUE)
 						d3 = 0.0;
-					sprintf(token, "%d%s %s",
+					snprintf(token, sizeof(token), "%d%s %s",
 							(int) inv_ptr->isotopes[j].isotope_number,
 							inv_ptr->isotopes[j].elt_name,
 							inv_ptr->phases[i].phase->name);
@@ -2060,7 +2060,7 @@ punch_model_heading(class inverse *inv_ptr)
 		*/
 		for (i = 0; i < inv_ptr->count_solns; i++)
 		{
-			sprintf(token, "Soln_%d", inv_ptr->solns[i]);
+			snprintf(token, sizeof(token), "Soln_%d", inv_ptr->solns[i]);
 			std::string tok1(token);
 			tok1.append("_min");
 			std::string tok2(token);
@@ -3582,35 +3582,21 @@ check_isotopes(class inverse *inv_ptr)
 
 			i = ii;
 			/* use inverse-defined uncertainties first */
-#ifdef NPP
 			if (j < inv_ptr->i_u[i].uncertainties.size()
-				&& !isnan(inv_ptr->i_u[i].uncertainties[j]))
-#else
-			if (j < inv_ptr->i_u[i].uncertainties.size()
-				&& inv_ptr->i_u[i].uncertainties[j] != NAN)
-#endif
+				&& !std::isnan(inv_ptr->i_u[i].uncertainties[j]))
 			{
 				kit->second.Set_x_ratio_uncertainty(inv_ptr->i_u[i].uncertainties[j]);
 
 				/* use solution-defined uncertainties second */
 			}
-#ifdef NPP
 			else if (inv_ptr->i_u[i].uncertainties.size() > 0
-				&& !isnan(inv_ptr->i_u[i].uncertainties[inv_ptr->i_u[i].uncertainties.size() - 1]))
-#else
-			else if (inv_ptr->i_u[i].uncertainties.size() > 0
-				&& inv_ptr->i_u[i].uncertainties[(size_t)inv_ptr->i_u[i].uncertainties.size() - 1] != NAN)
-#endif
+				&& !std::isnan(inv_ptr->i_u[i].uncertainties[inv_ptr->i_u[i].uncertainties.size() - 1]))
 			{
 				kit->second.Set_x_ratio_uncertainty(inv_ptr->i_u[i].uncertainties[inv_ptr->i_u[i].uncertainties.size() - 1]);
 
 				/* use solution-defined uncertainties second */
 			}
-#ifdef NPP
-			else if (!isnan(kit->second.Get_ratio_uncertainty()))
-#else
-			else if (kit->second.Get_ratio_uncertainty() != NAN)
-#endif
+			else if (!std::isnan(kit->second.Get_ratio_uncertainty()))
 			{
 				kit->second.Set_x_ratio_uncertainty(
 					kit->second.Get_ratio_uncertainty());
@@ -3618,7 +3604,7 @@ check_isotopes(class inverse *inv_ptr)
 			}
 			else
 			{
-				sprintf(token, "%g%s",
+				snprintf(token, sizeof(token), "%g%s",
 						(double) kit->second.Get_isotope_number(),
 						kit->second.Get_elt_name().c_str());
 				for (l = 0; l < count_iso_defaults; l++)
@@ -3638,11 +3624,7 @@ check_isotopes(class inverse *inv_ptr)
 					}
 				}
 			}
-#ifdef NPP
-			if (isnan(kit->second.Get_x_ratio_uncertainty()))
-#else
-			if (kit->second.Get_x_ratio_uncertainty() == NAN)
-#endif
+			if (std::isnan(kit->second.Get_x_ratio_uncertainty()))
 			{
 				error_string = sformatf(
 						"In solution %d, isotope ratio uncertainty is needed for element: %g%s.",
@@ -3764,7 +3746,7 @@ phase_isotope_inequalities(class inverse *inv_ptr)
 				my_array[count_rows * max_column_count + (size_t)col_phases + (size_t)i] =
 					inv_ptr->phases[i].isotopes[j].ratio_uncertainty;
 				my_array[count_rows * max_column_count + (size_t)column] = 1.0;
-				sprintf(token, "%s %s", inv_ptr->phases[i].phase->name,
+				snprintf(token, sizeof(token), "%s %s", inv_ptr->phases[i].phase->name,
 						"iso pos");
 				row_name[count_rows] = string_hsave(token);
 				count_rows++;
@@ -3772,7 +3754,7 @@ phase_isotope_inequalities(class inverse *inv_ptr)
 				my_array[count_rows * max_column_count + (size_t)col_phases + (size_t)i] =
 					inv_ptr->phases[i].isotopes[j].ratio_uncertainty;
 				my_array[count_rows * max_column_count + (size_t)column] = -1.0;
-				sprintf(token, "%s %s", inv_ptr->phases[i].phase->name,
+				snprintf(token, sizeof(token), "%s %s", inv_ptr->phases[i].phase->name,
 						"iso neg");
 				row_name[count_rows] = string_hsave(token);
 				count_rows++;
@@ -3784,7 +3766,7 @@ phase_isotope_inequalities(class inverse *inv_ptr)
 				my_array[count_rows * max_column_count + (size_t)col_phases + (size_t)i] =
 					-inv_ptr->phases[i].isotopes[j].ratio_uncertainty;
 				my_array[count_rows * max_column_count + (size_t)column] = -1.0;
-				sprintf(token, "%s %s", inv_ptr->phases[i].phase->name,
+				snprintf(token, sizeof(token), "%s %s", inv_ptr->phases[i].phase->name,
 						"iso pos");
 				row_name[count_rows] = string_hsave(token);
 				count_rows++;
@@ -3792,7 +3774,7 @@ phase_isotope_inequalities(class inverse *inv_ptr)
 				my_array[count_rows * max_column_count + (size_t)col_phases + (size_t)i] =
 					-inv_ptr->phases[i].isotopes[j].ratio_uncertainty;
 				my_array[count_rows * max_column_count + (size_t)column] = 1.0;
-				sprintf(token, "%s %s", inv_ptr->phases[i].phase->name,
+				snprintf(token, sizeof(token), "%s %s", inv_ptr->phases[i].phase->name,
 						"iso neg");
 				row_name[count_rows] = string_hsave(token);
 				count_rows++;
@@ -3829,7 +3811,7 @@ write_optimize_names(class inverse *inv_ptr)
 	{
 		for (i = 0; i < inv_ptr->count_solns; i++)
 		{
-			sprintf(token, "%s %s %d", "optimize",
+			snprintf(token, sizeof(token), "%s %s %d", "optimize",
 					inv_ptr->elts[j].master->elt->name, inv_ptr->solns[i]);
 			row_name[row] = string_hsave(token);
 			row++;
@@ -3842,7 +3824,7 @@ write_optimize_names(class inverse *inv_ptr)
 	{
 		for (i = 0; i < inv_ptr->count_solns; i++)
 		{
-			sprintf(token, "%s %s %d", "optimize", "pH", inv_ptr->solns[i]);
+			snprintf(token, sizeof(token), "%s %s %d", "optimize", "pH", inv_ptr->solns[i]);
 			row_name[row] = string_hsave(token);
 			row++;
 		}
@@ -3850,7 +3832,7 @@ write_optimize_names(class inverse *inv_ptr)
 /*
  *   water
  */
-	sprintf(token, "%s %s", "optimize", "water");
+	snprintf(token, sizeof(token), "%s %s", "optimize", "water");
 	row_name[row] = string_hsave(token);
 	row++;
 /*
@@ -3860,7 +3842,7 @@ write_optimize_names(class inverse *inv_ptr)
 	{
 		for (j = 0; j < inv_ptr->isotope_unknowns.size(); j++)
 		{
-			sprintf(token, "%s %d%s %d", "optimize",
+			snprintf(token, sizeof(token), "%s %d%s %d", "optimize",
 					(int) inv_ptr->isotope_unknowns[j].isotope_number,
 					inv_ptr->isotope_unknowns[j].elt_name, inv_ptr->solns[i]);
 			row_name[row] = string_hsave(token);
@@ -3875,7 +3857,7 @@ write_optimize_names(class inverse *inv_ptr)
 	{
 		for (j = 0; j < inv_ptr->isotopes.size(); j++)
 		{
-			sprintf(token, "%s %s %d%s", "optimize",
+			snprintf(token, sizeof(token), "%s %s %d%s", "optimize",
 					inv_ptr->phases[i].phase->name,
 					(int) inv_ptr->isotopes[j].isotope_number,
 					inv_ptr->isotopes[j].elt_name);
@@ -4192,11 +4174,11 @@ print_total_multi(FILE * l_netpath_file, cxxSolution *solution_ptr,
 	LDBLE sum;
 	int i, found;
 
-	strcpy(elts[0], elt0);
-	strcpy(elts[1], elt1);
-	strcpy(elts[2], elt2);
-	strcpy(elts[3], elt3);
-	strcpy(elts[4], elt4);
+	Utilities::strcpy_safe(elts[0], MAX_LENGTH, elt0);
+	Utilities::strcpy_safe(elts[1], MAX_LENGTH, elt1);
+	Utilities::strcpy_safe(elts[2], MAX_LENGTH, elt2);
+	Utilities::strcpy_safe(elts[3], MAX_LENGTH, elt3);
+	Utilities::strcpy_safe(elts[4], MAX_LENGTH, elt4);
 
 
 	sum = 0;

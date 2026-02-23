@@ -819,7 +819,7 @@ replace_solids_gases(void)
 				/* try phase name without (g) or  (s) */
 				if (phase_ptr == NULL)
 				{
-					strcpy(token, token_ptr->name);
+					Utilities::strcpy_safe(token, MAX_LENGTH, token_ptr->name);
 					replace("(g)", "", token);
 					replace("(s)", "", token);
 					replace("(G)", "", token);
@@ -979,11 +979,7 @@ tidy_gas_phase(void)
 						error_msg(error_string, CONTINUE);
 					}
 					/* calculate moles */
-#ifdef NPP
-					if (!isnan(gas_phase_ptr->Get_gas_comps()[j].Get_p_read()))
-#else
-					if (gas_phase_ptr->Get_gas_comps()[j].Get_p_read() != NAN)
-#endif
+					if (!std::isnan(gas_phase_ptr->Get_gas_comps()[j].Get_p_read()))
 					{
 						P += gas_phase_ptr->Get_gas_comps()[j].Get_p_read();
 						if (!PR)
@@ -1012,11 +1008,7 @@ tidy_gas_phase(void)
 					*/
 					if (!gas_phase_ptr->Get_solution_equilibria())
 					{
-#ifdef NPP
-						if (!isnan(gas_phase_ptr->Get_gas_comps()[j].Get_p_read()))
-#else
-						if (gas_phase_ptr->Get_gas_comps()[j].Get_p_read() != NAN)
-#endif
+						if (!std::isnan(gas_phase_ptr->Get_gas_comps()[j].Get_p_read()))
 						{
 							P += gas_phase_ptr->Get_gas_comps()[j].Get_p_read();
 							if (!PR)
@@ -1687,11 +1679,7 @@ tidy_ss_assemblage(void)
 					phase_ptr->moles_x = 0;
 					phase_ptr->fraction_x = 0;
 				}
-#ifdef NPP
-				if (isnan(comp_ptr->Get_moles()))
-#else
-				if (comp_ptr->Get_moles() == NAN)
-#endif
+				if (std::isnan(comp_ptr->Get_moles()))
 				{
 					input_error++;
 					error_string = sformatf(
@@ -2025,8 +2013,8 @@ tidy_punch(void)
 					" %s.", pair_ref.first.c_str());
 				warning_msg(error_string);
 			}
-			//strcpy(token, "m_");
-			//strcat(token, punch.molalities[i].name);
+			// Utilities::strcpy_safe(token, MAX_LENGTH, "m_");
+			//Utilities::strcat_safe(token, punch.molalities[i].name);
 			//fpunchf_heading(sformatf("%*s\t", l, token));
 			//if (punch.molalities[i].s == NULL)
 			//{
@@ -2051,8 +2039,8 @@ tidy_punch(void)
 					" %s.", pair_ref.first.c_str());
 				warning_msg(error_string);
 			}
-			//strcpy(token, "la_");
-			//strcat(token, punch.activities[i].name);
+			// Utilities::strcpy_safe(token, MAX_LENGTH, "la_");
+			//Utilities::strcat_safe(token, punch.activities[i].name);
 			//fpunchf_heading(sformatf("%*s\t", l, token));
 			//if (punch.activities[i].s == NULL)
 			//{
@@ -2078,8 +2066,8 @@ tidy_punch(void)
 					" %s.", pair_ref.first.c_str());
 				warning_msg(error_string);
 			}
-			//strcpy(token, "d_");
-			//strcat(token, punch.pure_phases[i].name);
+			// Utilities::strcpy_safe(token, MAX_LENGTH, "d_");
+			//Utilities::strcat_safe(token, punch.pure_phases[i].name);
 			//fpunchf_heading(sformatf("%*s\t", l, punch.pure_phases[i].name));
 			//fpunchf_heading(sformatf("%*s\t", l, token));
 			//if (punch.pure_phases[i].phase == NULL)
@@ -2105,8 +2093,8 @@ tidy_punch(void)
 					" %s.", pair_ref.first.c_str());
 				warning_msg(error_string);
 			}
-			//strcpy(token, "si_");
-			//strcat(token, punch.si[i].name);
+			// Utilities::strcpy_safe(token, MAX_LENGTH, "si_");
+			//Utilities::strcat_safe(token, punch.si[i].name);
 			//fpunchf_heading(sformatf("%*s\t", l, token));
 			//if (punch.si[i].phase == NULL)
 			//{
@@ -2138,8 +2126,8 @@ tidy_punch(void)
 					" %s.", pair_ref.first.c_str());
 				warning_msg(error_string);
 			}
-			//strcpy(token, "g_");
-			//strcat(token, punch.gases[i].name);
+			// Utilities::strcpy_safe(token, MAX_LENGTH, "g_");
+			//Utilities::strcat_safe(token, punch.gases[i].name);
 			//fpunchf_heading(sformatf("%*s\t", l, token));
 			//if (punch.gases[i].phase == NULL)
 			//{
@@ -2161,11 +2149,11 @@ tidy_punch(void)
 			name = "dk_";
 			name.append(pair_ref.first);
 			fpunchf_heading(sformatf("%*s\t", l, name.c_str()));
-			//strcpy(token, "k_");
-			//strcat(token, punch.kinetics[i].name);
+			// Utilities::strcpy_safe(token, MAX_LENGTH, "k_");
+			//Utilities::strcat_safe(token, punch.kinetics[i].name);
 			//fpunchf_heading(sformatf("%*s\t", l, token));
-			//strcpy(token, "dk_");
-			//strcat(token, punch.kinetics[i].name);
+			// Utilities::strcpy_safe(token, MAX_LENGTH, "dk_");
+			//Utilities::strcat_safe(token, punch.kinetics[i].name);
 			//fpunchf_heading(sformatf("%*s\t", l, token));
 		}
 
@@ -2178,8 +2166,8 @@ tidy_punch(void)
 			std::string name = "s_";
 			name.append(pair_ref.first);
 			fpunchf_heading(sformatf("%*s\t", l, name.c_str()));
-			//strcpy(token, "s_");
-			//strcat(token, punch.s_s[i].name);
+			// Utilities::strcpy_safe(token, MAX_LENGTH, "s_");
+			//Utilities::strcat_safe(token, punch.s_s[i].name);
 			//fpunchf_heading(sformatf("%*s\t", l, token));
 		}
 
@@ -2208,8 +2196,8 @@ tidy_punch(void)
 			//		punch.isotopes[i].name, punch.isotopes[i].name);
 			//	warning_msg(error_string);
 			//}
-			//strcpy(token, "I_");
-			//strcat(token, punch.isotopes[i].name);
+			// Utilities::strcpy_safe(token, MAX_LENGTH, "I_");
+			//Utilities::strcat_safe(token, punch.isotopes[i].name);
 			//fpunchf_heading(sformatf("%*s\t", l, token));
 		}
 
@@ -2239,8 +2227,8 @@ tidy_punch(void)
 			//		punch.calculate_values[i].name);
 			//	warning_msg(error_string);
 			//}
-			//strcpy(token, "V_");
-			//strcat(token, punch.calculate_values[i].name);
+			// Utilities::strcpy_safe(token, MAX_LENGTH, "V_");
+			//Utilities::strcat_safe(token, punch.calculate_values[i].name);
 			//fpunchf_heading(sformatf("%*s\t", l, token));
 		}
 
@@ -2324,6 +2312,15 @@ tidy_species(void)
 		}
 		/* store sequence number in master structure */
 		master[i]->number = i;
+		if (master[i]->s == NULL)
+		{
+			input_error++;
+			error_string = sformatf(
+				"Species pointer is null for, %s. Check your _MASTER_ and _SPECIES definitions.",
+				master[i]->elt->name);
+			error_msg(error_string, STOP);
+		}
+
 		if (strcmp(master[i]->elt->name, "Alkalinity") != 0)
 		{
 			if (master[i]->primary == TRUE)
@@ -3018,11 +3015,7 @@ tidy_isotopes(void)
 				temp_iso.Set_total(0);
 				temp_iso.Set_ratio(master[k]->isotope_ratio);
 				temp_iso.Set_ratio_uncertainty(master[k]->isotope_ratio_uncertainty);
-#ifdef NPP
-				if (!isnan(master[k]->isotope_ratio_uncertainty))
-#else
-				if (master[k]->isotope_ratio_uncertainty != NAN)
-#endif
+				if (!std::isnan(master[k]->isotope_ratio_uncertainty))
 				{
 					temp_iso.Set_ratio_uncertainty_defined(true);
 				}
@@ -4677,7 +4670,7 @@ ss_prep(LDBLE t, cxxSS *ss_ptr, int print)
 			{
 				if (print == TRUE)
 					output_msg(sformatf(
-							   "\nLocal minimum in the solidus curve coresponding to a maximum\nin the minimum stoichiometric saturation curve.\n\n"));
+							   "\nLocal minimum in the solidus curve corresponding to a maximum\nin the minimum stoichiometric saturation curve.\n\n"));
 			}
 			else
 			{
@@ -5447,6 +5440,16 @@ tidy_isotope_ratios(void)
 		/*
 		 * Mark master species list as minor isotope
 		 */
+		if (isotope_ratio[i]->isotope_name == NULL)
+		{
+
+			input_error++;
+			error_string = sformatf(
+				"For ISOTOPE_RATIO, did not find ISOTOPE name for this isotope ratio %s",
+				isotope_ratio[i]->name);
+			error_msg(error_string, CONTINUE);
+			continue;
+		}
 		master_isotope_ptr =
 			master_isotope_search(isotope_ratio[i]->isotope_name);
 		if (master_isotope_ptr == NULL)

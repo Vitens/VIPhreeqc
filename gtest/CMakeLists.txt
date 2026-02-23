@@ -3,19 +3,19 @@ project(unit)
 include(GoogleTest)
 
 add_executable(TestCVar TestCVar.cpp)
-target_link_libraries(TestCVar IPhreeqc gtest gtest_main)
+target_link_libraries(TestCVar IPhreeqc gtest gtest_main gmock)
 gtest_discover_tests(TestCVar)
 
 add_executable(TestVar TestVar.cpp)
-target_link_libraries(TestVar IPhreeqc gtest gtest_main)
+target_link_libraries(TestVar IPhreeqc gtest gtest_main gmock)
 gtest_discover_tests(TestVar)
 
 add_executable(TestIPhreeqcLib TestIPhreeqcLib.cpp FileTest.cpp)
-target_link_libraries(TestIPhreeqcLib IPhreeqc gtest gtest_main)
+target_link_libraries(TestIPhreeqcLib IPhreeqc gtest gtest_main gmock)
 gtest_discover_tests(TestIPhreeqcLib)
 
 add_executable(TestIPhreeqc TestIPhreeqc.cpp FileTest.cpp)
-target_link_libraries(TestIPhreeqc IPhreeqc gtest gtest_main)
+target_link_libraries(TestIPhreeqc IPhreeqc gtest gtest_main gmock)
 if (MSVC AND BUILD_SHARED_LIBS AND BUILD_CLR_LIBS)
   # Setup references for /CLR
   set_target_properties(TestIPhreeqc PROPERTIES VS_DOTNET_REFERENCES "${CMAKE_CURRENT_SOURCE_DIR}/../src/phreeqcpp/ZedGraph.dll")
@@ -24,63 +24,33 @@ endif()
 gtest_discover_tests(TestIPhreeqc)
 
 add_executable(TestSelectedOutput TestSelectedOutput.cpp)
-target_link_libraries(TestSelectedOutput IPhreeqc gtest gtest_main)
+target_link_libraries(TestSelectedOutput IPhreeqc gtest gtest_main gmock)
 gtest_discover_tests(TestSelectedOutput)
 
 if (MSVC AND BUILD_SHARED_LIBS)
-  # copy dlls
+  # copy dlls for TestCVar
   add_custom_command(TARGET TestCVar PRE_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:IPhreeqc> $<TARGET_FILE_DIR:TestCVar>
-    )
-  add_custom_command(TARGET TestCVar PRE_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:gtest> $<TARGET_FILE_DIR:TestCVar>
-    )
-  add_custom_command(TARGET TestCVar PRE_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:gtest_main> $<TARGET_FILE_DIR:TestCVar>
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:IPhreeqc> $<TARGET_FILE_DIR:TestCVar>
     )
 
-  # copy dlls
+  # copy dlls for TestVar
   add_custom_command(TARGET TestVar PRE_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:IPhreeqc> $<TARGET_FILE_DIR:TestVar>
-    )
-  add_custom_command(TARGET TestVar PRE_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:gtest> $<TARGET_FILE_DIR:TestVar>
-    )
-  add_custom_command(TARGET TestVar PRE_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:gtest_main> $<TARGET_FILE_DIR:TestVar>
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:IPhreeqc> $<TARGET_FILE_DIR:TestVar>
     )
 
-  # copy dlls
+  # copy dlls for TestIPhreeqcLib
   add_custom_command(TARGET TestIPhreeqcLib PRE_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:IPhreeqc> $<TARGET_FILE_DIR:TestIPhreeqcLib>
-    )
-  add_custom_command(TARGET TestIPhreeqcLib PRE_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:gtest> $<TARGET_FILE_DIR:TestIPhreeqcLib>
-    )
-  add_custom_command(TARGET TestIPhreeqcLib PRE_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:gtest_main> $<TARGET_FILE_DIR:TestIPhreeqcLib>
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:IPhreeqc> $<TARGET_FILE_DIR:TestIPhreeqcLib>
     )
 
-  # copy dlls
+  # copy dlls for TestIPhreeqc
   add_custom_command(TARGET TestIPhreeqc PRE_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:IPhreeqc> $<TARGET_FILE_DIR:TestIPhreeqc>
-    )
-  add_custom_command(TARGET TestIPhreeqc PRE_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:gtest> $<TARGET_FILE_DIR:TestIPhreeqc>
-    )
-  add_custom_command(TARGET TestIPhreeqc PRE_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:gtest_main> $<TARGET_FILE_DIR:TestIPhreeqc>
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:IPhreeqc> $<TARGET_FILE_DIR:TestIPhreeqc>
     )
 
-  # copy dlls
+  # copy dlls for TestSelectedOutput
   add_custom_command(TARGET TestSelectedOutput PRE_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:IPhreeqc> $<TARGET_FILE_DIR:TestSelectedOutput>
-    )
-  add_custom_command(TARGET TestSelectedOutput PRE_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:gtest> $<TARGET_FILE_DIR:TestSelectedOutput>
-    )
-  add_custom_command(TARGET TestSelectedOutput PRE_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:gtest_main> $<TARGET_FILE_DIR:TestSelectedOutput>
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:IPhreeqc> $<TARGET_FILE_DIR:TestSelectedOutput>
     )
 endif()
 
@@ -89,6 +59,12 @@ endif()
 configure_file(
   phreeqc.dat.old
   phreeqc.dat.old
+  COPYONLY
+  )
+
+configure_file(
+  phreeqc.dat.90a6449
+  phreeqc.dat.90a6449
   COPYONLY
   )
 
@@ -153,6 +129,12 @@ configure_file(
   )
 
 configure_file(
+  ../database/stimela.dat
+  stimela.dat
+  COPYONLY
+  )
+
+configure_file(
   ../database/ColdChem.dat
   ColdChem.dat
   COPYONLY
@@ -176,7 +158,7 @@ configure_file(
   COPYONLY
   )
 
-# misc files 
+# misc files
 
 configure_file(
   conv_fail.in

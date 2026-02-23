@@ -9,6 +9,3 @@ wateq4f.dat
 SET(Python_Dir ${EXAMPLES_DIR}/com/python)
 
 install(FILES ${Python_Files} DESTINATION ${Python_Dir})
-
-
-

@@ -162,10 +162,20 @@ read_solution_spread(void)
 				{
 				case 0:		/* temp */
 				case 1:		/* temperature */
-				case 2:		/* dens */
-				case 3:		/* density */
 				case 10:		/* water */
 					if ((count == 2 || count == 3) && num == TRUE)
+					{
+						/* opt = opt; */
+					}
+					else
+					{
+						opt = OPTION_DEFAULT;
+					}
+					break;
+				case 2:		/* dens */
+				case 3:		/* density */
+					copy_token(token, &cptr);
+					if (count == 2 || count == 3 && (num == TRUE || token[0] == 'c' || token[0] == 'C'))
 					{
 						/* opt = opt; */
 					}
@@ -285,32 +295,34 @@ read_solution_spread(void)
 			break;
 		case 2:				/* density */
 		case 3:
-			//sscanf(next_char, SCANFORMAT, &(soln_defaults.density));
 			{
-				copy_token(token, &next_char);
-				if (sscanf(token.c_str(), SCANFORMAT, &dummy) != 1)
-				{
-						error_msg("Expecting numeric value for density.", PHRQ_io::OT_CONTINUE);
-						error_msg(line_save, PHRQ_io::OT_CONTINUE);
-						input_error++;
-				}
-				else
-				{
-					soln_defaults.density = dummy;
-				}
 				int j = copy_token(token, &next_char);
-				if (j != EMPTY)
+				if (j == DIGIT)
 				{
-					if (token[0] != 'c' && token[0] != 'C')
+					if (sscanf(token.c_str(), SCANFORMAT, &dummy) != 1)
 					{
-						error_msg("Only option following density is c[alculate].", PHRQ_io::OT_CONTINUE);
+						error_msg("Expecting numeric value for density.", PHRQ_io::OT_CONTINUE);
 						error_msg(line_save, PHRQ_io::OT_CONTINUE);
 						input_error++;
 					}
 					else
 					{
-						soln_defaults.calc_density = true;
+						soln_defaults.density = dummy;
+						copy_token(token, &next_char);
+						if (token[0] == 'c' || token[0] == 'C')
+							soln_defaults.calc_density = true;
 					}
+				}
+				else if (j != EMPTY)
+				{
+					if (token[0] != 'c' && token[0] != 'C')
+					{
+						error_msg("Options following density are numeric value or c[alculate].", PHRQ_io::OT_CONTINUE);
+						error_msg(line_save, PHRQ_io::OT_CONTINUE);
+						input_error++;
+					}
+					else
+						soln_defaults.calc_density = true;
 				}
 			}
 			break;
@@ -1141,7 +1153,8 @@ copy_token_tab(std::string& token, const char **cptr)
  *      EOL,
  *      UNKNOWN.
  */
-	int i, return_value;
+	//int i, return_value;
+	int return_value;
 	char c;
 /*
  *   Strip leading spaces
@@ -1180,7 +1193,7 @@ copy_token_tab(std::string& token, const char **cptr)
 /*
  *   Begin copying to token
  */
-	i = 0;
+	//i = 0;
 	for (;;)
 	{
 		c = **cptr;
@@ -1197,7 +1210,7 @@ copy_token_tab(std::string& token, const char **cptr)
 		{
 			token.push_back(c);
 			(*cptr)++;
-			i++;
+			//i++;
 		}
 	}
 	return (return_value);

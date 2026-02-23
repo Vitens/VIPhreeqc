@@ -40,5 +40,8 @@ config.status
 libtool
 
 build/
+emsdk/
 .DS_Store
 .vscode/
+CMakePresets.json
+CMakeUserPresets.json

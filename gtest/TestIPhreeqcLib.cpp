@@ -1,8 +1,12 @@
 // -*- coding: windows-1252 -*-
 #include <gtest/gtest.h>
+#include <gmock/gmock.h>
 
 #include "IPhreeqc.h"
+#include "Phreeqc.h" /* snprintf */
 #include "CVar.hxx"
+
+using ::testing::HasSubstr;
 
 #if defined(_WIN32)
 #include <windows.h>
@@ -14,6 +18,7 @@
 #include <cmath>
 #include <cfloat>
 #include <stdlib.h>
+#include <filesystem>
 
 #include "FileTest.h"
 
@@ -121,21 +126,33 @@ TEST(TestIPhreeqcLib, TestLoadDatabase)
 {
 	int n = ::CreateIPhreeqc();
 	ASSERT_TRUE(n >= 0);
-
+	// Had to add the path, because files are not in the cwd but in the parent directory on windows
+	
+	std::filesystem::path cwd_path = std::filesystem::current_path();
+	std::filesystem::path filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	if (!std::filesystem::exists(filepath)) {
+		cwd_path = cwd_path.parent_path();
+	}
+	filepath = cwd_path;
+	std::string fpath;
 	std::string FILES[] = { "phreeqc.dat", "pitzer.dat", "wateq4f.dat",
 		"Amm.dat", "frezchem.dat", "iso.dat",
 		"llnl.dat", "minteq.dat", "minteq.v4.dat",
-		"sit.dat","ColdChem.dat","core10.dat",
+		"sit.dat", "stimela.dat", "ColdChem.dat","core10.dat",
 		"Tipping_Hurley.dat"
 	};
 
 	for (int j = 0; j < sizeof(FILES) / sizeof(std::string); ++j)
 	{
+		filepath = cwd_path;
+		filepath.append(FILES[j]);
+		fpath = filepath.generic_string();
 		for (int i = 0; i < 10; ++i)
 		{
-			ASSERT_EQ(true, ::FileExists(FILES[j].c_str()));
-			ASSERT_TRUE(::FileSize(FILES[j].c_str()) > 0);
-			ASSERT_EQ(0, ::LoadDatabase(n, FILES[j].c_str()));
+			ASSERT_EQ(true, ::FileExists(fpath.c_str()));
+			ASSERT_TRUE(::FileSize(fpath.c_str()) > 0);
+			ASSERT_EQ(0, ::LoadDatabase(n, fpath.c_str()));
 		}
 	}
 	ASSERT_EQ(IPQ_OK, ::DestroyIPhreeqc(n));
@@ -187,7 +204,7 @@ TEST(TestIPhreeqcLib, TestSetErrorOn)
 	int n = ::CreateIPhreeqc();
 	ASSERT_TRUE(n >= 0);
 
-	ASSERT_EQ(1, ::GetErrorOn(n));			// intial setting is true
+	ASSERT_EQ(1, ::GetErrorOn(n));			// initial setting is true
 	ASSERT_EQ(IPQ_OK, ::SetErrorOn(n, 0));
 	ASSERT_EQ(0, ::GetErrorOn(n));
 
@@ -199,16 +216,28 @@ TEST(TestIPhreeqcLib, TestSetErrorOn)
 
 TEST(TestIPhreeqcLib, TestLoadDatabaseWithErrors)
 {
-	ASSERT_EQ(true, ::FileExists("missing_e.dat"));
+	// Had to add the path, because files are not in the cwd but in the parent directory on windows
+		
+	std::filesystem::path cwd_path = std::filesystem::current_path();
+	std::filesystem::path filepath = cwd_path;
+	filepath.append("missing_e.dat");
+	if (!std::filesystem::exists(filepath)) {
+		cwd_path = cwd_path.parent_path();
+	}
+	filepath = cwd_path;
+	filepath.append("missing_e.dat");
+	std::string fpath = filepath.generic_string();
+	ASSERT_EQ(true, ::FileExists(fpath.c_str()));
 
 	int n = ::CreateIPhreeqc();
 	ASSERT_TRUE(n >= 0);
 
 	for (int i = 0; i < 10; ++i)
 	{
-		ASSERT_EQ(true, ::FileExists("missing_e.dat"));
-		ASSERT_TRUE(::FileSize("missing_e.dat") > 0);
-		ASSERT_EQ(6, ::LoadDatabase(n, "missing_e.dat"));
+		
+		ASSERT_EQ(true, ::FileExists(fpath.c_str()));
+		ASSERT_TRUE(::FileSize(fpath.c_str()) > 0);
+		ASSERT_EQ(6, ::LoadDatabase(n, fpath.c_str()));
 
 		static const char* expected =
 			"ERROR: Could not reduce equation to primary master species, CH4.\n"
@@ -249,8 +278,18 @@ TEST(TestIPhreeqcLib, TestRunAccumulated)
 {
 	int n = ::CreateIPhreeqc();
 	ASSERT_TRUE(n >= 0);
-
-	ASSERT_EQ(0,      ::LoadDatabase(n, "phreeqc.dat"));
+	// Had to add the path, because files are not in the cwd but in the parent directory on windows
+	
+	std::filesystem::path cwd_path = std::filesystem::current_path();
+	std::filesystem::path filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	if (!std::filesystem::exists(filepath)) {
+		cwd_path = cwd_path.parent_path();
+	}
+	filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	std::string fpath = filepath.generic_string();
+	ASSERT_EQ(0,      ::LoadDatabase(n, fpath.c_str()));
 	ASSERT_EQ(IPQ_OK, ::AccumulateLine(n, "solution 12"));
 	ASSERT_EQ(0,      ::GetOutputFileOn(n));
 	ASSERT_EQ(0,      ::GetErrorFileOn(n));
@@ -278,7 +317,18 @@ TEST(TestIPhreeqcLib, TestRunWithErrors)
 	int n = ::CreateIPhreeqc();
 	ASSERT_TRUE(n >= 0);
 
-	ASSERT_EQ(0,      ::LoadDatabase(n, "phreeqc.dat"));
+	// Had to add the path, because files are not in the cwd but in the parent directory on windows
+	
+	std::filesystem::path cwd_path = std::filesystem::current_path();
+	std::filesystem::path filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	if (!std::filesystem::exists(filepath)) {
+		cwd_path = cwd_path.parent_path();
+	}
+	filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	std::string fpath = filepath.generic_string();
+	ASSERT_EQ(0,	  ::LoadDatabase(n, fpath.c_str()));
 	ASSERT_EQ(IPQ_OK, ::AccumulateLine(n, "SOLUTION 1"));
 	ASSERT_EQ(IPQ_OK, ::AccumulateLine(n, "	pH	7"));
 	ASSERT_EQ(IPQ_OK, ::AccumulateLine(n, "	Na	1"));
@@ -324,19 +374,32 @@ TEST(TestIPhreeqcLib, TestRunFile)
 
 	int n = ::CreateIPhreeqc();
 	ASSERT_TRUE(n >= 0);
-
-	ASSERT_EQ(true, ::FileExists("phreeqc.dat"));
-	ASSERT_TRUE(::FileSize("phreeqc.dat") > 0);
-	ASSERT_EQ(0, ::LoadDatabase(n, "phreeqc.dat"));
+	// Had to add the path, because files are not in the cwd but in the parent directory on windows
+	
+	std::filesystem::path cwd_path = std::filesystem::current_path();
+	std::filesystem::path filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	if (!std::filesystem::exists(filepath)) {
+		cwd_path = cwd_path.parent_path();
+	}
+	filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	std::string fpath = filepath.generic_string();
+	ASSERT_EQ(true, ::FileExists(fpath.c_str()));
+	ASSERT_TRUE(::FileSize(fpath.c_str()) > 0);
+	ASSERT_EQ(0, ::LoadDatabase(n, fpath.c_str()));
 	ASSERT_EQ(0, ::GetOutputFileOn(n));
 	ASSERT_EQ(0, ::GetErrorFileOn(n));
 	ASSERT_EQ(0, ::GetLogFileOn(n));
 	ASSERT_EQ(0, ::GetSelectedOutputFileOn(n));
 	ASSERT_EQ(0, ::GetDumpFileOn(n));
 	ASSERT_EQ(0, ::GetDumpStringOn(n));
-	ASSERT_EQ(true, ::FileExists("conv_fail.in"));
-	ASSERT_TRUE(::FileSize("conv_fail.in") > 0);
-	ASSERT_EQ(1, ::RunFile(n, "conv_fail.in"));
+	filepath = cwd_path;
+	filepath.append("conv_fail.in");
+	fpath = filepath.generic_string();
+	ASSERT_EQ(true, ::FileExists(fpath.c_str()));
+	ASSERT_TRUE(::FileSize(fpath.c_str()) > 0);
+	ASSERT_EQ(1, ::RunFile(n, fpath.c_str()));
 
 	static const char expected[] =
 		"ERROR: Numerical method failed on all combinations of convergence parameters, cell/soln/mix 1\n";
@@ -434,15 +497,25 @@ TEST(TestIPhreeqcLib, TestRunString)
 	ASSERT_TRUE(n >= 0);
 
 	char OUTPUT_FILE[80];
-	sprintf(OUTPUT_FILE, "phreeqc.%d.out", n);
+	snprintf(OUTPUT_FILE, sizeof(OUTPUT_FILE), "phreeqc.%d.out", n);
 
 	if (::FileExists(OUTPUT_FILE))
 	{
 		ASSERT_TRUE(::DeleteFile(OUTPUT_FILE));
 	}
 	ASSERT_EQ(false, ::FileExists(OUTPUT_FILE));
-
-	ASSERT_EQ(0, ::LoadDatabase(n, "phreeqc.dat"));
+	// Had to add the path, because files are not in the cwd but in the parent directory on windows
+	
+	std::filesystem::path cwd_path = std::filesystem::current_path();
+	std::filesystem::path filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	if (!std::filesystem::exists(filepath)) {
+		cwd_path = cwd_path.parent_path();
+	}
+	filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	std::string fpath = filepath.generic_string();
+	ASSERT_EQ(0, ::LoadDatabase(n, fpath.c_str()));
 	::SetOutputFileOn(n, 1);
 	::SetErrorFileOn(n, 0);
 	::SetLogFileOn(n, 0);
@@ -466,10 +539,20 @@ TEST(TestIPhreeqcLib, TestGetSelectedOutputRowCount)
 {
 	int n = ::CreateIPhreeqc();
 	ASSERT_TRUE(n >= 0);
-
-	ASSERT_EQ(true, ::FileExists("llnl.dat"));
-	ASSERT_TRUE(::FileSize("llnl.dat") > 0);
-	ASSERT_EQ(0, ::LoadDatabase(n, "llnl.dat"));
+	// Had to add the path, because files are not in the cwd but in the parent directory on windows
+	
+	std::filesystem::path cwd_path = std::filesystem::current_path();
+	std::filesystem::path filepath = cwd_path;
+	filepath.append("llnl.dat");
+	if (!std::filesystem::exists(filepath)) {
+		cwd_path = cwd_path.parent_path();
+	}
+	filepath = cwd_path;
+	filepath.append("llnl.dat");
+	std::string fpath = filepath.generic_string();
+	ASSERT_EQ(true, ::FileExists(fpath.c_str()));
+	ASSERT_TRUE(::FileSize(fpath.c_str()) > 0);
+	ASSERT_EQ(0, ::LoadDatabase(n, fpath.c_str()));
 
 	int max = 6;
 
@@ -495,8 +578,18 @@ TEST(TestIPhreeqcLib, TestGetSelectedOutputValue)
 {
 	int n = ::CreateIPhreeqc();
 	ASSERT_TRUE(n >= 0);
-
-	ASSERT_EQ(0, ::LoadDatabase(n, "llnl.dat"));
+	// Had to add the path, because files are not in the cwd but in the parent directory on windows
+	
+	std::filesystem::path cwd_path = std::filesystem::current_path();
+	std::filesystem::path filepath = cwd_path;
+	filepath.append("llnl.dat");
+	if (!std::filesystem::exists(filepath)) {
+		cwd_path = cwd_path.parent_path();
+	}
+	filepath = cwd_path;
+	filepath.append("llnl.dat");
+	std::string fpath = filepath.generic_string();
+	ASSERT_EQ(0, ::LoadDatabase(n, fpath.c_str()));
 
 	int max = 6;
 
@@ -1216,7 +1309,18 @@ TEST(TestIPhreeqcLib, TestGetSelectedOutputColumnCount)
 	int n = ::CreateIPhreeqc();
 	ASSERT_TRUE(n >= 0);
 
-	ASSERT_EQ(0, ::LoadDatabase(n, "llnl.dat"));
+	// Had to add the path, because files are not in the cwd but in the parent directory on windows
+
+	std::filesystem::path cwd_path = std::filesystem::current_path();
+	std::filesystem::path filepath = cwd_path;
+	filepath.append("llnl.dat");
+	if (!std::filesystem::exists(filepath)) {
+		cwd_path = cwd_path.parent_path();
+	}
+	filepath = cwd_path;
+	filepath.append("llnl.dat");
+	std::string fpath = filepath.generic_string();
+	ASSERT_EQ(0, ::LoadDatabase(n, fpath.c_str()));
 	ASSERT_EQ(0, ::GetSelectedOutputColumnCount(n));
 	ASSERT_EQ(IPQ_OK, ::SOLUTION(n, 1.0, 1.0, 1.0));
 	ASSERT_EQ(IPQ_OK, ::EQUILIBRIUM_PHASES(n, "calcite", 1.0, 1.0));
@@ -1233,8 +1337,18 @@ TEST(TestIPhreeqcLib, TestAddError)
 {
 	int n = ::CreateIPhreeqc();
 	ASSERT_TRUE(n >= 0);
-
-	ASSERT_EQ(0, ::LoadDatabase(n, "phreeqc.dat"));
+	// Had to add the path, because files are not in the cwd but in the parent directory on windows
+	
+	std::filesystem::path cwd_path = std::filesystem::current_path();
+	std::filesystem::path filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	if (!std::filesystem::exists(filepath)) {
+		cwd_path = cwd_path.parent_path();
+	}
+	filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	std::string fpath = filepath.generic_string();
+	ASSERT_EQ(0, ::LoadDatabase(n, fpath.c_str()));
 
 	// make sure initialized to empty
 	//
@@ -1264,7 +1378,7 @@ TEST(TestIPhreeqcLib, TestAddError)
 
 	// clear errors
 	//
-	ASSERT_EQ(0, ::LoadDatabase(n, "phreeqc.dat"));
+	ASSERT_EQ(0, ::LoadDatabase(n, fpath.c_str()));
 
 	// make sure back to empty
 	//
@@ -1323,7 +1437,7 @@ TEST(TestIPhreeqcLib, TestCase1)
 	ASSERT_TRUE(n >= 0);
 
 	char SELECTED_OUT[80];
-	sprintf(SELECTED_OUT, "selected_1.%d.out", n);
+	snprintf(SELECTED_OUT, sizeof(SELECTED_OUT), "selected_1.%d.out", n);
 
 	// remove punch file if it exists
 	if (::FileExists(SELECTED_OUT))
@@ -1331,9 +1445,20 @@ TEST(TestIPhreeqcLib, TestCase1)
 		ASSERT_TRUE(::DeleteFile(SELECTED_OUT));
 	}
 	ASSERT_EQ(false, ::FileExists(SELECTED_OUT));
-	ASSERT_EQ(true, ::FileExists("phreeqc.dat"));
-	ASSERT_TRUE(::FileSize("phreeqc.dat") > 0);
-	ASSERT_EQ(0, ::LoadDatabase(n, "phreeqc.dat"));
+	// Had to add the path, because files are not in the cwd but in the parent directory on windows
+	
+	std::filesystem::path cwd_path = std::filesystem::current_path();
+	std::filesystem::path filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	if (!std::filesystem::exists(filepath)) {
+		cwd_path = cwd_path.parent_path();
+	}
+	filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	std::string fpath = filepath.generic_string();
+	ASSERT_EQ(true, ::FileExists(fpath.c_str()));
+	ASSERT_TRUE(::FileSize(fpath.c_str()) > 0);
+	ASSERT_EQ(0, ::LoadDatabase(n, fpath.c_str()));
 	ASSERT_EQ(IPQ_OK, ::SOLUTION(n, 1.0, 1.0, 1.0));
 	ASSERT_EQ(IPQ_OK, ::USER_PUNCH(n, "Ca", 10));
 	ASSERT_EQ(IPQ_OK, ::SetSelectedOutputFileOn(n, 1));
@@ -1366,7 +1491,7 @@ TEST(TestIPhreeqcLib, TestCase2)
 	ASSERT_TRUE(n >= 0);
 
 	char SELECTED_OUT[80];
-	sprintf(SELECTED_OUT, "selected_1.%d.out", n);
+	snprintf(SELECTED_OUT, sizeof(SELECTED_OUT), "selected_1.%d.out", n);
 
 	// remove punch files if they exists
 	//
@@ -1380,7 +1505,18 @@ TEST(TestIPhreeqcLib, TestCase2)
 	}
 	ASSERT_EQ(false, ::FileExists(SELECTED_OUT));
 	ASSERT_EQ(false, ::FileExists("case2.punch"));
-	ASSERT_EQ(0, ::LoadDatabase(n, "phreeqc.dat"));
+	// Had to add the path, because files are not in the cwd but in the parent directory on windows
+	
+	std::filesystem::path cwd_path = std::filesystem::current_path();
+	std::filesystem::path filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	if (!std::filesystem::exists(filepath)) {
+		cwd_path = cwd_path.parent_path();
+	}
+	filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	std::string fpath = filepath.generic_string();
+	ASSERT_EQ(0, ::LoadDatabase(n, fpath.c_str()));
 	ASSERT_EQ(IPQ_OK, ::SOLUTION(n, 1.0, 1.0, 1.0));
 	ASSERT_EQ(IPQ_OK, ::USER_PUNCH(n, "Ca", 10));
 	ASSERT_EQ(IPQ_OK, ::AccumulateLine(n, "-file case2.punch")); // force have_punch_name to TRUE (see read_selected_ouput)
@@ -1437,8 +1573,18 @@ TEST(TestIPhreeqcLib, TestPrintSelectedOutputFalse)
 		::DeleteFile("selected.out");
 	}
 	ASSERT_EQ(false, ::FileExists("selected.out"));
-
-	ASSERT_EQ(0, ::LoadDatabase(n, "phreeqc.dat"));
+	// Had to add the path, because files are not in the cwd but in the parent directory on windows
+	
+	std::filesystem::path cwd_path = std::filesystem::current_path();
+	std::filesystem::path filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	if (!std::filesystem::exists(filepath)) {
+		cwd_path = cwd_path.parent_path();
+	}
+	filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	std::string fpath = filepath.generic_string();
+	ASSERT_EQ(0, ::LoadDatabase(n, fpath.c_str()));
 
 	// add solution block
 	ASSERT_EQ(IPQ_OK, ::SOLUTION(n, 1.0, 1.0, 1.0));
@@ -1458,7 +1604,7 @@ TEST(TestIPhreeqcLib, TestPrintSelectedOutputFalse)
 
 
 	// reset pr.punch to TRUE
-	ASSERT_EQ(0, ::LoadDatabase(n, "phreeqc.dat"));
+	ASSERT_EQ(0, ::LoadDatabase(n, fpath.c_str()));
 
 	// add solution block
 	ASSERT_EQ(IPQ_OK, ::SOLUTION(n, 1.0, 1.0, 1.0));
@@ -1543,7 +1689,7 @@ void TestFileOnOff(const char* FILENAME_FORMAT, int output_file_on, int error_fi
 	ASSERT_TRUE(n >= 0);
 
 	char FILENAME[80];
-	sprintf(FILENAME, FILENAME_FORMAT, n);
+	snprintf(FILENAME, sizeof(FILENAME), FILENAME_FORMAT, n);
 
 	// remove FILENAME if it exists
 	//
@@ -1553,7 +1699,18 @@ void TestFileOnOff(const char* FILENAME_FORMAT, int output_file_on, int error_fi
 	}
 	ASSERT_EQ(false, ::FileExists(FILENAME));
 
-	ASSERT_EQ(0, ::LoadDatabase(n, "phreeqc.dat"));
+	// Had to add the path, because files are not in the cwd but in the parent directory on windows
+	
+	std::filesystem::path cwd_path = std::filesystem::current_path();
+	std::filesystem::path filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	if (!std::filesystem::exists(filepath)) {
+		cwd_path = cwd_path.parent_path();
+	}
+	filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	std::string fpath = filepath.generic_string();
+	ASSERT_EQ(0, ::LoadDatabase(n, fpath.c_str()));
 
 	// add solution block
 	ASSERT_EQ(IPQ_OK, ::SOLUTION(n, 1.0, 1.0, 1.0));
@@ -1573,7 +1730,7 @@ void TestFileOnOff(const char* FILENAME_FORMAT, int output_file_on, int error_fi
 	ASSERT_EQ(IPQ_OK, ::SetDumpStringOn(n, 0));
 	ASSERT_EQ(0, ::RunAccumulated(n));
 	ASSERT_EQ(false, ::FileExists(FILENAME));
-	ASSERT_EQ(0, ::LoadDatabase(n, "phreeqc.dat"));
+	ASSERT_EQ(0, ::LoadDatabase(n, fpath.c_str()));
 
 	// add solution block
 	ASSERT_EQ(IPQ_OK, ::SOLUTION(n, 1.0, 1.0, 1.0));
@@ -1594,7 +1751,7 @@ void TestFileOnOff(const char* FILENAME_FORMAT, int output_file_on, int error_fi
 	ASSERT_EQ(0, ::RunAccumulated(n));
 	ASSERT_EQ(true, ::FileExists(FILENAME));
 	ASSERT_TRUE(::DeleteFile(FILENAME));
-	ASSERT_EQ(0, ::LoadDatabase(n, "phreeqc.dat"));
+	ASSERT_EQ(0, ::LoadDatabase(n, fpath.c_str()));
 
 	// add solution block
 	ASSERT_EQ(IPQ_OK, ::SOLUTION(n, 1.0, 1.0, 1.0));
@@ -1614,7 +1771,7 @@ void TestFileOnOff(const char* FILENAME_FORMAT, int output_file_on, int error_fi
 	ASSERT_EQ(IPQ_OK, ::SetDumpStringOn(n, 0));
 	ASSERT_EQ(0, ::RunAccumulated(n));
 	ASSERT_EQ(false, ::FileExists(FILENAME));
-	ASSERT_EQ(0, ::LoadDatabase(n, "phreeqc.dat"));
+	ASSERT_EQ(0, ::LoadDatabase(n, fpath.c_str()));
 
 	// add solution block
 	ASSERT_EQ(IPQ_OK, ::SOLUTION(n, 1.0, 1.0, 1.0));
@@ -1651,7 +1808,18 @@ TEST(TestIPhreeqcLib, TestLongHeadings)
 	int n = ::CreateIPhreeqc();
 	ASSERT_TRUE(n >= 0);
 
-	ASSERT_EQ(0, ::LoadDatabase(n, "phreeqc.dat"));
+	// Had to add the path, because files are not in the cwd but in the parent directory on windows
+	
+	std::filesystem::path cwd_path = std::filesystem::current_path();
+	std::filesystem::path filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	if (!std::filesystem::exists(filepath)) {
+		cwd_path = cwd_path.parent_path();
+	}
+	filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	std::string fpath = filepath.generic_string();
+	ASSERT_EQ(0, ::LoadDatabase(n, fpath.c_str()));
 
 	std::ostringstream oss;
 	oss << "SOLUTION" << "\n";
@@ -1699,14 +1867,27 @@ TEST(TestIPhreeqcLib, TestDatabaseKeyword)
 {
 	int n = ::CreateIPhreeqc();
 	ASSERT_TRUE(n >= 0);
-
-	ASSERT_EQ(0, ::LoadDatabase(n, "phreeqc.dat"));
+	// Had to add the path, because files are not in the cwd but in the parent directory on windows
+	
+	std::filesystem::path cwd_path = std::filesystem::current_path();
+	std::filesystem::path filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	if (!std::filesystem::exists(filepath)) {
+		cwd_path = cwd_path.parent_path();
+	}
+	filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	std::string fpath = filepath.generic_string();
+	ASSERT_EQ(0, ::LoadDatabase(n, fpath.c_str()));
 	ASSERT_EQ(IPQ_OK, ::SetOutputFileOn(n, 0));
 	ASSERT_EQ(IPQ_OK, ::SetErrorFileOn(n, 1));
 	ASSERT_EQ(IPQ_OK, ::SetLogFileOn(n, 0));
 	ASSERT_EQ(IPQ_OK, ::SetSelectedOutputFileOn(n, 0));
 	ASSERT_EQ(IPQ_OK, ::SetDumpFileOn(n, 0));
-	ASSERT_EQ(1, ::RunFile(n, "dump"));
+	filepath = cwd_path;
+	filepath.append("dump");
+	fpath = filepath.generic_string();
+	ASSERT_EQ(1, ::RunFile(n, fpath.c_str()));
 
 	const char* exp_errs =
 		"ERROR: Gas not found in PHASES database, Amm(g).\n"
@@ -1736,7 +1917,18 @@ TEST(TestIPhreeqcLib, TestDumpString)
 	int n = ::CreateIPhreeqc();
 	ASSERT_TRUE(n >= 0);
 
-	ASSERT_EQ(0, ::LoadDatabase(n, "phreeqc.dat"));
+	// Had to add the path, because files are not in the cwd but in the parent directory on windows
+	
+	std::filesystem::path cwd_path = std::filesystem::current_path();
+	std::filesystem::path filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	if (!std::filesystem::exists(filepath)) {
+		cwd_path = cwd_path.parent_path();
+	}
+	filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	std::string fpath = filepath.generic_string();
+	ASSERT_EQ(0, ::LoadDatabase(n, fpath.c_str()));
 
 	// add solution block
 	ASSERT_EQ(IPQ_OK, ::SOLUTION(n, 1.0, 1.0, 1.0));
@@ -1755,35 +1947,39 @@ TEST(TestIPhreeqcLib, TestDumpString)
 
 	const char* dump_str = ::GetDumpString(n);
 
-	ASSERT_TRUE(::strstr(dump_str, "SOLUTION_RAW") != NULL);
-	ASSERT_TRUE(::strstr(dump_str, "-temp") != NULL);
-	ASSERT_TRUE(::strstr(dump_str, "-total_h") != NULL);
-	ASSERT_TRUE(::strstr(dump_str, "-total_o") != NULL);
-	ASSERT_TRUE(::strstr(dump_str, "-cb") != NULL);
-	ASSERT_TRUE(::strstr(dump_str, "-totals") != NULL);
-	ASSERT_TRUE(::strstr(dump_str, " C(4) ") != NULL);
-	ASSERT_TRUE(::strstr(dump_str, " Ca ") != NULL);
-	ASSERT_TRUE(::strstr(dump_str, " H(0) ") != NULL);
-	ASSERT_TRUE(::strstr(dump_str, " Na ") != NULL);
-	ASSERT_TRUE(::strstr(dump_str, "-pH") != NULL);
-	ASSERT_TRUE(::strstr(dump_str, "-pe") != NULL);
-	ASSERT_TRUE(::strstr(dump_str, "-mu") != NULL);
-	ASSERT_TRUE(::strstr(dump_str, "-ah2o") != NULL);
-	ASSERT_TRUE(::strstr(dump_str, "-mass_water") != NULL);
-	ASSERT_TRUE(::strstr(dump_str, "-total_alkalinity") != NULL);
-	ASSERT_TRUE(::strstr(dump_str, "-activities") != NULL);
-	ASSERT_TRUE(::strstr(dump_str, " C(-4) ") != NULL);
-	ASSERT_TRUE(::strstr(dump_str, " C(4) ") != NULL);
-	ASSERT_TRUE(::strstr(dump_str, " Ca ") != NULL);
-	ASSERT_TRUE(::strstr(dump_str, " E ") != NULL);
-	ASSERT_TRUE(::strstr(dump_str, " H(0) ") != NULL);
-	ASSERT_TRUE(::strstr(dump_str, " Na ") != NULL);
-	ASSERT_TRUE(::strstr(dump_str, " O(0) ") != NULL);
-	ASSERT_TRUE(::strstr(dump_str, "-gammas") != NULL);
-	ASSERT_TRUE(::strstr(dump_str, "USE mix none") != NULL);
-	ASSERT_TRUE(::strstr(dump_str, "USE reaction none") != NULL);
-	ASSERT_TRUE(::strstr(dump_str, "USE reaction_temperature none") != NULL);
-	ASSERT_TRUE(::strstr(dump_str, "USE reaction_pressure none") != NULL);
+	EXPECT_THAT(dump_str, HasSubstr("SOLUTION_RAW"));
+	EXPECT_THAT(dump_str, HasSubstr("-temp"));
+	EXPECT_THAT(dump_str, HasSubstr("-pressure"));
+	EXPECT_THAT(dump_str, HasSubstr("-potential"));
+	EXPECT_THAT(dump_str, HasSubstr("-total_h"));
+	EXPECT_THAT(dump_str, HasSubstr("-total_o"));
+	EXPECT_THAT(dump_str, HasSubstr("-cb"));
+	EXPECT_THAT(dump_str, HasSubstr("-density"));
+	EXPECT_THAT(dump_str, HasSubstr("-viscosity"));
+	EXPECT_THAT(dump_str, HasSubstr("-totals"));
+	EXPECT_THAT(dump_str, HasSubstr(" C(4) "));
+	EXPECT_THAT(dump_str, HasSubstr(" Ca "));
+	EXPECT_THAT(dump_str, HasSubstr(" H(0) "));
+	EXPECT_THAT(dump_str, HasSubstr(" Na "));
+	EXPECT_THAT(dump_str, HasSubstr("-pH"));
+	EXPECT_THAT(dump_str, HasSubstr("-pe"));
+	EXPECT_THAT(dump_str, HasSubstr("-mu"));
+	EXPECT_THAT(dump_str, HasSubstr("-ah2o"));
+	EXPECT_THAT(dump_str, HasSubstr("-mass_water"));
+	EXPECT_THAT(dump_str, HasSubstr("-total_alkalinity"));
+	EXPECT_THAT(dump_str, HasSubstr("-activities"));
+	EXPECT_THAT(dump_str, HasSubstr(" C(-4) "));
+	EXPECT_THAT(dump_str, HasSubstr(" C(4) "));
+	EXPECT_THAT(dump_str, HasSubstr(" Ca "));
+	EXPECT_THAT(dump_str, HasSubstr(" E "));
+	EXPECT_THAT(dump_str, HasSubstr(" H(0) "));
+	EXPECT_THAT(dump_str, HasSubstr(" Na "));
+	EXPECT_THAT(dump_str, HasSubstr(" O(0) "));
+	EXPECT_THAT(dump_str, HasSubstr("-gammas"));
+	EXPECT_THAT(dump_str, HasSubstr("USE mix none"));
+	EXPECT_THAT(dump_str, HasSubstr("USE reaction none"));
+	EXPECT_THAT(dump_str, HasSubstr("USE reaction_temperature none"));
+	EXPECT_THAT(dump_str, HasSubstr("USE reaction_pressure none"));
 
 	if (n >= 0)
 	{
@@ -1796,7 +1992,18 @@ TEST(TestIPhreeqcLib, TestGetDumpStringLineCount)
 	int n = ::CreateIPhreeqc();
 	ASSERT_TRUE(n >= 0);
 
-	ASSERT_EQ(0, ::LoadDatabase(n, "phreeqc.dat"));
+	// Had to add the path, because files are not in the cwd but in the parent directory on windows
+	
+	std::filesystem::path cwd_path = std::filesystem::current_path();
+	std::filesystem::path filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	if (!std::filesystem::exists(filepath)) {
+		cwd_path = cwd_path.parent_path();
+	}
+	filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	std::string fpath = filepath.generic_string();
+	ASSERT_EQ(0, ::LoadDatabase(n, fpath.c_str()));
 
 	// add solution block
 	ASSERT_EQ(IPQ_OK, ::SOLUTION(n, 1.0, 1.0, 1.0));
@@ -1812,7 +2019,7 @@ TEST(TestIPhreeqcLib, TestGetDumpStringLineCount)
 	ASSERT_EQ(IPQ_OK, ::SetDumpFileOn(n, 0));
 	ASSERT_EQ(IPQ_OK, ::SetDumpStringOn(n, 1));
 	ASSERT_EQ(0, ::RunAccumulated(n));
-	ASSERT_EQ(33, ::GetDumpStringLineCount(n));
+	ASSERT_EQ(35, ::GetDumpStringLineCount(n));
 
 	if (n >= 0)
 	{
@@ -1825,7 +2032,18 @@ TEST(TestIPhreeqcLib, TestGetDumpStringLine)
 	int n = ::CreateIPhreeqc();
 	ASSERT_TRUE(n >= 0);
 
-	ASSERT_EQ(0, ::LoadDatabase(n, "phreeqc.dat"));
+	// Had to add the path, because files are not in the cwd but in the parent directory on windows
+	
+	std::filesystem::path cwd_path = std::filesystem::current_path();
+	std::filesystem::path filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	if (!std::filesystem::exists(filepath)) {
+		cwd_path = cwd_path.parent_path();
+	}
+	filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	std::string fpath = filepath.generic_string();
+	ASSERT_EQ(0, ::LoadDatabase(n, fpath.c_str()));
 
 	// add solution block
 	ASSERT_EQ(IPQ_OK, ::SOLUTION(n, 1.0, 1.0, 1.0));
@@ -1841,43 +2059,45 @@ TEST(TestIPhreeqcLib, TestGetDumpStringLine)
 	ASSERT_EQ(IPQ_OK, ::SetDumpFileOn(n, 0));
 	ASSERT_EQ(IPQ_OK, ::SetDumpStringOn(n, 1));
 	ASSERT_EQ(0, ::RunAccumulated(n));
-	ASSERT_EQ(33, ::GetDumpStringLineCount(n));
+	ASSERT_EQ(35, ::GetDumpStringLineCount(n));
 
 	int line = 0;
 
-	ASSERT_TRUE(::strstr(::GetDumpStringLine(n, line++), "SOLUTION_RAW") != NULL);
-	ASSERT_TRUE(::strstr(::GetDumpStringLine(n, line++), "-temp") != NULL);
-	ASSERT_TRUE(::strstr(::GetDumpStringLine(n, line++), "-pressure") != NULL);
-	ASSERT_TRUE(::strstr(::GetDumpStringLine(n, line++), "-potential") != NULL);
-	ASSERT_TRUE(::strstr(::GetDumpStringLine(n, line++), "-total_h") != NULL);
-	ASSERT_TRUE(::strstr(::GetDumpStringLine(n, line++), "-total_o") != NULL);
-	ASSERT_TRUE(::strstr(::GetDumpStringLine(n, line++), "-cb") != NULL);
-	ASSERT_TRUE(::strstr(::GetDumpStringLine(n, line++), "-density") != NULL);
-	ASSERT_TRUE(::strstr(::GetDumpStringLine(n, line++), "-totals") != NULL);
-	ASSERT_TRUE(::strstr(::GetDumpStringLine(n, line++), " C(4) ") != NULL);
-	ASSERT_TRUE(::strstr(::GetDumpStringLine(n, line++), " Ca ") != NULL);
-	ASSERT_TRUE(::strstr(::GetDumpStringLine(n, line++), " H(0) ") != NULL);
-	ASSERT_TRUE(::strstr(::GetDumpStringLine(n, line++), " Na ") != NULL);
-	ASSERT_TRUE(::strstr(::GetDumpStringLine(n, line++), "-pH") != NULL);
-	ASSERT_TRUE(::strstr(::GetDumpStringLine(n, line++), "-pe") != NULL);
-	ASSERT_TRUE(::strstr(::GetDumpStringLine(n, line++), "-mu") != NULL);
-	ASSERT_TRUE(::strstr(::GetDumpStringLine(n, line++), "-ah2o") != NULL);
-	ASSERT_TRUE(::strstr(::GetDumpStringLine(n, line++), "-mass_water") != NULL);
-	ASSERT_TRUE(::strstr(::GetDumpStringLine(n, line++), "-soln_vol") != NULL);
-	ASSERT_TRUE(::strstr(::GetDumpStringLine(n, line++), "-total_alkalinity") != NULL);
-	ASSERT_TRUE(::strstr(::GetDumpStringLine(n, line++), "-activities") != NULL);
-	ASSERT_TRUE(::strstr(::GetDumpStringLine(n, line++), " C(-4) ") != NULL);
-	ASSERT_TRUE(::strstr(::GetDumpStringLine(n, line++), " C(4) ") != NULL);
-	ASSERT_TRUE(::strstr(::GetDumpStringLine(n, line++), " Ca ") != NULL);
-	ASSERT_TRUE(::strstr(::GetDumpStringLine(n, line++), " E ") != NULL);
-	ASSERT_TRUE(::strstr(::GetDumpStringLine(n, line++), " H(0) ") != NULL);
-	ASSERT_TRUE(::strstr(::GetDumpStringLine(n, line++), " Na ") != NULL);
-	ASSERT_TRUE(::strstr(::GetDumpStringLine(n, line++), " O(0) ") != NULL);
-	ASSERT_TRUE(::strstr(::GetDumpStringLine(n, line++), "-gammas") != NULL);
-	ASSERT_TRUE(::strstr(::GetDumpStringLine(n, line++), "USE mix none") != NULL);
-	ASSERT_TRUE(::strstr(::GetDumpStringLine(n, line++), "USE reaction none") != NULL);
-	ASSERT_TRUE(::strstr(::GetDumpStringLine(n, line++), "USE reaction_temperature none") != NULL);
-	ASSERT_TRUE(::strstr(::GetDumpStringLine(n, line++), "USE reaction_pressure none") != NULL);
+	EXPECT_THAT(::GetDumpStringLine(n, line++), HasSubstr("SOLUTION_RAW"));
+	EXPECT_THAT(::GetDumpStringLine(n, line++), HasSubstr("-temp"));
+	EXPECT_THAT(::GetDumpStringLine(n, line++), HasSubstr("-pressure"));
+	EXPECT_THAT(::GetDumpStringLine(n, line++), HasSubstr("-potential"));
+	EXPECT_THAT(::GetDumpStringLine(n, line++), HasSubstr("-total_h"));
+	EXPECT_THAT(::GetDumpStringLine(n, line++), HasSubstr("-total_o"));
+	EXPECT_THAT(::GetDumpStringLine(n, line++), HasSubstr("-cb"));
+	EXPECT_THAT(::GetDumpStringLine(n, line++), HasSubstr("-density"));
+	EXPECT_THAT(::GetDumpStringLine(n, line++), HasSubstr("-viscosity"));
+	EXPECT_THAT(::GetDumpStringLine(n, line++), HasSubstr("-viscos_0"));
+	EXPECT_THAT(::GetDumpStringLine(n, line++), HasSubstr("-totals"));
+	EXPECT_THAT(::GetDumpStringLine(n, line++), HasSubstr(" C(4) "));
+	EXPECT_THAT(::GetDumpStringLine(n, line++), HasSubstr(" Ca "));
+	EXPECT_THAT(::GetDumpStringLine(n, line++), HasSubstr(" H(0) "));
+	EXPECT_THAT(::GetDumpStringLine(n, line++), HasSubstr(" Na "));
+	EXPECT_THAT(::GetDumpStringLine(n, line++), HasSubstr("-pH"));
+	EXPECT_THAT(::GetDumpStringLine(n, line++), HasSubstr("-pe"));
+	EXPECT_THAT(::GetDumpStringLine(n, line++), HasSubstr("-mu"));
+	EXPECT_THAT(::GetDumpStringLine(n, line++), HasSubstr("-ah2o"));
+	EXPECT_THAT(::GetDumpStringLine(n, line++), HasSubstr("-mass_water"));
+	EXPECT_THAT(::GetDumpStringLine(n, line++), HasSubstr("-soln_vol"));
+	EXPECT_THAT(::GetDumpStringLine(n, line++), HasSubstr("-total_alkalinity"));
+	EXPECT_THAT(::GetDumpStringLine(n, line++), HasSubstr("-activities"));
+	EXPECT_THAT(::GetDumpStringLine(n, line++), HasSubstr(" C(-4) "));
+	EXPECT_THAT(::GetDumpStringLine(n, line++), HasSubstr(" C(4) "));
+	EXPECT_THAT(::GetDumpStringLine(n, line++), HasSubstr(" Ca "));
+	EXPECT_THAT(::GetDumpStringLine(n, line++), HasSubstr(" E "));
+	EXPECT_THAT(::GetDumpStringLine(n, line++), HasSubstr(" H(0) "));
+	EXPECT_THAT(::GetDumpStringLine(n, line++), HasSubstr(" Na "));
+	EXPECT_THAT(::GetDumpStringLine(n, line++), HasSubstr(" O(0) "));
+	EXPECT_THAT(::GetDumpStringLine(n, line++), HasSubstr("-gammas"));
+	EXPECT_THAT(::GetDumpStringLine(n, line++), HasSubstr("USE mix none"));
+	EXPECT_THAT(::GetDumpStringLine(n, line++), HasSubstr("USE reaction none"));
+	EXPECT_THAT(::GetDumpStringLine(n, line++), HasSubstr("USE reaction_temperature none"));
+	EXPECT_THAT(::GetDumpStringLine(n, line++), HasSubstr("USE reaction_pressure none"));
 
 	// remaining lines should be empty
 	ASSERT_EQ(std::string(""), std::string(::GetDumpStringLine(n, line++)));
@@ -1902,7 +2122,18 @@ TEST(TestIPhreeqcLib, TestGetComponentCount)
 	int n = ::CreateIPhreeqc();
 	ASSERT_TRUE(n >= 0);
 
-	ASSERT_EQ(0, ::LoadDatabase(n, "phreeqc.dat"));
+	// Had to add the path, because files are not in the cwd but in the parent directory on windows
+	
+	std::filesystem::path cwd_path = std::filesystem::current_path();
+	std::filesystem::path filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	if (!std::filesystem::exists(filepath)) {
+		cwd_path = cwd_path.parent_path();
+	}
+	filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	std::string fpath = filepath.generic_string();
+	ASSERT_EQ(0, ::LoadDatabase(n, fpath.c_str()));
 
 	// add solution block
 	ASSERT_EQ(IPQ_OK, ::SOLUTION(n, 1.0, 1.0, 1.0));
@@ -1928,7 +2159,18 @@ TEST(TestIPhreeqcLib, TestGetComponent)
 	int n = ::CreateIPhreeqc();
 	ASSERT_TRUE(n >= 0);
 
-	ASSERT_EQ(0, ::LoadDatabase(n, "phreeqc.dat"));
+	// Had to add the path, because files are not in the cwd but in the parent directory on windows
+	
+	std::filesystem::path cwd_path = std::filesystem::current_path();
+	std::filesystem::path filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	if (!std::filesystem::exists(filepath)) {
+		cwd_path = cwd_path.parent_path();
+	}
+	filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	std::string fpath = filepath.generic_string();
+	ASSERT_EQ(0, ::LoadDatabase(n, fpath.c_str()));
 
 	// add solution block
 	ASSERT_EQ(IPQ_OK, ::SOLUTION(n, 1.0, 1.0, 1.0));
@@ -1979,7 +2221,7 @@ TEST(TestIPhreeqcLib, TestGetComponent)
 	ASSERT_EQ(std::string(""), std::string(::GetComponent(n, 5)));
 
 	// clear using LoadDatabase
-	ASSERT_EQ(0, ::LoadDatabase(n, "phreeqc.dat"));
+	ASSERT_EQ(0, ::LoadDatabase(n, fpath.c_str()));
 	ASSERT_EQ(0, ::GetComponentCount(n));
 
 	ASSERT_EQ(std::string(""), std::string(::GetComponent(n, -2)));
@@ -2040,13 +2282,27 @@ TEST(TestIPhreeqcLib, TestGetErrorStringLine)
 	int n = ::CreateIPhreeqc();
 	ASSERT_TRUE(n >= 0);
 
-	ASSERT_EQ(0, ::LoadDatabase(n, "phreeqc.dat"));
+	// Had to add the path, because files are not in the cwd but in the parent directory on windows
+	
+	std::filesystem::path cwd_path = std::filesystem::current_path();
+	std::filesystem::path filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	if (!std::filesystem::exists(filepath)) {
+		cwd_path = cwd_path.parent_path();
+	}
+	filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	std::string fpath = filepath.generic_string();
+	ASSERT_EQ(0, ::LoadDatabase(n, fpath.c_str()));
 	ASSERT_EQ(IPQ_OK, ::SetOutputFileOn(n, 0));
 	ASSERT_EQ(IPQ_OK, ::SetErrorFileOn(n, 0));
 	ASSERT_EQ(IPQ_OK, ::SetLogFileOn(n, 0));
 	ASSERT_EQ(IPQ_OK, ::SetSelectedOutputFileOn(n, 0));
 	ASSERT_EQ(IPQ_OK, ::SetDumpFileOn(n, 0));
-	ASSERT_EQ(1, ::RunFile(n, "dump"));
+	filepath = cwd_path;
+	filepath.append("dump");
+	fpath = filepath.generic_string();
+	ASSERT_EQ(1, ::RunFile(n, fpath.c_str()));
 #if 0
 	ASSERT_EQ(8, ::GetErrorStringLineCount(n));
 #else
@@ -2081,20 +2337,34 @@ TEST(TestIPhreeqcLib, TestErrorFileOn)
 	ASSERT_TRUE(n >= 0);
 
 	char FILENAME[80];
-	sprintf(FILENAME, "phreeqc.%d.err", n);
+	snprintf(FILENAME, sizeof(FILENAME), "phreeqc.%d.err", n);
 
 	if (::FileExists(FILENAME))
 	{
 		::DeleteFile(FILENAME);
 	}
 
-	ASSERT_EQ(0, ::LoadDatabase(n, "phreeqc.dat"));
+	// Had to add the path, because files are not in the cwd but in the parent directory on windows
+	
+	std::filesystem::path cwd_path = std::filesystem::current_path();
+	std::filesystem::path filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	if (!std::filesystem::exists(filepath)) {
+		cwd_path = cwd_path.parent_path();
+	}
+	filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	std::string fpath = filepath.generic_string();
+	ASSERT_EQ(0, ::LoadDatabase(n, fpath.c_str()));
 	ASSERT_EQ(IPQ_OK, ::SetOutputFileOn(n, 0));
 	ASSERT_EQ(IPQ_OK, ::SetErrorFileOn(n, 1));
 	ASSERT_EQ(IPQ_OK, ::SetLogFileOn(n, 0));
 	ASSERT_EQ(IPQ_OK, ::SetSelectedOutputFileOn(n, 0));
 	ASSERT_EQ(IPQ_OK, ::SetDumpFileOn(n, 0));
-	ASSERT_EQ(1, ::RunFile(n, "dump"));
+	filepath = cwd_path;
+	filepath.append("dump");
+	fpath = filepath.generic_string();
+	ASSERT_EQ(1, ::RunFile(n, fpath.c_str()));
 	ASSERT_EQ(true, ::FileExists(FILENAME));
 
 	std::string lines[10];
@@ -2131,21 +2401,34 @@ TEST(TestIPhreeqcLib, TestLogFileOn)
 	ASSERT_TRUE(n >= 0);
 
 	char FILENAME[80];
-	sprintf(FILENAME, "phreeqc.%d.log", n);
+	snprintf(FILENAME, sizeof(FILENAME), "phreeqc.%d.log", n);
 
 	if (::FileExists(FILENAME))
 	{
 		::DeleteFile(FILENAME);
 	}
 
-	ASSERT_EQ(0, ::LoadDatabase(n, "phreeqc.dat"));
+	// Had to add the path, because files are not in the cwd but in the parent directory on windows
+	
+	std::filesystem::path cwd_path = std::filesystem::current_path();
+	std::filesystem::path filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	if (!std::filesystem::exists(filepath)) {
+		cwd_path = cwd_path.parent_path();
+	}
+	filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	std::string fpath = filepath.generic_string();
+	ASSERT_EQ(0, ::LoadDatabase(n, fpath.c_str()));
 	ASSERT_EQ(IPQ_OK, ::SetOutputFileOn(n, 0));
 	ASSERT_EQ(IPQ_OK, ::SetErrorFileOn(n, 0));
 	ASSERT_EQ(IPQ_OK, ::SetLogFileOn(n, 1));
 	ASSERT_EQ(IPQ_OK, ::SetSelectedOutputFileOn(n, 0));
 	ASSERT_EQ(IPQ_OK, ::SetDumpFileOn(n, 0));
-
-	ASSERT_EQ(1, ::RunFile(n, "dump"));
+	filepath = cwd_path;
+	filepath.append("dump");
+	fpath = filepath.generic_string();
+	ASSERT_EQ(1, ::RunFile(n, fpath.c_str()));
 	ASSERT_EQ(true, ::FileExists(FILENAME));
 
 	std::string lines[10];
@@ -2179,13 +2462,27 @@ TEST(TestIPhreeqcLib, TestGetWarningStringLine)
 	int n = ::CreateIPhreeqc();
 	ASSERT_TRUE(n >= 0);
 
-	ASSERT_EQ(0, ::LoadDatabase(n, "phreeqc.dat"));
+	// Had to add the path, because files are not in the cwd but in the parent directory on windows
+	
+	std::filesystem::path cwd_path = std::filesystem::current_path();
+	std::filesystem::path filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	if (!std::filesystem::exists(filepath)) {
+		cwd_path = cwd_path.parent_path();
+	}
+	filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	std::string fpath = filepath.generic_string();
+	ASSERT_EQ(0, ::LoadDatabase(n, fpath.c_str()));
 	ASSERT_EQ(IPQ_OK, ::SetOutputFileOn(n, 0));
 	ASSERT_EQ(IPQ_OK, ::SetErrorFileOn(n, 0));
 	ASSERT_EQ(IPQ_OK, ::SetLogFileOn(n, 0));
 	ASSERT_EQ(IPQ_OK, ::SetSelectedOutputFileOn(n, 0));
 	ASSERT_EQ(IPQ_OK, ::SetDumpFileOn(n, 0));
-	ASSERT_EQ(1, ::RunFile(n, "dump"));
+	filepath = cwd_path;
+	filepath.append("dump");
+	fpath = filepath.generic_string();
+	ASSERT_EQ(1, ::RunFile(n, fpath.c_str()));
 
 	ASSERT_EQ(5, ::GetWarningStringLineCount(n));
 	ASSERT_EQ(std::string("WARNING: DATABASE keyword is ignored by IPhreeqc."), std::string(::GetWarningStringLine(n, 0)));
@@ -2202,13 +2499,24 @@ TEST(TestIPhreeqcLib, TestGetWarningStringLine)
 
 TEST(TestIPhreeqcLib, TestPitzer)
 {
-	ASSERT_EQ(true, ::FileExists("pitzer.dat"));
-	ASSERT_TRUE(::FileSize("pitzer.dat") > 0);
+	// Had to add the path, because files are not in the cwd but in the parent directory on windows
+	
+	std::filesystem::path cwd_path = std::filesystem::current_path();
+	std::filesystem::path filepath = cwd_path;
+	filepath.append("pitzer.dat");
+	if (!std::filesystem::exists(filepath)) {
+		cwd_path = cwd_path.parent_path();
+	}
+	filepath = cwd_path;
+	filepath.append("pitzer.dat");
+	std::string fpath = filepath.generic_string();
+	ASSERT_EQ(true, ::FileExists(fpath.c_str()));
+	ASSERT_TRUE(::FileSize(fpath.c_str()) > 0);
 
 	int id = ::CreateIPhreeqc();
 	ASSERT_TRUE(id >= 0);
 
-	ASSERT_EQ(0, ::LoadDatabase(id, "pitzer.dat"));
+	ASSERT_EQ(0, ::LoadDatabase(id, fpath.c_str()));
 
 	ASSERT_EQ(IPQ_OK, ::AccumulateLine(id, "SOLUTION 1"));
 	ASSERT_EQ(IPQ_OK, ::AccumulateLine(id, "units mol/kgw"));
@@ -2238,13 +2546,24 @@ TEST(TestIPhreeqcLib, TestPitzer)
 
 TEST(TestIPhreeqcLib, TestClearAccumulatedLines)
 {
-	ASSERT_EQ(true, ::FileExists("wateq4f.dat"));
-	ASSERT_TRUE(::FileSize("wateq4f.dat") > 0);
+	// Had to add the path, because files are not in the cwd but in the parent directory on windows
+	
+	std::filesystem::path cwd_path = std::filesystem::current_path();
+	std::filesystem::path filepath = cwd_path;
+	filepath.append("wateq4f.dat");
+	if (!std::filesystem::exists(filepath)) {
+		cwd_path = cwd_path.parent_path();
+	}
+	filepath = cwd_path;
+	filepath.append("wateq4f.dat");
+	std::string fpath = filepath.generic_string();
+	ASSERT_EQ(true, ::FileExists(fpath.c_str()));
+	ASSERT_TRUE(::FileSize(fpath.c_str()) > 0);
 
 	int id = ::CreateIPhreeqc();
 	ASSERT_TRUE(id >= 0);
 
-	ASSERT_EQ(0, ::LoadDatabase(id, "wateq4f.dat"));
+	ASSERT_EQ(0, ::LoadDatabase(id, fpath.c_str()));
 
 	// phreeqc can now handle pH of -2 (-r5885)
 	ASSERT_EQ(IPQ_OK, ::AccumulateLine(id, "SOLUTION 1"));
@@ -2293,7 +2612,7 @@ TEST(TestIPhreeqcLib, TestClearAccumulatedLines)
 TEST(TestIPhreeqcLib, TestSetDumpFileName)
 {
 	char DUMP_FILENAME[80];
-	sprintf(DUMP_FILENAME, "dump.%06d.out", ::rand());
+	snprintf(DUMP_FILENAME, sizeof(DUMP_FILENAME), "dump.%06d.out", ::rand());
 	if (::FileExists(DUMP_FILENAME))
 	{
 		::DeleteFile(DUMP_FILENAME);
@@ -2302,7 +2621,18 @@ TEST(TestIPhreeqcLib, TestSetDumpFileName)
 	int n = ::CreateIPhreeqc();
 	ASSERT_TRUE(n >= 0);
 
-	ASSERT_EQ(0, ::LoadDatabase(n, "phreeqc.dat"));
+	// Had to add the path, because files are not in the cwd but in the parent directory on windows
+	
+	std::filesystem::path cwd_path = std::filesystem::current_path();
+	std::filesystem::path filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	if (!std::filesystem::exists(filepath)) {
+		cwd_path = cwd_path.parent_path();
+	}
+	filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	std::string fpath = filepath.generic_string();
+	ASSERT_EQ(0, ::LoadDatabase(n, fpath.c_str()));
 
 	// add solution block
 	ASSERT_EQ(IPQ_OK, ::SOLUTION(n, 1.0, 1.0, 1.0));
@@ -2327,7 +2657,7 @@ TEST(TestIPhreeqcLib, TestSetDumpFileName)
 
 	ASSERT_EQ(true, ::FileExists(DUMP_FILENAME));
 
-	std::string lines[33];
+	std::string lines[35];
 	std::ifstream ifs(DUMP_FILENAME);
 
 	size_t i = 0;
@@ -2335,41 +2665,44 @@ TEST(TestIPhreeqcLib, TestSetDumpFileName)
 	{
 		++i;
 	}
+	ifs.close();
 
 	int line = 0;
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "SOLUTION_RAW") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "-temp") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "-pressure") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "-potential") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "-total_h") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "-total_o") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "-cb") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "-density") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "-totals") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), " C(4) ") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), " Ca ") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), " H(0) ") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), " Na ") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "-pH") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "-pe") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "-mu") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "-ah2o") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "-mass_water") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "-soln_vol") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "-total_alkalinity") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "-activities") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), " C(-4) ") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), " C(4) ") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), " Ca ") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), " E ") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), " H(0) ") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), " Na ") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), " O(0) ") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "-gammas") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "USE mix none") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "USE reaction none") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "USE reaction_temperature none") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "USE reaction_pressure none") != NULL);
+	EXPECT_THAT(lines[line++], HasSubstr("SOLUTION_RAW"));
+	EXPECT_THAT(lines[line++], HasSubstr("-temp"));
+	EXPECT_THAT(lines[line++], HasSubstr("-pressure"));
+	EXPECT_THAT(lines[line++], HasSubstr("-potential"));
+	EXPECT_THAT(lines[line++], HasSubstr("-total_h"));
+	EXPECT_THAT(lines[line++], HasSubstr("-total_o"));
+	EXPECT_THAT(lines[line++], HasSubstr("-cb"));
+	EXPECT_THAT(lines[line++], HasSubstr("-density"));
+	EXPECT_THAT(lines[line++], HasSubstr("-viscosity"));
+	EXPECT_THAT(lines[line++], HasSubstr("-viscos_0"));
+	EXPECT_THAT(lines[line++], HasSubstr("-totals"));
+	EXPECT_THAT(lines[line++], HasSubstr(" C(4) "));
+	EXPECT_THAT(lines[line++], HasSubstr(" Ca "));
+	EXPECT_THAT(lines[line++], HasSubstr(" H(0) "));
+	EXPECT_THAT(lines[line++], HasSubstr(" Na "));
+	EXPECT_THAT(lines[line++], HasSubstr("-pH"));
+	EXPECT_THAT(lines[line++], HasSubstr("-pe"));
+	EXPECT_THAT(lines[line++], HasSubstr("-mu"));
+	EXPECT_THAT(lines[line++], HasSubstr("-ah2o"));
+	EXPECT_THAT(lines[line++], HasSubstr("-mass_water"));
+	EXPECT_THAT(lines[line++], HasSubstr("-soln_vol"));
+	EXPECT_THAT(lines[line++], HasSubstr("-total_alkalinity"));
+	EXPECT_THAT(lines[line++], HasSubstr("-activities"));
+	EXPECT_THAT(lines[line++], HasSubstr(" C(-4) "));
+	EXPECT_THAT(lines[line++], HasSubstr(" C(4) "));
+	EXPECT_THAT(lines[line++], HasSubstr(" Ca "));
+	EXPECT_THAT(lines[line++], HasSubstr(" E "));
+	EXPECT_THAT(lines[line++], HasSubstr(" H(0) "));
+	EXPECT_THAT(lines[line++], HasSubstr(" Na "));
+	EXPECT_THAT(lines[line++], HasSubstr(" O(0) "));
+	EXPECT_THAT(lines[line++], HasSubstr("-gammas"));
+	EXPECT_THAT(lines[line++], HasSubstr("USE mix none"));
+	EXPECT_THAT(lines[line++], HasSubstr("USE reaction none"));
+	EXPECT_THAT(lines[line++], HasSubstr("USE reaction_temperature none"));
+	EXPECT_THAT(lines[line++], HasSubstr("USE reaction_pressure none"));
 
 	if (::FileExists(DUMP_FILENAME))
 	{
@@ -2385,7 +2718,7 @@ TEST(TestIPhreeqcLib, TestSetDumpFileName)
 TEST(TestIPhreeqcLib, TestSetOutputFileName)
 {
 	char OUTPUT_FILENAME[80];
-	sprintf(OUTPUT_FILENAME, "output.%06d.out", ::rand());
+	snprintf(OUTPUT_FILENAME, sizeof(OUTPUT_FILENAME), "output.%06d.out", ::rand());
 	if (::FileExists(OUTPUT_FILENAME))
 	{
 		::DeleteFile(OUTPUT_FILENAME);
@@ -2394,7 +2727,18 @@ TEST(TestIPhreeqcLib, TestSetOutputFileName)
 	int n = ::CreateIPhreeqc();
 	ASSERT_TRUE(n >= 0);
 
-	ASSERT_EQ(0, ::LoadDatabase(n, "phreeqc.dat.old"));
+	// Had to add the path, because files are not in the cwd but in the parent directory on windows
+	
+	std::filesystem::path cwd_path = std::filesystem::current_path();
+	std::filesystem::path filepath = cwd_path;
+	filepath.append("phreeqc.dat.old");
+	if (!std::filesystem::exists(filepath)) {
+		cwd_path = cwd_path.parent_path();
+	}
+	filepath = cwd_path;
+	filepath.append("phreeqc.dat.old");
+	std::string fpath = filepath.generic_string();
+	ASSERT_EQ(0, ::LoadDatabase(n, fpath.c_str()));
 
 	// add solution block
 	ASSERT_EQ(IPQ_OK, ::SOLUTION(n, 1.0, 1.0, 1.0));
@@ -2435,111 +2779,111 @@ TEST(TestIPhreeqcLib, TestSetOutputFileName)
 
 	int line = 0;
 
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "------------------------------------") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "Reading input data for simulation 1.") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "------------------------------------") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "	SOLUTION 1") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "	C 1") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "	Ca 1") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "	Na 1") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "	DUMP") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "	-solution 1") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "-------------------------------------------") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "Beginning of initial solution calculations.") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "-------------------------------------------") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "Initial solution 1.	") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "-----------------------------Solution composition--------") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "	Elements           Molality       Moles") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "	C                ") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "	Ca               ") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "	Na               ") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "----------------------------Description of solution------") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "                                       pH  =  ") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "                                       pe  =  ") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "                        Activity of water  =  ") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "                 Ionic strength (mol/kgw)  =  ") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "                       Mass of water (kg)  =  ") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "                 Total alkalinity (eq/kg)  =  ") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "                       Total CO2 (mol/kg)  =  ") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "                         Temperature (°C)  =  ") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "                  Electrical balance (eq)  =  ") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), " Percent error, 100*(Cat-|An|)/(Cat+|An|)  =  ") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "                               Iterations  =  ") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "                                  Total H  = ") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "                                  Total O  = ") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "----------------------------Distribution of species----------------------------") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "                                               Log       Log       Log    mole V") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "   Species          Molality    Activity  Molality  Activity     Gamma    cm³/mol") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "   OH- ") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "   H+ ") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "   H2O ") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "C(-4) ") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "   CH4 ") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "C(4) ") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "   HCO3- ") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "   CO2 ") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "   CaHCO3+ ") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "   CaCO3 ") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "   CO3-2 ") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "   NaHCO3 ") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "   NaCO3- ") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "Ca ") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "   Ca+2 ") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "   CaHCO3+ ") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "   CaCO3 ") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "   CaOH+ ") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "H(0) ") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "   H2 ") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "Na ") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "   Na+ ") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "   NaHCO3 ") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "   NaCO3- ") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "   NaOH ") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "O(0) ") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "   O2 ") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "------------------------------Saturation indices-------------------------------") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "  Phase               SI** log IAP   log K(298 K,   1 atm)") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "  Aragonite") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "  Calcite") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "  CH4(g)") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "  CO2(g)") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "  H2(g)") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "  H2O(g)") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "  O2(g)") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "**For a gas, SI = log10(fugacity). Fugacity = pressure * phi / 1 atm.") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "  For ideal gases, phi = 1.") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "------------------") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "End of simulation.") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "------------------") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "------------------------------------") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "Reading input data for simulation 2.") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "------------------------------------") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "") != NULL);
+	EXPECT_THAT(lines[line++], HasSubstr("------------------------------------"));
+	EXPECT_THAT(lines[line++], HasSubstr("Reading input data for simulation 1."));
+	EXPECT_THAT(lines[line++], HasSubstr("------------------------------------"));
+	EXPECT_THAT(lines[line++], HasSubstr(""));
+	EXPECT_THAT(lines[line++], HasSubstr("	SOLUTION 1"));
+	EXPECT_THAT(lines[line++], HasSubstr("	C 1"));
+	EXPECT_THAT(lines[line++], HasSubstr("	Ca 1"));
+	EXPECT_THAT(lines[line++], HasSubstr("	Na 1"));
+	EXPECT_THAT(lines[line++], HasSubstr("	DUMP"));
+	EXPECT_THAT(lines[line++], HasSubstr("	-solution 1"));
+	EXPECT_THAT(lines[line++], HasSubstr("-------------------------------------------"));
+	EXPECT_THAT(lines[line++], HasSubstr("Beginning of initial solution calculations."));
+	EXPECT_THAT(lines[line++], HasSubstr("-------------------------------------------"));
+	EXPECT_THAT(lines[line++], HasSubstr(""));
+	EXPECT_THAT(lines[line++], HasSubstr("Initial solution 1.	"));
+	EXPECT_THAT(lines[line++], HasSubstr(""));
+	EXPECT_THAT(lines[line++], HasSubstr("-----------------------------Solution composition--------"));
+	EXPECT_THAT(lines[line++], HasSubstr(""));
+	EXPECT_THAT(lines[line++], HasSubstr("	Elements           Molality       Moles"));
+	EXPECT_THAT(lines[line++], HasSubstr(""));
+	EXPECT_THAT(lines[line++], HasSubstr("	C                "));
+	EXPECT_THAT(lines[line++], HasSubstr("	Ca               "));
+	EXPECT_THAT(lines[line++], HasSubstr("	Na               "));
+	EXPECT_THAT(lines[line++], HasSubstr(""));
+	EXPECT_THAT(lines[line++], HasSubstr("----------------------------Description of solution------"));
+	EXPECT_THAT(lines[line++], HasSubstr(""));
+	EXPECT_THAT(lines[line++], HasSubstr("                                       pH  =  "));
+	EXPECT_THAT(lines[line++], HasSubstr("                                       pe  =  "));
+	EXPECT_THAT(lines[line++], HasSubstr("                        Activity of water  =  "));
+	EXPECT_THAT(lines[line++], HasSubstr("                 Ionic strength (mol/kgw)  =  "));
+	EXPECT_THAT(lines[line++], HasSubstr("                       Mass of water (kg)  =  "));
+	EXPECT_THAT(lines[line++], HasSubstr("                 Total alkalinity (eq/kg)  =  "));
+	EXPECT_THAT(lines[line++], HasSubstr("                       Total CO2 (mol/kg)  =  "));
+	EXPECT_THAT(lines[line++], HasSubstr("                         Temperature (Â°C)  =  "));
+	EXPECT_THAT(lines[line++], HasSubstr("                  Electrical balance (eq)  =  "));
+	EXPECT_THAT(lines[line++], HasSubstr(" Percent error, 100*(Cat-|An|)/(Cat+|An|)  =  "));
+	EXPECT_THAT(lines[line++], HasSubstr("                               Iterations  =  "));
+	EXPECT_THAT(lines[line++], HasSubstr("                                  Total H  = "));
+	EXPECT_THAT(lines[line++], HasSubstr("                                  Total O  = "));
+	EXPECT_THAT(lines[line++], HasSubstr(""));
+	EXPECT_THAT(lines[line++], HasSubstr("----------------------------Distribution of species----------------------------"));
+	EXPECT_THAT(lines[line++], HasSubstr(""));
+	EXPECT_THAT(lines[line++], HasSubstr("                                               Log       Log       Log    mole V"));
+	EXPECT_THAT(lines[line++], HasSubstr("   Species          Molality    Activity  Molality  Activity     Gamma   cmÂ³/mol"));
+	EXPECT_THAT(lines[line++], HasSubstr(""));
+	EXPECT_THAT(lines[line++], HasSubstr("   OH- "));
+	EXPECT_THAT(lines[line++], HasSubstr("   H+ "));
+	EXPECT_THAT(lines[line++], HasSubstr("   H2O "));
+	EXPECT_THAT(lines[line++], HasSubstr("C(-4) "));
+	EXPECT_THAT(lines[line++], HasSubstr("   CH4 "));
+	EXPECT_THAT(lines[line++], HasSubstr("C(4) "));
+	EXPECT_THAT(lines[line++], HasSubstr("   HCO3- "));
+	EXPECT_THAT(lines[line++], HasSubstr("   CO2 "));
+	EXPECT_THAT(lines[line++], HasSubstr("   CaHCO3+ "));
+	EXPECT_THAT(lines[line++], HasSubstr("   CaCO3 "));
+	EXPECT_THAT(lines[line++], HasSubstr("   CO3-2 "));
+	EXPECT_THAT(lines[line++], HasSubstr("   NaHCO3 "));
+	EXPECT_THAT(lines[line++], HasSubstr("   NaCO3- "));
+	EXPECT_THAT(lines[line++], HasSubstr("Ca "));
+	EXPECT_THAT(lines[line++], HasSubstr("   Ca+2 "));
+	EXPECT_THAT(lines[line++], HasSubstr("   CaHCO3+ "));
+	EXPECT_THAT(lines[line++], HasSubstr("   CaCO3 "));
+	EXPECT_THAT(lines[line++], HasSubstr("   CaOH+ "));
+	EXPECT_THAT(lines[line++], HasSubstr("H(0) "));
+	EXPECT_THAT(lines[line++], HasSubstr("   H2 "));
+	EXPECT_THAT(lines[line++], HasSubstr("Na "));
+	EXPECT_THAT(lines[line++], HasSubstr("   Na+ "));
+	EXPECT_THAT(lines[line++], HasSubstr("   NaHCO3 "));
+	EXPECT_THAT(lines[line++], HasSubstr("   NaCO3- "));
+	EXPECT_THAT(lines[line++], HasSubstr("   NaOH "));
+	EXPECT_THAT(lines[line++], HasSubstr("O(0) "));
+	EXPECT_THAT(lines[line++], HasSubstr("   O2 "));
+	EXPECT_THAT(lines[line++], HasSubstr(""));
+	EXPECT_THAT(lines[line++], HasSubstr("------------------------------Saturation indices-------------------------------"));
+	EXPECT_THAT(lines[line++], HasSubstr(""));
+	EXPECT_THAT(lines[line++], HasSubstr("  Phase               SI** log IAP   log K(298 K,   1 atm)"));
+	EXPECT_THAT(lines[line++], HasSubstr(""));
+	EXPECT_THAT(lines[line++], HasSubstr("  Aragonite"));
+	EXPECT_THAT(lines[line++], HasSubstr("  Calcite"));
+	EXPECT_THAT(lines[line++], HasSubstr("  CH4(g)"));
+	EXPECT_THAT(lines[line++], HasSubstr("  CO2(g)"));
+	EXPECT_THAT(lines[line++], HasSubstr("  H2(g)"));
+	EXPECT_THAT(lines[line++], HasSubstr("  H2O(g)"));
+	EXPECT_THAT(lines[line++], HasSubstr("  O2(g)"));
+	EXPECT_THAT(lines[line++], HasSubstr(""));
+	EXPECT_THAT(lines[line++], HasSubstr("**For a gas, SI = log10(fugacity). Fugacity = pressure * phi / 1 atm."));
+	EXPECT_THAT(lines[line++], HasSubstr("  For ideal gases, phi = 1."));
+	EXPECT_THAT(lines[line++], HasSubstr(""));
+	EXPECT_THAT(lines[line++], HasSubstr("------------------"));
+	EXPECT_THAT(lines[line++], HasSubstr("End of simulation."));
+	EXPECT_THAT(lines[line++], HasSubstr("------------------"));
+	EXPECT_THAT(lines[line++], HasSubstr(""));
+	EXPECT_THAT(lines[line++], HasSubstr("------------------------------------"));
+	EXPECT_THAT(lines[line++], HasSubstr("Reading input data for simulation 2."));
+	EXPECT_THAT(lines[line++], HasSubstr("------------------------------------"));
+	EXPECT_THAT(lines[line++], HasSubstr(""));
 #ifndef TESTING
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "----------------") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "End of Run after ") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "----------------") != NULL);
+	EXPECT_THAT(lines[line++], HasSubstr("----------------"));
+	EXPECT_THAT(lines[line++], HasSubstr("End of Run after "));
+	EXPECT_THAT(lines[line++], HasSubstr("----------------"));
 #endif
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "") != NULL);
-	ASSERT_TRUE(::strstr(lines[line++].c_str(), "") != NULL);
+	EXPECT_THAT(lines[line++], HasSubstr(""));
+	EXPECT_THAT(lines[line++], HasSubstr(""));
+	EXPECT_THAT(lines[line++], HasSubstr(""));
+	EXPECT_THAT(lines[line++], HasSubstr(""));
 ///#endif
 
 	if (n >= 0)
@@ -2578,14 +2922,25 @@ TEST(TestIPhreeqcLib, TestGetOutputString)
 	ASSERT_TRUE(n >= 0);
 
 	char OUTPUT_FILENAME[80];
-	sprintf(OUTPUT_FILENAME, "output.%06d.out", ::rand());
+	snprintf(OUTPUT_FILENAME, sizeof(OUTPUT_FILENAME), "output.%06d.out", ::rand());
 	if (::FileExists(OUTPUT_FILENAME))
 	{
 		::DeleteFile(OUTPUT_FILENAME);
 	}
 	ASSERT_EQ(false, ::FileExists(OUTPUT_FILENAME));
 
-	ASSERT_EQ(0, ::LoadDatabase(n, "phreeqc.dat"));
+	// Had to add the path, because files are not in the cwd but in the parent directory on windows
+	
+	std::filesystem::path cwd_path = std::filesystem::current_path();
+	std::filesystem::path filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	if (!std::filesystem::exists(filepath)) {
+		cwd_path = cwd_path.parent_path();
+	}
+	filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	std::string fpath = filepath.generic_string();
+	ASSERT_EQ(0, ::LoadDatabase(n, fpath.c_str()));
 
 	// add solution block
 	ASSERT_EQ(IPQ_OK, ::SOLUTION(n, 1.0, 1.0, 1.0));
@@ -2634,7 +2989,18 @@ TEST(TestIPhreeqcLib, TestGetOutputStringLineCount)
 	ASSERT_TRUE(n >= 0);
 
 	ASSERT_EQ(0, ::GetOutputStringLineCount(n));
-	ASSERT_EQ(0, ::LoadDatabase(n, "phreeqc.dat.old"));
+	// Had to add the path, because files are not in the cwd but in the parent directory on windows
+	
+	std::filesystem::path cwd_path = std::filesystem::current_path();
+	std::filesystem::path filepath = cwd_path;
+	filepath.append("phreeqc.dat.old");
+	if (!std::filesystem::exists(filepath)) {
+		cwd_path = cwd_path.parent_path();
+	}
+	filepath = cwd_path;
+	filepath.append("phreeqc.dat.old");
+	std::string fpath = filepath.generic_string();
+	ASSERT_EQ(0, ::LoadDatabase(n, fpath.c_str()));
 	ASSERT_EQ(0, ::GetOutputStringLineCount(n));
 
 	// add solution block
@@ -2693,7 +3059,18 @@ TEST(TestIPhreeqcLib, TestGetOutputStringLine)
 	ASSERT_TRUE(n >= 0);
 
 	ASSERT_EQ(0, ::GetOutputStringLineCount(n));
-	ASSERT_EQ(0, ::LoadDatabase(n, "phreeqc.dat.old"));
+	// Had to add the path, because files are not in the cwd but in the parent directory on windows
+	
+	std::filesystem::path cwd_path = std::filesystem::current_path();
+	std::filesystem::path filepath = cwd_path;
+	filepath.append("phreeqc.dat.old");
+	if (!std::filesystem::exists(filepath)) {
+		cwd_path = cwd_path.parent_path();
+	}
+	filepath = cwd_path;
+	filepath.append("phreeqc.dat.old");
+	std::string fpath = filepath.generic_string();
+	ASSERT_EQ(0, ::LoadDatabase(n, fpath.c_str()));
 	ASSERT_EQ(0, ::GetOutputStringLineCount(n));
 
 	// add solution block
@@ -2782,7 +3159,7 @@ TEST(TestIPhreeqcLib, TestGetOutputStringLine)
 TEST(TestIPhreeqcLib, TestSetLogFileName)
 {
 	char LOG_FILENAME[80];
-	sprintf(LOG_FILENAME, "log.%06d.out", ::rand());
+	snprintf(LOG_FILENAME, sizeof(LOG_FILENAME), "log.%06d.out", ::rand());
 	if (::FileExists(LOG_FILENAME))
 	{
 		::DeleteFile(LOG_FILENAME);
@@ -2791,7 +3168,18 @@ TEST(TestIPhreeqcLib, TestSetLogFileName)
 	int n = ::CreateIPhreeqc();
 	ASSERT_TRUE(n >= 0);
 
-	ASSERT_EQ(0, ::LoadDatabase(n, "phreeqc.dat"));
+	// Had to add the path, because files are not in the cwd but in the parent directory on windows
+	
+	std::filesystem::path cwd_path = std::filesystem::current_path();
+	std::filesystem::path filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	if (!std::filesystem::exists(filepath)) {
+		cwd_path = cwd_path.parent_path();
+	}
+	filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	std::string fpath = filepath.generic_string();
+	ASSERT_EQ(0, ::LoadDatabase(n, fpath.c_str()));
 
 	// add solution block
 	ASSERT_EQ(IPQ_OK, ::SOLUTION(n, 1.0, 1.0, 1.0));
@@ -2844,7 +3232,7 @@ TEST(TestIPhreeqcLib, TestSetLogFileName)
 	ASSERT_EQ(std::string("Number of infeasible solutions: 0"), lines[line++]);
 	ASSERT_EQ(std::string("Number of basis changes: 0"), lines[line++]);
 	ASSERT_EQ(std::string(""), lines[line++]);
-	ASSERT_EQ(std::string("Number of iterations: 6"), lines[line++]);
+	ASSERT_EQ(std::string("Number of iterations: 8"), lines[line++]);
 	ASSERT_EQ(std::string(""), lines[line++]);
 	ASSERT_EQ(std::string("------------------"), lines[line++]);
 	ASSERT_EQ(std::string("End of simulation."), lines[line++]);
@@ -2889,7 +3277,7 @@ TEST(TestIPhreeqcLib, TestLogStringOnOff)
 TEST(TestIPhreeqcLib, TestGetLogString)
 {
 	char LOG_FILENAME[80];
-	sprintf(LOG_FILENAME, "log.%06d.out", ::rand());
+	snprintf(LOG_FILENAME, sizeof(LOG_FILENAME), "log.%06d.out", ::rand());
 	if (::FileExists(LOG_FILENAME))
 	{
 		::DeleteFile(LOG_FILENAME);
@@ -2899,7 +3287,18 @@ TEST(TestIPhreeqcLib, TestGetLogString)
 	int n = ::CreateIPhreeqc();
 	ASSERT_TRUE(n >= 0);
 
-	ASSERT_EQ(0, ::LoadDatabase(n, "phreeqc.dat"));
+	// Had to add the path, because files are not in the cwd but in the parent directory on windows
+	
+	std::filesystem::path cwd_path = std::filesystem::current_path();
+	std::filesystem::path filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	if (!std::filesystem::exists(filepath)) {
+		cwd_path = cwd_path.parent_path();
+	}
+	filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	std::string fpath = filepath.generic_string();
+	ASSERT_EQ(0, ::LoadDatabase(n, fpath.c_str()));
 
 	// add solution block
 	ASSERT_EQ(IPQ_OK, ::SOLUTION(n, 1.0, 1.0, 1.0));
@@ -2960,7 +3359,18 @@ TEST(TestIPhreeqcLib, TestGetLogStringLineCount)
 
 	ASSERT_EQ(0, ::GetLogStringLineCount(n));
 
-	ASSERT_EQ(0, ::LoadDatabase(n, "phreeqc.dat"));
+	// Had to add the path, because files are not in the cwd but in the parent directory on windows
+	
+	std::filesystem::path cwd_path = std::filesystem::current_path();
+	std::filesystem::path filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	if (!std::filesystem::exists(filepath)) {
+		cwd_path = cwd_path.parent_path();
+	}
+	filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	std::string fpath = filepath.generic_string();
+	ASSERT_EQ(0, ::LoadDatabase(n, fpath.c_str()));
 
 	ASSERT_EQ(0, ::GetLogStringLineCount(n));
 
@@ -3033,7 +3443,18 @@ TEST(TestIPhreeqcLib, TestGetLogStringLine)
 	ASSERT_TRUE(n >= 0);
 	ASSERT_EQ(0, ::GetLogStringLineCount(n));
 
-	ASSERT_EQ(0, ::LoadDatabase(n, "phreeqc.dat"));
+	// Had to add the path, because files are not in the cwd but in the parent directory on windows
+	
+	std::filesystem::path cwd_path = std::filesystem::current_path();
+	std::filesystem::path filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	if (!std::filesystem::exists(filepath)) {
+		cwd_path = cwd_path.parent_path();
+	}
+	filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	std::string fpath = filepath.generic_string();
+	ASSERT_EQ(0, ::LoadDatabase(n, fpath.c_str()));
 
 	ASSERT_EQ(0, ::GetLogStringLineCount(n));
 
@@ -3106,7 +3527,7 @@ TEST(TestIPhreeqcLib, TestGetLogStringLine)
 	ASSERT_EQ(std::string("Number of infeasible solutions: 0"), std::string(::GetLogStringLine(n, line++)));
 	ASSERT_EQ(std::string("Number of basis changes: 0"), std::string(::GetLogStringLine(n, line++)));
 	ASSERT_EQ(std::string(""), std::string(::GetLogStringLine(n, line++)));
-	ASSERT_EQ(std::string("Number of iterations: 6"), std::string(::GetLogStringLine(n, line++)));
+	ASSERT_EQ(std::string("Number of iterations: 8"), std::string(::GetLogStringLine(n, line++)));
 	ASSERT_EQ(std::string(""), std::string(::GetLogStringLine(n, line++)));
 	ASSERT_EQ(std::string("------------------"), std::string(::GetLogStringLine(n, line++)));
 	ASSERT_EQ(std::string("End of simulation."), std::string(::GetLogStringLine(n, line++)));
@@ -3159,7 +3580,7 @@ TEST(TestIPhreeqcLib, TestGetLogStringLine)
 TEST(TestIPhreeqcLib, TestSetErrorFileName)
 {
 	char ERR_FILENAME[80];
-	sprintf(ERR_FILENAME, "error.%s.out", "TestIPhreeqcLib-TestSetErrorFileName");
+	snprintf(ERR_FILENAME, sizeof(ERR_FILENAME), "error.%s.out", "TestIPhreeqcLib-TestSetErrorFileName");
 	if (::FileExists(ERR_FILENAME))
 	{
 		::DeleteFile(ERR_FILENAME);
@@ -3168,7 +3589,18 @@ TEST(TestIPhreeqcLib, TestSetErrorFileName)
 	int n = ::CreateIPhreeqc();
 	ASSERT_TRUE(n >= 0);
 
-	ASSERT_EQ(0, ::LoadDatabase(n, "phreeqc.dat"));
+	// Had to add the path, because files are not in the cwd but in the parent directory on windows
+	
+	std::filesystem::path cwd_path = std::filesystem::current_path();
+	std::filesystem::path filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	if (!std::filesystem::exists(filepath)) {
+		cwd_path = cwd_path.parent_path();
+	}
+	filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	std::string fpath = filepath.generic_string();
+	ASSERT_EQ(0, ::LoadDatabase(n, fpath.c_str()));
 
 	ASSERT_EQ(IPQ_OK, ::AccumulateLine(n, "SOLUTION 1"));
 	ASSERT_EQ(IPQ_OK, ::AccumulateLine(n, "	pH	7"));
@@ -3246,7 +3678,7 @@ TEST(TestIPhreeqcLib, TestErrorStringOnOff)
 TEST(TestIPhreeqcLib, TestGetErrorString)
 {
 	char ERR_FILENAME[80];
-	sprintf(ERR_FILENAME, "error.%06d.out", ::rand());
+	snprintf(ERR_FILENAME, sizeof(ERR_FILENAME), "error.%06d.out", ::rand());
 	if (::FileExists(ERR_FILENAME))
 	{
 		::DeleteFile(ERR_FILENAME);
@@ -3256,7 +3688,18 @@ TEST(TestIPhreeqcLib, TestGetErrorString)
 	int n = ::CreateIPhreeqc();
 	ASSERT_TRUE(n >= 0);
 
-	ASSERT_EQ(0, ::LoadDatabase(n, "phreeqc.dat"));
+	// Had to add the path, because files are not in the cwd but in the parent directory on windows
+	
+	std::filesystem::path cwd_path = std::filesystem::current_path();
+	std::filesystem::path filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	if (!std::filesystem::exists(filepath)) {
+		cwd_path = cwd_path.parent_path();
+	}
+	filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	std::string fpath = filepath.generic_string();
+	ASSERT_EQ(0, ::LoadDatabase(n, fpath.c_str()));
 
 	ASSERT_EQ(IPQ_OK, ::AccumulateLine(n, "SOLUTION 1"));
 	ASSERT_EQ(IPQ_OK, ::AccumulateLine(n, "	pH	7"));
@@ -3321,7 +3764,18 @@ TEST(TestIPhreeqcLib, TestGetErrorStringLineCount)
 
 	ASSERT_EQ(0, ::GetErrorStringLineCount(n));
 
-	ASSERT_EQ(0, ::LoadDatabase(n, "phreeqc.dat"));
+	// Had to add the path, because files are not in the cwd but in the parent directory on windows
+	
+	std::filesystem::path cwd_path = std::filesystem::current_path();
+	std::filesystem::path filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	if (!std::filesystem::exists(filepath)) {
+		cwd_path = cwd_path.parent_path();
+	}
+	filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	std::string fpath = filepath.generic_string();
+	ASSERT_EQ(0, ::LoadDatabase(n, fpath.c_str()));
 
 	ASSERT_EQ(0, ::GetErrorStringLineCount(n));
 
@@ -3380,7 +3834,7 @@ TEST(TestIPhreeqcLib, TestGetErrorStringLineCount)
 TEST(TestIPhreeqcLib, TestSetSelectedOutputFileName)
 {
 	char SELOUT_FILENAME[80];
-	sprintf(SELOUT_FILENAME, "selected_output.%06d.out", ::rand());
+	snprintf(SELOUT_FILENAME, sizeof(SELOUT_FILENAME), "selected_output.%06d.out", ::rand());
 	if (::FileExists(SELOUT_FILENAME))
 	{
 		::DeleteFile(SELOUT_FILENAME);
@@ -3389,7 +3843,18 @@ TEST(TestIPhreeqcLib, TestSetSelectedOutputFileName)
 	int n = ::CreateIPhreeqc();
 	ASSERT_TRUE(n >= 0);
 
-	ASSERT_EQ(0, ::LoadDatabase(n, "llnl.dat"));
+	// Had to add the path, because files are not in the cwd but in the parent directory on windows
+	
+	std::filesystem::path cwd_path = std::filesystem::current_path();
+	std::filesystem::path filepath = cwd_path;
+	filepath.append("llnl.dat");
+	if (!std::filesystem::exists(filepath)) {
+		cwd_path = cwd_path.parent_path();
+	}
+	filepath = cwd_path;
+	filepath.append("llnl.dat");
+	std::string fpath = filepath.generic_string();
+	ASSERT_EQ(0, ::LoadDatabase(n, fpath.c_str()));
 
 	int max = 6;
 
@@ -3450,7 +3915,18 @@ TEST(TestIPhreeqcLib, TestGetSelectedOutputString)
 	int n = ::CreateIPhreeqc();
 	ASSERT_TRUE(n >= 0);
 
-	ASSERT_EQ(0, ::LoadDatabase(n, "llnl.dat"));
+	// Had to add the path, because files are not in the cwd but in the parent directory on windows
+	
+	std::filesystem::path cwd_path = std::filesystem::current_path();
+	std::filesystem::path filepath = cwd_path;
+	filepath.append("llnl.dat");
+	if (!std::filesystem::exists(filepath)) {
+		cwd_path = cwd_path.parent_path();
+	}
+	filepath = cwd_path;
+	filepath.append("llnl.dat");
+	std::string fpath = filepath.generic_string();
+	ASSERT_EQ(0, ::LoadDatabase(n, fpath.c_str()));
 
 	int max = 6;
 
@@ -3545,7 +4021,18 @@ TEST(TestIPhreeqcLib, TestGetSelectedOutputStringLineCount)
 
 	ASSERT_EQ(0, ::GetSelectedOutputFileOn(n));
 
-	ASSERT_EQ(0, ::LoadDatabase(n, "llnl.dat"));
+	// Had to add the path, because files are not in the cwd but in the parent directory on windows
+	
+	std::filesystem::path cwd_path = std::filesystem::current_path();
+	std::filesystem::path filepath = cwd_path;
+	filepath.append("llnl.dat");
+	if (!std::filesystem::exists(filepath)) {
+		cwd_path = cwd_path.parent_path();
+	}
+	filepath = cwd_path;
+	filepath.append("llnl.dat");
+	std::string fpath = filepath.generic_string();
+	ASSERT_EQ(0, ::LoadDatabase(n, fpath.c_str()));
 
 	ASSERT_EQ(0, ::GetSelectedOutputFileOn(n));
 
@@ -3582,7 +4069,18 @@ TEST(TestIPhreeqcLib, TestGetSelectedOutputStringLine)
 
 	ASSERT_EQ(0, ::GetSelectedOutputFileOn(n));
 
-	ASSERT_EQ(0, ::LoadDatabase(n, "llnl.dat"));
+	// Had to add the path, because files are not in the cwd but in the parent directory on windows
+	
+	std::filesystem::path cwd_path = std::filesystem::current_path();
+	std::filesystem::path filepath = cwd_path;
+	filepath.append("llnl.dat");
+	if (!std::filesystem::exists(filepath)) {
+		cwd_path = cwd_path.parent_path();
+	}
+	filepath = cwd_path;
+	filepath.append("llnl.dat");
+	std::string fpath = filepath.generic_string();
+	ASSERT_EQ(0, ::LoadDatabase(n, fpath.c_str()));
 
 	ASSERT_EQ(0, ::GetSelectedOutputFileOn(n));
 
@@ -3709,7 +4207,18 @@ TEST(TestIPhreeqcLib, TestGetSelectedOutputStringLineNotEnoughHeadings)
 
 	ASSERT_EQ(0, ::GetSelectedOutputFileOn(n));
 
-	ASSERT_EQ(0, ::LoadDatabase(n, "llnl.dat"));
+	// Had to add the path, because files are not in the cwd but in the parent directory on windows
+	
+	std::filesystem::path cwd_path = std::filesystem::current_path();
+	std::filesystem::path filepath = cwd_path;
+	filepath.append("llnl.dat");
+	if (!std::filesystem::exists(filepath)) {
+		cwd_path = cwd_path.parent_path();
+	}
+	filepath = cwd_path;
+	filepath.append("llnl.dat");
+	std::string fpath = filepath.generic_string();
+	ASSERT_EQ(0, ::LoadDatabase(n, fpath.c_str()));
 
 	ASSERT_EQ(0, ::GetSelectedOutputFileOn(n));
 
@@ -3814,7 +4323,18 @@ TEST(TestIPhreeqcLib, TestLongUser_Punch)
 	int n = ::CreateIPhreeqc();
 	ASSERT_TRUE(n >= 0);
 	ASSERT_EQ(IPQ_OK, ::SetSelectedOutputStringOn(n, 1));
-	ASSERT_EQ(0, ::LoadDatabase(n, "phreeqc.dat"));
+	// Had to add the path, because files are not in the cwd but in the parent directory on windows
+	
+	std::filesystem::path cwd_path = std::filesystem::current_path();
+	std::filesystem::path filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	if (!std::filesystem::exists(filepath)) {
+		cwd_path = cwd_path.parent_path();
+	}
+	filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	std::string fpath = filepath.generic_string();
+	ASSERT_EQ(0, ::LoadDatabase(n, fpath.c_str()));
 	ASSERT_EQ(0, ::RunString(n, input));
 
 	if (n >= 0)
@@ -3827,8 +4347,18 @@ TEST(TestIPhreeqcLib, TestBasicSURF)
 {
 	int n = ::CreateIPhreeqc();
 	ASSERT_TRUE(n >= 0);
-
-	ASSERT_EQ(0, ::LoadDatabase(n, "phreeqc.dat"));
+	// Had to add the path, because files are not in the cwd but in the parent directory on windows
+	
+	std::filesystem::path cwd_path = std::filesystem::current_path();
+	std::filesystem::path filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	if (!std::filesystem::exists(filepath)) {
+		cwd_path = cwd_path.parent_path();
+	}
+	filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	std::string fpath = filepath.generic_string();
+	ASSERT_EQ(0, ::LoadDatabase(n, fpath.c_str()));
 
 	ASSERT_EQ(IPQ_OK, ::AccumulateLine(n, "SURFACE_MASTER_SPECIES"));
 	ASSERT_EQ(IPQ_OK, ::AccumulateLine(n, "		 Surfa Surfa"));
@@ -3993,7 +4523,7 @@ TEST(TestIPhreeqcLib, TestIEEE)
 TEST(TestIPhreeqcLib, TestDelete)
 {
 	const char input[] =
-		"SOLUTION 1 # definition of intial condition 1\n"
+		"SOLUTION 1 # definition of initial condition 1\n"
 		"COPY cell 1 7405 # copy cell 1 to placeholder cell with index larger than the number of cells in the model domain\n"
 		"END\n"
 		"DELETE # delete initial condition 1 to allow for a redefinition of all reactions\n"
@@ -4020,15 +4550,25 @@ TEST(TestIPhreeqcLib, TestDelete)
 	ASSERT_TRUE(n >= 0);
 
 	char OUTPUT_FILE[80];
-	sprintf(OUTPUT_FILE, "phreeqc.%d.out", n);
+	snprintf(OUTPUT_FILE, sizeof(OUTPUT_FILE), "phreeqc.%d.out", n);
 
 	if (::FileExists(OUTPUT_FILE))
 	{
 		ASSERT_TRUE(::DeleteFile(OUTPUT_FILE));
 	}
 	ASSERT_EQ(false, ::FileExists(OUTPUT_FILE));
-
-	ASSERT_EQ(0, ::LoadDatabase(n, "phreeqc.dat"));
+	// Had to add the path, because files are not in the cwd but in the parent directory on windows
+	
+	std::filesystem::path cwd_path = std::filesystem::current_path();
+	std::filesystem::path filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	if (!std::filesystem::exists(filepath)) {
+		cwd_path = cwd_path.parent_path();
+	}
+	filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	std::string fpath = filepath.generic_string();
+	ASSERT_EQ(0, ::LoadDatabase(n, fpath.c_str()));
 	::SetOutputFileOn(n, 0);
 	::SetErrorFileOn(n, 0);
 	::SetLogFileOn(n, 0);
@@ -4055,8 +4595,22 @@ TEST(TestIPhreeqcLib, TestMultiPunchCSelectedOutput)
 	int id = ::CreateIPhreeqc();
 	ASSERT_TRUE(id >= 0);
 
-	ASSERT_EQ(0, ::LoadDatabase(id, "phreeqc.dat"));
-	ASSERT_EQ(0, ::RunFile(id, "multi_punch"));
+	// Had to add the path, because files are not in the cwd but in the parent directory on windows
+	
+	std::filesystem::path cwd_path = std::filesystem::current_path();
+	std::filesystem::path filepath = cwd_path;
+	filepath.append("phreeqc.dat.90a6449");
+	if (!std::filesystem::exists(filepath)) {
+		cwd_path = cwd_path.parent_path();
+	}
+	filepath = cwd_path;
+	filepath.append("phreeqc.dat.90a6449");
+	std::string fpath = filepath.generic_string();
+	ASSERT_EQ(0, ::LoadDatabase(id, fpath.c_str()));
+	filepath = cwd_path;
+	filepath.append("multi_punch");
+	fpath = filepath.generic_string();
+	ASSERT_EQ(0, ::RunFile(id, fpath.c_str()));
 
 	ASSERT_EQ(6, ::GetSelectedOutputRowCount(id));
 	ASSERT_EQ(35, ::GetSelectedOutputColumnCount(id));
@@ -4174,12 +4728,12 @@ TEST(TestIPhreeqcLib, TestMultiPunchCSelectedOutput)
 	ASSERT_EQ(IPQ_OK, ::GetSelectedOutputValue(id, 6, 0, &var));   ASSERT_NEAR(-7.60411, var.dVal, ::pow(10., -2));
 
 	// si_Calcite
-	ASSERT_EQ(IPQ_OK, ::GetSelectedOutputValue(id, 1, 1, &var));   ASSERT_NEAR(0.692077, var.dVal, ::pow(10., -2));
-	ASSERT_EQ(IPQ_OK, ::GetSelectedOutputValue(id, 2, 1, &var));   ASSERT_NEAR(0.678847, var.dVal, ::pow(10., -2));
-	ASSERT_EQ(IPQ_OK, ::GetSelectedOutputValue(id, 3, 1, &var));   ASSERT_NEAR(0.678847, var.dVal, ::pow(10., -2));
+	ASSERT_EQ(IPQ_OK, ::GetSelectedOutputValue(id, 1, 1, &var));   ASSERT_NEAR(0.702316, var.dVal, ::pow(10., -2));
+	ASSERT_EQ(IPQ_OK, ::GetSelectedOutputValue(id, 2, 1, &var));   ASSERT_NEAR(0.695856, var.dVal, ::pow(10., -2));
+	ASSERT_EQ(IPQ_OK, ::GetSelectedOutputValue(id, 3, 1, &var));   ASSERT_NEAR(0.689518, var.dVal, ::pow(10., -2));
 	ASSERT_EQ(IPQ_OK, ::GetSelectedOutputValue(id, 4, 1, &var));   ASSERT_NEAR(-999.999, var.dVal, ::pow(10., -2));
 	ASSERT_EQ(IPQ_OK, ::GetSelectedOutputValue(id, 5, 1, &var));   ASSERT_NEAR(-999.999, var.dVal, ::pow(10., -2));
-	ASSERT_EQ(IPQ_OK, ::GetSelectedOutputValue(id, 6, 1, &var));   ASSERT_NEAR(0.672429, var.dVal, ::pow(10., -2));
+	ASSERT_EQ(IPQ_OK, ::GetSelectedOutputValue(id, 6, 1, &var));   ASSERT_NEAR(0.683300, var.dVal, ::pow(10., -2));
 
 	// DUMMY_1
 	ASSERT_EQ(IPQ_OK, ::GetSelectedOutputValue(id, 1, 2, &var));   ASSERT_EQ(TT_EMPTY, var.type);
@@ -4203,7 +4757,7 @@ TEST(TestIPhreeqcLib, TestMultiPunchCSelectedOutput)
 	ASSERT_EQ(IPQ_OK, ::GetSelectedOutputValue(id, 3, 4, &var));   ASSERT_EQ(TT_EMPTY, var.type);
 	ASSERT_EQ(IPQ_OK, ::GetSelectedOutputValue(id, 4, 4, &var));   ASSERT_EQ(TT_EMPTY, var.type);
 	ASSERT_EQ(IPQ_OK, ::GetSelectedOutputValue(id, 5, 4, &var));   ASSERT_EQ(TT_EMPTY, var.type);
-	ASSERT_EQ(IPQ_OK, ::GetSelectedOutputValue(id, 6, 4, &var));   ASSERT_NEAR(3.69E-13, var.dVal, ::pow(10., log10(3.69E-13) - 2));
+	ASSERT_EQ(IPQ_OK, ::GetSelectedOutputValue(id, 6, 4, &var));   ASSERT_NEAR(4.12e-13, var.dVal, ::pow(10., log10(4.12e-13) - 2));
 
 	// Sum_Delta/U
 	ASSERT_EQ(IPQ_OK, ::GetSelectedOutputValue(id, 1, 5, &var));   ASSERT_EQ(TT_EMPTY, var.type);
@@ -4321,7 +4875,7 @@ TEST(TestIPhreeqcLib, TestMultiPunchCSelectedOutput)
 	ASSERT_EQ(IPQ_OK, ::GetSelectedOutputValue(id, 0, ncol++, &var));   ASSERT_EQ(std::string("Halite_max"), std::string(var.sVal));
 
 	// Sum_resid
-	ASSERT_EQ(IPQ_OK, ::GetSelectedOutputValue(id, 1, 0, &var));   ASSERT_NEAR(3.69E-13, var.dVal, ::pow(10., log10(3.69E-13) - 2));
+	ASSERT_EQ(IPQ_OK, ::GetSelectedOutputValue(id, 1, 0, &var));   ASSERT_NEAR(4.12E-13, var.dVal, ::pow(10., log10(4.12E-13) - 2));
 
 	// Sum_Delta/U
 	ASSERT_EQ(IPQ_OK, ::GetSelectedOutputValue(id, 1, 1, &var));   ASSERT_NEAR(0, var.dVal, ::pow(10., -3));
@@ -4381,9 +4935,23 @@ TEST(TestIPhreeqcLib, TestGetSelectedOutputCount)
 	ASSERT_TRUE(id >= 0);
 
 	ASSERT_EQ(0, ::GetSelectedOutputCount(id));
-	ASSERT_EQ(0, ::LoadDatabase(id, "phreeqc.dat"));
+	// Had to add the path, because files are not in the cwd but in the parent directory on windows
+	
+	std::filesystem::path cwd_path = std::filesystem::current_path();
+	std::filesystem::path filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	if (!std::filesystem::exists(filepath)) {
+		cwd_path = cwd_path.parent_path();
+	}
+	filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	std::string fpath = filepath.generic_string();
+	ASSERT_EQ(0, ::LoadDatabase(id, fpath.c_str()));
 	ASSERT_EQ(0, ::GetSelectedOutputCount(id));
-	ASSERT_EQ(0, ::RunFile(id, "multi_punch"));
+	filepath = cwd_path;
+	filepath.append("multi_punch");
+	fpath = filepath.generic_string();
+	ASSERT_EQ(0, ::RunFile(id, fpath.c_str()));
 	ASSERT_EQ(3, ::GetSelectedOutputCount(id));
 
 	if (id >= 0)
@@ -4397,8 +4965,22 @@ TEST(TestIPhreeqcLib, TestGetNthSelectedOutputUserNumber)
 	int id = ::CreateIPhreeqc();
 	ASSERT_TRUE(id >= 0);
 
-	ASSERT_EQ(0, ::LoadDatabase(id, "phreeqc.dat"));
-	ASSERT_EQ(0, ::RunFile(id, "multi_punch"));
+	// Had to add the path, because files are not in the cwd but in the parent directory on windows
+	
+	std::filesystem::path cwd_path = std::filesystem::current_path();
+	std::filesystem::path filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	if (!std::filesystem::exists(filepath)) {
+		cwd_path = cwd_path.parent_path();
+	}
+	filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	std::string fpath = filepath.generic_string();
+	ASSERT_EQ(0, ::LoadDatabase(id, fpath.c_str()));
+	filepath = cwd_path;
+	filepath.append("multi_punch");
+	fpath = filepath.generic_string();
+	ASSERT_EQ(0, ::RunFile(id, fpath.c_str()));
 
 	ASSERT_EQ(3, ::GetSelectedOutputCount(id));
 
@@ -4422,9 +5004,23 @@ TEST(TestIPhreeqcLib, TestGetCurrentSelectedOutputUserNumber)
 	ASSERT_TRUE(id >= 0);
 	ASSERT_EQ(1, ::GetCurrentSelectedOutputUserNumber(id));
 
-	ASSERT_EQ(0, ::LoadDatabase(id, "phreeqc.dat"));
+	// Had to add the path, because files are not in the cwd but in the parent directory on windows
+	
+	std::filesystem::path cwd_path = std::filesystem::current_path();
+	std::filesystem::path filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	if (!std::filesystem::exists(filepath)) {
+		cwd_path = cwd_path.parent_path();
+	}
+	filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	std::string fpath = filepath.generic_string();
+	ASSERT_EQ(0, ::LoadDatabase(id, fpath.c_str()));
 	ASSERT_EQ(1, ::GetCurrentSelectedOutputUserNumber(id));
-	ASSERT_EQ(0, ::RunFile(id, "multi_punch"));
+	filepath = cwd_path;
+	filepath.append("multi_punch");
+	fpath = filepath.generic_string();
+	ASSERT_EQ(0, ::RunFile(id, fpath.c_str()));
 
 	ASSERT_EQ(1, ::GetCurrentSelectedOutputUserNumber(id));
 	ASSERT_EQ(6, ::GetSelectedOutputRowCount(id));
@@ -4447,7 +5043,10 @@ TEST(TestIPhreeqcLib, TestGetCurrentSelectedOutputUserNumber)
 	ASSERT_EQ(0, ::GetCurrentSelectedOutputUserNumber(id));
 
 	// unload database
-	ASSERT_EQ(0, ::LoadDatabase(id, "phreeqc.dat"));
+	filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	fpath = filepath.generic_string();
+	ASSERT_EQ(0, ::LoadDatabase(id, fpath.c_str()));
 	ASSERT_EQ(1, ::GetCurrentSelectedOutputUserNumber(id));
 
 	if (id >= 0)
@@ -4467,7 +5066,18 @@ TEST(TestIPhreeqcLib, TestMultiSetSelectedOutputFileName)
 	int id = ::CreateIPhreeqc();
 	ASSERT_TRUE(id >= 0);
 
-	ASSERT_EQ(0, ::LoadDatabase(id, "phreeqc.dat"));
+	// Had to add the path, because files are not in the cwd but in the parent directory on windows
+	
+	std::filesystem::path cwd_path = std::filesystem::current_path();
+	std::filesystem::path filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	if (!std::filesystem::exists(filepath)) {
+		cwd_path = cwd_path.parent_path();
+	}
+	filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	std::string fpath = filepath.generic_string();
+	ASSERT_EQ(0, ::LoadDatabase(id, fpath.c_str()));
 
 	ASSERT_EQ(IPQ_OK, ::SetCurrentSelectedOutputUserNumber(id, 1));
 	ASSERT_EQ(IPQ_OK, ::SetSelectedOutputStringOn(id, true));
@@ -4511,7 +5121,18 @@ TEST(TestIPhreeqcLib, TestWissmeier20131203)
 	int id = ::CreateIPhreeqc();
 	ASSERT_TRUE(id >= 0);
 
-	ASSERT_EQ(0, ::LoadDatabase(id, "phreeqc.dat"));
+	// Had to add the path, because files are not in the cwd but in the parent directory on windows
+	
+	std::filesystem::path cwd_path = std::filesystem::current_path();
+	std::filesystem::path filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	if (!std::filesystem::exists(filepath)) {
+		cwd_path = cwd_path.parent_path();
+	}
+	filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	std::string fpath = filepath.generic_string();
+	ASSERT_EQ(0, ::LoadDatabase(id, fpath.c_str()));
 
 	ASSERT_EQ(IPQ_OK, ::AccumulateLine(id, "selected_output 1"));
 	ASSERT_EQ(IPQ_OK, ::AccumulateLine(id, "-totals O"));
@@ -4543,7 +5164,18 @@ TEST(TestIPhreeqcLib, TestWissmeier20131203_2)
 	int id = ::CreateIPhreeqc();
 	ASSERT_TRUE(id >= 0);
 
-	ASSERT_EQ(0, ::LoadDatabase(id, "phreeqc.dat"));
+	// Had to add the path, because files are not in the cwd but in the parent directory on windows
+	
+	std::filesystem::path cwd_path = std::filesystem::current_path();
+	std::filesystem::path filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	if (!std::filesystem::exists(filepath)) {
+		cwd_path = cwd_path.parent_path();
+	}
+	filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	std::string fpath = filepath.generic_string();
+	ASSERT_EQ(0, ::LoadDatabase(id, fpath.c_str()));
 
 	ASSERT_EQ(IPQ_OK, ::AccumulateLine(id, "selected_output 22"));
 	ASSERT_EQ(IPQ_OK, ::AccumulateLine(id, "-totals O"));
@@ -4576,7 +5208,18 @@ TEST(TestIPhreeqcLib, TestWissmeier20131203_3)
 	int id = ::CreateIPhreeqc();
 	ASSERT_TRUE(id >= 0);
 
-	ASSERT_EQ(0, ::LoadDatabase(id, "phreeqc.dat"));
+	// Had to add the path, because files are not in the cwd but in the parent directory on windows
+	
+	std::filesystem::path cwd_path = std::filesystem::current_path();
+	std::filesystem::path filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	if (!std::filesystem::exists(filepath)) {
+		cwd_path = cwd_path.parent_path();
+	}
+	filepath = cwd_path;
+	filepath.append("phreeqc.dat");
+	std::string fpath = filepath.generic_string();
+	ASSERT_EQ(0, ::LoadDatabase(id, fpath.c_str()));
 
 	ASSERT_EQ(IPQ_OK, ::AccumulateLine(id, "selected_output 1"));
 	ASSERT_EQ(IPQ_OK, ::AccumulateLine(id, "-reset false"));

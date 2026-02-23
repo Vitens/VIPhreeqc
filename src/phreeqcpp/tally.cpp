@@ -31,7 +31,7 @@ get_tally_table_rows_columns(int *rows, int *columns)
 				       returns number of rows and columns in table
 get_tally_table_row_heading(int row, char *string)
 				       row is C row number
-				       returns row descripter for row
+				       returns row descriptor for row
 get_tally_table_column_heading(int column, int *type, char *string)
 				       column is C column number
 				       returns column heading for column
@@ -798,12 +798,12 @@ build_tally_table(void)
  */
 	int j, k, l, p, save_print_use;
 	size_t n;
-	int count_tt_pure_phase, count_tt_ss_phase, count_tt_kinetics;
+	//int count_tt_pure_phase, count_tt_ss_phase, count_tt_kinetics;
 	class phase *phase_ptr;
 	char token[MAX_LENGTH];
 	const char* cptr;
 /*
- *  make list of all elements in all entitites
+ *  make list of all elements in all entities
  *  defines the number of rows in the table
  */
 	get_all_components();
@@ -811,7 +811,7 @@ build_tally_table(void)
 	save_print_use = pr.use;
 	pr.use = FALSE;
 /*
- *  find nuber of columns
+ *  find number of columns
  */
 	count_tally_table_columns = 0;
 /*
@@ -871,7 +871,7 @@ build_tally_table(void)
 /*
  *   Count pure phases
  */
-	count_tt_pure_phase = 0;
+	//count_tt_pure_phase = 0;
 	if (Rxn_pp_assemblage_map.size() > 0)
 	{
 		/* 
@@ -904,7 +904,7 @@ build_tally_table(void)
 				/*
 				 * Add to table
 				 */
-				count_tt_pure_phase++;
+				//count_tt_pure_phase++;
 				n = count_tally_table_columns;
 				extend_tally_table();
 				tally_table[n].name = phase_ptr->name;
@@ -914,13 +914,13 @@ build_tally_table(void)
 				paren_count = 0;
 				if (comp_ptr->Get_add_formula().size() > 0)
 				{
-					strcpy(token, comp_ptr->Get_add_formula().c_str());
+					Utilities::strcpy_safe(token, MAX_LENGTH, comp_ptr->Get_add_formula().c_str());
 					cptr = &(token[0]);
 					get_elts_in_species(&cptr, 1.0);
 				}
 				else
 				{
-					strcpy(token, phase_ptr->formula);
+					Utilities::strcpy_safe(token, MAX_LENGTH, phase_ptr->formula);
 					add_elt_list(phase_ptr->next_elt, 1.0);
 				}
 				elt_list_combine();
@@ -931,7 +931,7 @@ build_tally_table(void)
 /*
  *   Add solid-solution pure phases
  */
-	count_tt_ss_phase = 0;
+	//count_tt_ss_phase = 0;
 	if (Rxn_ss_assemblage_map.size() > 0)
 	{
 		/* 
@@ -964,14 +964,14 @@ build_tally_table(void)
 					/*
 					 * Add to table
 					 */
-					count_tt_ss_phase++;
+					//count_tt_ss_phase++;
 					n = count_tally_table_columns;
 					extend_tally_table();
 					tally_table[n].name = phase_ptr->name;
 					tally_table[n].type = Ss_phase;
 					count_elts = 0;
 					paren_count = 0;
-					strcpy(token, phase_ptr->formula);
+					Utilities::strcpy_safe(token, MAX_LENGTH, phase_ptr->formula);
 					add_elt_list(phase_ptr->next_elt, 1.0);
 					elt_list_combine();
 					tally_table[n].formula = elt_list_vsave();
@@ -982,7 +982,7 @@ build_tally_table(void)
 /*
  *   Add kinetic reactants
  */
-	count_tt_kinetics = 0;
+	//count_tt_kinetics = 0;
 	if (Rxn_kinetics_map.size() > 0)
 	{
 		std::map<int, cxxKinetics>::iterator it;
@@ -1006,7 +1006,7 @@ build_tally_table(void)
 				/*
 				 * Add to table
 				 */
-				count_tt_kinetics++;
+				//count_tt_kinetics++;
 				n = count_tally_table_columns;
 				extend_tally_table();
 				tally_table[n].name = string_hsave(kinetics_comp_ptr->Get_rate_name().c_str());
@@ -1019,7 +1019,7 @@ build_tally_table(void)
 				phase_ptr = NULL;
 				if (kinetics_comp_ptr->Get_namecoef().size() == 1)
 				{
-					strcpy(token, kinetics_comp_ptr->Get_namecoef().begin()->first.c_str());
+					Utilities::strcpy_safe(token, MAX_LENGTH, kinetics_comp_ptr->Get_namecoef().begin()->first.c_str());
 					phase_ptr = phase_bsearch(token, &p, FALSE);
 				}
 				if (phase_ptr != NULL)

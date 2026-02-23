@@ -45,7 +45,7 @@ class CoupledModel(object):
                                             processes)
         self.reaction_model.make_initial_state()
         init_conc = dict([(name, [value] * ncells) for name, value in
-                          self.reaction_model.init_conc.items()])
+                          list(self.reaction_model.init_conc.items())])
         self.advection_model = AdvectionModel(init_conc,
                                               self.reaction_model.inflow_conc)
         self.component_names = self.reaction_model.component_names
@@ -56,7 +56,7 @@ class CoupledModel(object):
     def run(self):
         """Go over all time steps (shifts).
         """
-        for shift in xrange(self.nshifts):
+        for shift in range(self.nshifts):
             self.advection_model.advect()
             self.advection_model.save_results(self.results)
             self.reaction_model.modify(self.advection_model.conc)
@@ -155,7 +155,7 @@ class ReactionModel(object):
                                                 self.initial_conditions)
             self.calculators = [root_calculator]
             self.cell_ranges = [(0, root_ncells)]
-            for process in xrange(self.processes - 1):
+            for process in range(self.processes - 1):
                 self.calculators.append(PhreeqcCalculatorProxy(slave_ncells,
                                                     self.initial_conditions))
                 self.cell_ranges.append((current_cell,
@@ -193,7 +193,7 @@ class ReactionModel(object):
             self.conc[name] = []
         for cell_range, calculator in zip(self.cell_ranges, self.calculators):
             current_conc = dict([(name, value[cell_range[0]:cell_range[1]]) for
-                                  name, value in new_conc.items()])
+                                  name, value in list(new_conc.items())])
             calculator.modify(current_conc)
         for calculator in self.calculators:
             conc = calculator.get_modified()
@@ -214,7 +214,7 @@ class ReactionModel(object):
 class PhreeqcCalculator(object):
     """All PHREEQC calculations happen here.
 
-    This is the only place where we interact wit IPhreeqc.
+    This is the only place where we interact with IPhreeqc.
     Each instance of this class might run in a different
     process using `multiprocessing`.
     """
@@ -251,7 +251,7 @@ class PhreeqcCalculator(object):
         code += self.make_selected_output(self.components)
         self.phreeqc.RunString(code)
         self.conc = self.get_selected_output()
-        all_names = self.conc.keys()
+        all_names = list(self.conc.keys())
         self.component_names = [name for name in all_names if name not in
                                 ('cb', 'H', 'O')]
         code = ''
@@ -270,7 +270,7 @@ class PhreeqcCalculator(object):
         end = self.ncells + 1
         conc.update(new_conc)
         modify = []
-        for index, cell in enumerate(xrange(1, end)):
+        for index, cell in enumerate(range(1, end)):
             modify.append("SOLUTION_MODIFY %d" % cell)
             modify.append("\t-cb      %e" % conc['cb'][index])
             modify.append("\t-total_h %s" % conc['H'][index])
@@ -375,7 +375,7 @@ class PhreeqcCalculatorProxy(object):
 def process_worker(ncells, initial_conditions, in_queue, out_queue):
     """This runs in another process.
     """
-    print 'Started process with ID', os.getpid()
+    print('Started process with ID', os.getpid())
     calculator = PhreeqcCalculator(ncells, initial_conditions)
     out_queue.put((calculator.inflow_conc, calculator.init_conc,
                   calculator.component_names))
@@ -393,7 +393,7 @@ def plot(ncells, outflow, specie_names):
     """
     colors = {'Ca': 'r', 'Cl': 'b', 'K': 'g', 'N': 'y', 'Na': 'm'}
     x = [i / float(ncells) for i in
-         xrange(1, len(outflow[specie_names[0]]) + 1)]
+         range(1, len(outflow[specie_names[0]]) + 1)]
     args = []
     for name in specie_names:
         args.extend([x, outflow[name], colors[name]])
@@ -410,15 +410,9 @@ def measure_time(func, *args, **kwargs):
     """Convenience function to measure run times.
     """
     import sys
-    if sys.platform == 'win32':
-        # time.clock is more accurate on Windows
-        timer_func = time.clock
-    else:
-        # but behaves differently on other platforms
-        timer_func = time.time
-    start = timer_func()
+    start = time.perf_counter()
     result = func(*args, **kwargs)
-    return result, time.clock() - start
+    return result, time.perf_counter() - start
 
 if __name__ == '__main__':
 
@@ -460,12 +454,12 @@ if __name__ == '__main__':
             model.run()
             return model, model.results
         (model, outflow), run_time = measure_time(run)
-        print 'Statistics'
-        print '=========='
-        print 'number of cells:    ', ncells
-        print 'number of shifts:   ', nshifts
-        print 'number of processes:', processes
-        print 'run_time:           ', run_time
+        print('Statistics')
+        print('==========')
+        print('number of cells:    ', ncells)
+        print('number of shifts:   ', nshifts)
+        print('number of processes:', processes)
+        print('run_time:           ', run_time)
         plot(ncells, outflow, model.component_names)
 
     main(ncells=400, nshifts=1200, processes=2)

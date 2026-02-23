@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">>
+		<title>Simplistic example on how to use the VIPhreeqc WASM module</title>
+	</head>
+  <body>
+	<div id="output" style="font-family:monospace;"></div>
+    <script type="module">
+		import VIPhreeqcModule from './WASMIPhreeqc.mjs';
+		const out = document.getElementById('output');
+		function addTextNode(text) {
+			const newText = document.createTextNode(text);
+			const para = document.createElement("pre");
+			para.appendChild(newText);
+			out.appendChild(para);
+		}
+		function addHeading(text) {
+			const newText = document.createTextNode(text);
+			const header = document.createElement("h1");
+			header.appendChild(newText);
+			out.appendChild(header);
+		}
+		VIPhreeqcModule().then(Module => {
+			addHeading("Testing C-style interface:");
+			addTextNode("Version:" + Module.GetVersionString());
+			addTextNode("Creating IPhreeqc instance");
+			const id = Module.CreateIPhreeqc();
+			addTextNode(id);
+			addTextNode("Set output string on");
+			addTextNode(Module.SetOutputStringOn(id, 1));
+			addTextNode("Try loading database phreeqc.dat");
+			const dbload = Module.LoadDatabase(id,"/database/phreeqc.dat");
+			addTextNode(dbload)
+			addTextNode("Calculate a buffer as an example:");
+			const programstring = 'SOLUTION 1\n' +
+			'	temp 20.0\n' + 
+			'	pH 7.5 charge\n' + 
+			'	units mmol/L\n' + 
+			'	Na 166.61\n' +
+			'	P 100.00\n' +
+			'	-water 1.0\n' +
+			'END';
+			/* ERROR Test
+			var programstring = 'SOLUTION 1\n' +
+			'	temp 20.0\n' + 
+			'	pH 7.5 charge\n' + 
+			'	units mmol/L\n' + 
+			'	Na 166.61\n' +
+			'	P 100.00\n' +
+			'	-water 1.0\n\n' +
+			'EQUILIBRIUM_PHASES 1\n' +
+			'	Fix_pH -7.5 NaOH\n' +
+			'	-V_delta -10\n' +
+			'END';*/
+			addTextNode(programstring);
+			const i = Module.RunString(id,programstring);
+			addTextNode("Number of Errors: " + i)
+			addTextNode("Get output string:");
+			addTextNode(Module.GetOutputString(id));
+			addTextNode("Resulting pH: " + Module.GetPH(id,1));
+			addTextNode("Destroying IPhreeqc instance");
+			const destroyed = Module.DestroyIPhreeqc(id);
+			addTextNode(destroyed);
+
+
+			addHeading("Testing C++-style interface:");
+			addTextNode("Creating IPhreeqc instance");
+			var pp = new Module.VIPhreeqc;
+			try {
+				addTextNode("Version: " + pp.GetVersionString());
+				addTextNode("Set output string on");
+				pp.SetOutputStringOn(true)
+				addTextNode("Try loading database phreeqc.dat");
+				const dbload = pp.LoadDatabase("/database/phreeqc.dat");
+				addTextNode(dbload)
+				addTextNode("Calculate a buffer as an example:");
+				addTextNode(programstring);
+				const i = pp.RunString(programstring);
+				addTextNode("number of errors:" + i)
+				addTextNode("Get output string:");
+				addTextNode(pp.GetOutputString());
+				addTextNode("Resulting pH: " + pp.GetPH(1));
+			} finally {
+				addTextNode("Destroying IPhreeqc instance");
+				pp.delete(); // will be called no matter what
+				addTextNode("destroyed"); 
+			}
+			
+		});
+    </script>
+  </body>
+</html>

@@ -884,7 +884,6 @@ int Phreeqc::gammas_a_f(int i1)
 	{
 		if (s_x[i]->rxn_x.token[j].s->type == EX)
 		{
-			//strcpy(name, s_x[i]->rxn_x.token[j].s->name);
 			name = s_x[i]->rxn_x.token[j].s->name;
 			//m_ptr = s_x[i]->rxn_x.token[j].s->primary->elt->master; // appt debug
 			break;
@@ -1965,7 +1964,7 @@ jacobian_sums(void)
 		*sum_jacob2[k].target += *sum_jacob2[k].source * sum_jacob2[k].coef;
 	}
 /*
- *   Make final adustments to jacobian array
+ *   Make final adjustments to jacobian array
  */
 /*
  *   Ionic strength
@@ -2543,7 +2542,7 @@ int Phreeqc::
 calc_gas_pressures(void)
 /* ---------------------------------------------------------------------- */
 {
-	int n_g = 0;
+	//int n_g = 0;
 	LDBLE lp, V_m = 0;
 	class rxn_token *rxn_ptr;
 	std::vector<class phase *> phase_ptrs;
@@ -2576,7 +2575,7 @@ calc_gas_pressures(void)
 			phase_ptrs.push_back(phase_ptr);
 			if (!PR && phase_ptr->t_c > 0 && phase_ptr->p_c > 0)
 				PR = true;
-			n_g++;
+			//n_g++;
 		}
 		if (iterations > 2 && gas_phase_ptr->Get_type() == cxxGasPhase::GP_VOLUME)
 		{
@@ -2657,9 +2656,6 @@ calc_gas_pressures(void)
 					gas_unknown->moles / gas_phase_ptr->Get_total_p();
 				phase_ptr->fraction_x =
 					phase_ptr->moles_x / gas_unknown->moles;
-				// does this fix the problem?
-				gas_phase_ptr->Set_total_moles(gas_phase_ptr->Get_total_moles() +
-					phase_ptr->moles_x);
 			}
 			else
 			{
@@ -3781,7 +3777,7 @@ residuals(void)
 	int converge;
 
 	LDBLE l_toler;
-	LDBLE sum_residual;
+	//LDBLE sum_residual;
 	LDBLE sinh_constant;
 	LDBLE sum, sum1;
 	class master *master_ptr, *master_ptr1, *master_ptr2;
@@ -3789,7 +3785,7 @@ residuals(void)
 	int print_fail;
 	std::vector<LDBLE> cd_psi;
 	print_fail = FALSE;
-	sum_residual = 0.0;
+	//sum_residual = 0.0;
 	sigmaddl = 0;
 	sum = 0;
 /*
@@ -4533,7 +4529,7 @@ residuals(void)
  *   Store residuals in array
  */
 		my_array[((size_t)i + 1) * (count_unknowns + 1) - 1] = residual[i];
-		sum_residual += fabs(residual[i]);
+		//sum_residual += fabs(residual[i]);
 	}
 /*
  *   Return
@@ -4895,7 +4891,6 @@ sum_species(void)
 	solution_pe_x = -s_eminus->la;
 	ah2o_x = exp(s_h2o->la * LOG_10);
 
-	density_x = 1.0;
 	if (s_o2 != NULL)
 		s_o2->moles = under(s_o2->lm) * mass_water_aq_x;
 	if (s_h2 != NULL)

@@ -11,7 +11,7 @@
 #include "ChartObject.h"
 #include "Parser.h"
 #include <fstream>
-#include <math.h>
+#include <cmath>
 #include <iomanip>
 #include "phqalloc.h"
 

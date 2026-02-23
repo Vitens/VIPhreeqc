@@ -23,9 +23,9 @@ if (IPHREEQC_FORTRAN_TESTING AND IPHREEQC_ENABLE_MODULE)
   advect.F90
   ../../../src/IPhreeqc_interface.F90
   )
-  
+
   # place [*.F90] files into "Source Files"
-  source_group("Source Files" FILES ${FORTRAN_Advect_SRC})  
+  source_group("Source Files" FILES ${FORTRAN_Advect_SRC})
 
   # executable
   add_executable(example_advect_f90 ${FORTRAN_Advect_SRC})
@@ -33,7 +33,7 @@ if (IPHREEQC_FORTRAN_TESTING AND IPHREEQC_ENABLE_MODULE)
   # library dependencies
   SET(EXTRA_LIBS ${EXTRA_LIBS} IPhreeqc)
 
-  # link 
+  # link
   target_link_libraries(example_advect_f90 ${EXTRA_LIBS})
 endif()
 

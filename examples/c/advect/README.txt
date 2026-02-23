@@ -4,7 +4,7 @@ Example usage
 Windows
 --------------------------------------------------------------------------------------
 Configure, build, test and install IPhreeqc
-  1. cd iphreeqc-3.7.3-15968
+  1. cd iphreeqc-@VERSION@-@REVISION@
   2. mkdir _build
   3. cd _build
   4. cmake -S .. -B . -DCMAKE_INSTALL_PREFIX:PATH=c:/Users/charlton/iphreeqc
@@ -27,7 +27,7 @@ Build example:
 Linux/macOS
 --------------------------------------------------------------------------------------
 Configure, build, test and install IPhreeqc
-  1. cd iphreeqc-3.7.3-15968
+  1. cd iphreeqc-@VERSION@-@REVISION@
   2. mkdir _build
   3. cd _build
   4. cmake -S .. -B . -DCMAKE_INSTALL_PREFIX:PATH=/home/charlton/iphreeqc

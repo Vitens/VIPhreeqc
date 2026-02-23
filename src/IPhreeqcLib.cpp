@@ -7,6 +7,11 @@
 #include "IPhreeqc.hpp"
 #include "thread.h"
 
+#ifdef __EMSCRIPTEN__
+// only if the emscripten framework is used, we want the bind code to be compiled
+#include <emscripten/bind.h>
+using namespace emscripten;
+#endif
 class IPhreeqcLib
 {
 public:
@@ -1412,6 +1417,7 @@ GetElements(int id, int solution)
   }
   return err_msg;
 }
+
 const char *
 GetSolutionList(int id)
 {

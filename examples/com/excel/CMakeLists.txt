@@ -7,6 +7,3 @@ withcallback.xls
 SET(Excel_Dir ${EXAMPLES_DIR}/com/excel)
 
 install(FILES ${Excel_Files} DESTINATION ${Excel_Dir})
-
-
-

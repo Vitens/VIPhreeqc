@@ -14,6 +14,11 @@
 #define VAR_UNION_NAME
 #endif
 
+#ifdef __EMSCRIPTEN__
+#if defined(__cplusplus)
+#include <string>
+#endif
+#endif
 /*! \brief Enumeration used to determine the type of data stored in a VAR.
 */
 typedef enum {
@@ -35,19 +40,6 @@ typedef enum {
 	VR_INVALIDCOL    = -5   /*!< Failure, Invalid column */
 } VRESULT;
 
-/*! \brief Datatype used to store SELECTED_OUTPUT values.
-*/
-typedef struct {
-	VAR_TYPE type;         /*!< holds datatype of <code>VAR</code>          */
-	union {
-		long    lVal;      /*!< valid when <code>(type == TT_LONG)</code>   */
-		double  dVal;      /*!< valid when <code>(type == TT_DOUBLE)</code> */
-		char*   sVal;      /*!< valid when <code>(type == TT_STRING)</code> */
-		VRESULT vresult;   /*!< valid when <code>(type == TT_ERROR)</code>  */
-	} VAR_UNION_NAME;
-} VAR;
-
-
 #if defined(__cplusplus)
 extern "C" {
 #endif
@@ -57,7 +49,45 @@ extern "C" {
  *  @return A pointer to the string on success NULL otherwise.
  */
 IPQ_DLL_EXPORT char*   VarAllocString(const char* pSrc);
+#if defined(__cplusplus)
+}
+#endif
 
+/*! \brief Datatype used to store SELECTED_OUTPUT values.
+*/
+#ifdef __EMSCRIPTEN__
+typedef struct VAR {
+#else
+typedef struct {
+#endif
+	VAR_TYPE type;         /*!< holds datatype of <code>VAR</code>          */
+	union {
+		long    lVal;      /*!< valid when <code>(type == TT_LONG)</code>   */
+		double  dVal;      /*!< valid when <code>(type == TT_DOUBLE)</code> */
+		char*   sVal;      /*!< valid when <code>(type == TT_STRING)</code> */
+		VRESULT vresult;   /*!< valid when <code>(type == TT_ERROR)</code>  */
+	} VAR_UNION_NAME;
+	#ifdef __EMSCRIPTEN__
+	#if defined(__cplusplus)
+	// add some getters and setters for emscripten
+	std::string get_sVal() const {
+		if(this->sVal != nullptr) {
+			return std::string(this->sVal);
+		}
+		return std::string();
+	}
+	void set_sVal(const std::string& text) {
+		this->sVal = VarAllocString(text.c_str());
+	}
+	#endif
+	#endif
+} VAR;
+
+
+
+#if defined(__cplusplus)
+extern "C" {
+#endif
 /** Clears a VAR.
  *  @param pvar Pointer to the VAR that will be freed and initialized.
  *  @retval VR_OK Success.

@@ -5,8 +5,14 @@
 /* ----------------------------------------------------------------------
  *   #define DEFINITIONS
  * ---------------------------------------------------------------------- */
-#ifndef NAN
-#   define NAN -99999999
+#if !defined(NAN)
+#  if defined(_MSC_VER) && (_MSC_VER <= 1700) // VS2012
+//   https://learn.microsoft.com/en-us/cpp/preprocessor/predefined-macros?view=msvc-170     
+#    include <limits>
+#    define NAN std::numeric_limits<double>::signaling_NaN()
+#  else
+#    define NAN nan("1")
+#  endif
 #endif
 #define MISSING -9999.999            
 #include "NA.h"   /* NA = not available */
@@ -103,7 +109,7 @@
 #define TRANSPORT		 8
 #define PHAST		     9
 
-/* constaints in mass balance */
+/* constraints in mass balance */
 #define EITHER 0
 #define DISSOLVE 1
 #define PRECIPITATE -1
@@ -204,6 +210,20 @@ struct Change_Surf
 /*----------------------------------------------------------------------
  *   CReaction
  *---------------------------------------------------------------------- */
+class rxn_token
+{
+public:
+	~rxn_token() {};
+	rxn_token()
+	{
+		s = NULL;
+		coef = 0.0;
+		name = NULL;
+	}
+	class species* s;
+	LDBLE coef;
+	const char* name;
+};
 class CReaction
 {
 public:
@@ -222,20 +242,6 @@ public:
 	double logk[MAX_LOG_K_INDICES];
 	double dz[3];
 	std::vector<class rxn_token> token;
-};
-class rxn_token
-{
-public:
-	~rxn_token() {};
-	rxn_token()
-	{
-		s = NULL;
-		coef = 0.0;
-		name = NULL;
-	}
-	class species* s;
-	LDBLE coef;
-	const char* name;
 };
 class save
 {
@@ -316,6 +322,86 @@ public:
 /*----------------------------------------------------------------------
  *   Inverse
  *---------------------------------------------------------------------- */
+class inv_elts
+{
+public:
+	~inv_elts() {};
+	inv_elts()
+	{
+		name = NULL;
+		master = NULL;
+		row = 0;
+		//uncertainties.clear();
+	}
+	const char* name;
+	class master* master;
+	size_t row;
+	std::vector<double> uncertainties;
+};
+class isotope
+{
+public:
+	~isotope() {};
+	isotope()
+	{
+		isotope_number = 0;
+		elt_name = NULL;
+		isotope_name = NULL;
+		total = 0;
+		ratio = 0;
+		ratio_uncertainty = 0;
+		x_ratio_uncertainty = 0;
+		master = NULL;
+		primary = NULL;
+		coef = 0;					/* coefficient of element in phase */
+	}
+	LDBLE isotope_number;
+	const char* elt_name;
+	const char* isotope_name;
+	LDBLE total;
+	LDBLE ratio;
+	LDBLE ratio_uncertainty;
+	LDBLE x_ratio_uncertainty;
+	class master* master;
+	class master* primary;
+	LDBLE coef;
+};
+class inv_isotope
+{
+public:
+	~inv_isotope() {};
+	inv_isotope()
+	{
+		isotope_name = NULL;
+		isotope_number = 0;
+		elt_name = NULL;
+		//uncertainties.clear();
+	}
+	const char* isotope_name;
+	LDBLE isotope_number;
+	const char* elt_name;
+	std::vector<double> uncertainties;
+};
+class inv_phases
+{
+public:
+	~inv_phases() {};
+	inv_phases()
+	{
+		name = NULL;
+		phase = NULL;
+		column = 0;
+		constraint = EITHER;
+		force = FALSE;
+		//isotopes.clear();
+	}
+	const char* name;
+	class phase* phase;
+	int column;
+	int constraint;
+	int force;
+	std::vector<class isotope> isotopes;
+};
 class inverse
 {
 public:
@@ -379,58 +465,6 @@ public:
 	std::vector<class isotope> isotope_unknowns;
 	const char* netpath;
 	const char* pat;
-};
-class inv_elts
-{
-public:
-	~inv_elts() {};
-	inv_elts()
-	{
-		name = NULL;
-		master = NULL;
-		row = 0;
-		//uncertainties.clear();
-	}
-	const char* name;
-	class master* master;
-	size_t row;
-	std::vector<double> uncertainties;
-};
-class inv_isotope
-{
-public:
-	~inv_isotope() {};
-	inv_isotope()
-	{
-		isotope_name = NULL;
-		isotope_number = 0;
-		elt_name = NULL;
-		//uncertainties.clear();
-	}
-	const char* isotope_name;
-	LDBLE isotope_number;
-	const char* elt_name;
-	std::vector<double> uncertainties;
-};
-class inv_phases
-{
-public:
-	~inv_phases() {};
-	inv_phases()
-	{
-		name = NULL;
-		phase = NULL;
-		column = 0;
-		constraint = EITHER;
-		force = FALSE;
-		//isotopes.clear();
-	}
-	const char* name;
-	class phase* phase;
-	int column;
-	int constraint;
-	int force;
-	std::vector<class isotope> isotopes;
 };
 /*----------------------------------------------------------------------
  *   Jacobian and Mass balance lists
@@ -530,34 +564,6 @@ public:
 	}
 	LDBLE* source;
 	LDBLE* target;
-	LDBLE coef;
-};
-class isotope
-{
-public:
-	~isotope() {};
-	isotope()
-	{
-		isotope_number = 0;
-		elt_name = NULL;
-		isotope_name = NULL;
-		total = 0;
-		ratio = 0;
-		ratio_uncertainty = 0;
-		x_ratio_uncertainty = 0;
-		master = NULL;
-		primary = NULL;
-		coef = 0;					/* coefficient of element in phase */
-	}
-	LDBLE isotope_number;
-	const char* elt_name;
-	const char* isotope_name;
-	LDBLE total;
-	LDBLE ratio;
-	LDBLE ratio_uncertainty;
-	LDBLE x_ratio_uncertainty;
-	class master* master;
-	class master* primary;
 	LDBLE coef;
 };
 class iso
@@ -706,16 +712,18 @@ public:
 		secondary = NULL;
 		gfw = 0;              // gram formula wt of species
 		z = 0;                // charge of species
-		// tracer diffusion coefficient in water at 25oC, m2/s
-		dw = 0;
-		// correct Dw for temperature: Dw(TK) = Dw(298.15) * exp(dw_t / TK - dw_t / 298.15)
-		dw_t = 0;
-		// parms for calc'ng SC = SC0 * exp(-dw_a * z * mu^0.5 / (1 + DH_B * dw_a2 * mu^0.5))
+		dw = 0;		// tracer diffusion coefficient in water at 25oC, m2/s
+		dw_t = 0;	// correct Dw for temperature: Dw(TK) = Dw(298.15) * exp(dw_t / TK - dw_t / 298.15)
+		// parms for calc'ng SC = SC0 * exp(-dw_a * z * mu^0.5 / (1 + DH_B * dw_a2 * mu^0.5) / (1 + mu^dw_a3))
+		// with DHO: ka = DH_B * dw_a * (1 + DD(V_apparent)^dw_a2 * sqrt_mu, dw_a3 is a switch, see calc_SC in PBasic
 		dw_a = 0;
 		dw_a2 = 0;
-		dw_a_visc = 0;   // viscosity correction of SC
+		dw_a3 = 0;
+		dw_a_visc = 0;   // exponent in viscosity correction of SC
+		dw_a_v_dif = 0;  // exponent in viscosity correction of D, the diffusion coefficient of the species
 		dw_t_SC = 0;     // contribution to SC, for calc'ng transport number with BASIC
-		dw_corr = 0;	 // dw corrected for TK and mu
+		dw_t_visc = 0;   // contribution to viscosity
+		dw_corr = 0;	 // dw corrected for mu and TK
 		erm_ddl = 0;     // enrichment factor in DDL
 		equiv = 0;       // equivalents in exchange species
 		alk = 0;	     // alkalinity of species, used for cec in exchange
@@ -774,8 +782,11 @@ public:
 	LDBLE dw_t;
 	LDBLE dw_a;
 	LDBLE dw_a2;
+	LDBLE dw_a3;
 	LDBLE dw_a_visc;
+	LDBLE dw_a_v_dif;
 	LDBLE dw_t_SC;
+	LDBLE dw_t_visc;
 	LDBLE dw_corr;
 	LDBLE erm_ddl;
 	LDBLE equiv;
@@ -970,7 +981,7 @@ public:
 		alk = 0;
 		// default gfw for species
 		gfw = 1;
-		// formula from which to calcuate gfw
+		// formula from which to calculate gfw
 		gfw_formula = NULL;
 		// pointer to unknown structure
 		unknown = NULL;
@@ -1096,20 +1107,6 @@ public:
 /*----------------------------------------------------------------------
  *   Reaction work space
  *---------------------------------------------------------------------- */
-class reaction_temp
-{
-public:
-	~reaction_temp() {};
-	reaction_temp()
-	{
-		for (size_t i = 0; i < MAX_LOG_K_INDICES; i++) logk[i] = 0;
-		for (size_t i = 0; i < 3; i++) dz[i] = 0;
-		//token.clear();
-	}
-	LDBLE logk[MAX_LOG_K_INDICES];
-	LDBLE dz[3];
-	std::vector<class rxn_token_temp> token;
-};
 class rxn_token_temp
 {
 public:
@@ -1127,6 +1124,20 @@ public:
 	class species* s;
 	class unknown* unknown;
 	LDBLE coef;
+};
+class reaction_temp
+{
+public:
+	~reaction_temp() {};
+	reaction_temp()
+	{
+		for (size_t i = 0; i < MAX_LOG_K_INDICES; i++) logk[i] = 0;
+		for (size_t i = 0; i < 3; i++) dz[i] = 0;
+		//token.clear();
+	}
+	LDBLE logk[MAX_LOG_K_INDICES];
+	LDBLE dz[3];
+	std::vector<class rxn_token_temp> token;
 };
 class unknown_list
 {
@@ -1475,10 +1486,14 @@ public:
 		c = 0;
 		// charge number
 		z = 0;
-		// temperature corrected free water diffusion coefficient, m2/s
+		// free water diffusion coefficient, m2/s
+		Dw = 0;
+		// temperature and viscosity corrected free water diffusion coefficient, m2/s
 		Dwt = 0;
 		// temperature factor for Dw
 		dw_t = 0;
+		// viscosity factor for Dw
+		dw_a_v_dif = 0;
 		// enrichment factor in ddl
 		erm_ddl = 0;
 	}
@@ -1490,8 +1505,10 @@ public:
 	LDBLE lg;
 	LDBLE c;
 	LDBLE z;
+	LDBLE Dw;
 	LDBLE Dwt;
 	LDBLE dw_t;
+	LDBLE dw_a_v_dif;
 	LDBLE erm_ddl;
 };
 
@@ -1507,15 +1524,17 @@ public:
 		count_exch_spec = 0;
 		// total moles of X-, max X- in transport step in sol_D[1], tk
 		exch_total = 0, x_max = 0, tk_x = 0;
-		// (tk_x * viscos_0_25) / (298 * viscos) 
-		viscos_f = 0;
+		// viscos_0 at I = 0
+		viscos_0 = 0;
+		// viscosity of solution
+		viscos = 0;
 		spec = NULL;
 		spec_size = 0;
 	}
 	int count_spec;
 	int count_exch_spec;
 	LDBLE exch_total, x_max, tk_x;
-	LDBLE viscos_f;
+	LDBLE viscos_0, viscos;
 	class spec* spec;
 	int spec_size;
 };
@@ -1565,7 +1584,7 @@ public:
 };
 // Pitzer definitions
 typedef enum
-{ TYPE_B0, TYPE_B1, TYPE_B2, TYPE_C0, TYPE_THETA, TYPE_LAMDA, TYPE_ZETA,
+{ TYPE_B0, TYPE_B1, TYPE_B2, TYPE_C0, TYPE_THETA, TYPE_LAMBDA, TYPE_ZETA,
   TYPE_PSI, TYPE_ETHETA, TYPE_ALPHAS, TYPE_MU, TYPE_ETA, TYPE_Other,
   TYPE_SIT_EPSILON, TYPE_SIT_EPSILON_MU, TYPE_APHI
 } pitz_param_type;
@@ -1597,7 +1616,7 @@ public:
 		LDBLE b2;
 		LDBLE c0;
 		LDBLE theta;
-		LDBLE lamda;
+		LDBLE lambda;
 		LDBLE zeta;
 		LDBLE psi;
 		LDBLE alphas;

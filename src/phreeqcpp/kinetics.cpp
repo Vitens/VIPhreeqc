@@ -115,11 +115,7 @@ calc_kinetic_reaction(cxxKinetics *kinetics_ptr, LDBLE time_step)
 						kinetics_comp_ptr->Get_rate_name().c_str());
 				error_msg(error_string, STOP);
 			}
-#ifdef NPP
-			if (isnan(rate_moles))
-#else
-			if (rate_moles == NAN)
-#endif
+			if (std::isnan(rate_moles))
 			{
 				error_string = sformatf( "Moles of reaction not SAVEed for %s.",
 						kinetics_comp_ptr->Get_rate_name().c_str());
@@ -1075,7 +1071,7 @@ rk_kinetics(int i, LDBLE kin_time, int use_mix, int nsaver,
 		}
 		{
 			char str[MAX_LENGTH];
-			sprintf(str, "RK-steps: Bad%4d. OK%5d. Time %3d%%", step_bad,
+			snprintf(str, sizeof(str), "RK-steps: Bad%4d. OK%5d. Time %3d%%", step_bad,
 					step_ok, (int) (100 * h_sum / kin_time));
 			status(0, str, true);
 		}
@@ -1583,7 +1579,11 @@ set_and_run(int i, int use_mix, int use_kinetics, int nsaver,
 		converge = model();
 	}
 	sum_species();
-	viscosity();
+	viscos = viscosity(NULL);
+	use.Get_solution_ptr()->Set_viscosity(viscos);
+	use.Get_solution_ptr()->Set_viscos_0(viscos_0);
+	if (use.Get_surface_ptr() != NULL && dl_type_x != cxxSurface::NO_DL && use.Get_surface_ptr()->Get_calc_viscosity())
+		use.Get_surface_ptr()->Set_DDL_viscosity(viscosity(use.Get_surface_ptr()));
 	return (converge);
 }
 
@@ -1880,13 +1880,13 @@ set_reaction(int i, int use_mix, int use_kinetics)
 /*
  *   Find surface
  */
-	if (use.Get_surface_in() && use.Get_kinetics_in() && use.Get_kinetics_ptr() && !use.Get_kinetics_ptr()->Get_use_cvode() && reaction_step > 1)
-	{
-		// use.Set_surface_ptr(Utilities::Rxn_find(Rxn_surface_map, i));
-		// appt: we may come here with zero kinetic reaction, but surface may have to keep DONNAN_DL
-	}
-	else
-		dl_type_x = cxxSurface::NO_DL;
+	//if (use.Get_surface_in() && use.Get_kinetics_in() && use.Get_kinetics_ptr() && !use.Get_kinetics_ptr()->Get_use_cvode() && reaction_step > 1)
+	//{
+	//	// use.Set_surface_ptr(Utilities::Rxn_find(Rxn_surface_map, i));
+	//	// appt: we may come here with zero kinetic reaction, but surface may have to keep DONNAN_DL
+	//}
+	//else
+	//	dl_type_x = cxxSurface::NO_DL;
 	if (use.Get_surface_in() == TRUE)
 	{
 		use.Set_surface_ptr(Utilities::Rxn_find(Rxn_surface_map, i));

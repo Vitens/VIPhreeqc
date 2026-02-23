@@ -41,6 +41,10 @@ calc_alk(CReaction& rxn_ref)
 			break;
 		}
 		return_value += r_token->coef * master_ptr->alk;
+		//if (strcmp(r_token->name, "e-") == 0 && strcmp(rxn_ref.token[0].name,"e-") != 0)
+		//{
+		//	std::cerr << rxn_ref.token[0].name << "   Non-master species has e- in reaction.\n";
+		//}
 		r_token++;
 	}
 	return (return_value);
@@ -233,7 +237,7 @@ compute_gfw(const char *string, LDBLE * gfw)
 
 	count_elts = 0;
 	paren_count = 0;
-	strcpy(token, string);
+	Utilities::strcpy_safe(token, MAX_LENGTH, string);
 	cptr = token;
 	if (get_elts_in_species(&cptr, 1.0) == ERROR)
 	{
@@ -479,7 +483,7 @@ get_token(const char** eqnaddr, std::string& string, LDBLE* l_z, int* l)
 	cptr = *eqnaddr;
 	i = 0;
 	/*
-	 *   Find end of token or begining of charge
+	 *   Find end of token or beginning of charge
 	 */
 	while (((c = *cptr) != '+') && (c != '-') && (c != '=') && (c != '\0'))
 	{
@@ -567,7 +571,7 @@ get_token(const char** eqnaddr, std::string& string, LDBLE* l_z, int* l)
 		/*
 		 *   Charge has been written, now need to check if charge has legal format
 		 */
-		if (get_charge(charge, l_z) == OK)
+		if (get_charge(charge, MAX_LENGTH, l_z) == OK)
 		{
 			string.append(charge);
 		}
@@ -642,135 +646,6 @@ malloc_error(void)
 
 /* ---------------------------------------------------------------------- */
 int Phreeqc::
-parse_couple(char *token)
-/* ---------------------------------------------------------------------- */
-{
-/*
- *   Parse couple puts redox couples in standard form
- *   "+" is removed and couples are rewritten in sort
- *    order.
- */
-	int e1, e2, p1, p2;
-	const char* cptr;
-	std::string elt1, elt2;
-	char paren1[MAX_LENGTH], paren2[MAX_LENGTH];
-
-	if (strcmp_nocase_arg1(token, "pe") == 0)
-	{
-		str_tolower(token);
-		return (OK);
-	}
-	while (replace("(+", "(", token) == TRUE);
-	cptr = token;
-	get_elt(&cptr, elt1, &e1);
-	if (*cptr != '(')
-	{
-		error_string = sformatf( "Element name must be followed by "
-				"parentheses in redox couple, %s.", token);
-		error_msg(error_string, CONTINUE);
-		parse_error++;
-		return (ERROR);
-	}
-	paren_count = 1;
-	paren1[0] = '(';
-	p1 = 1;
-	while (*cptr != '\0')
-	{
-		cptr++;
-		if (*cptr == '/' || *cptr == '\0')
-		{
-			error_string = sformatf(
-					"End of line or  " "/"
-					" encountered before end of parentheses, %s.", token);
-			error_msg(error_string, CONTINUE);
-			return (ERROR);
-		}
-		paren1[p1++] = *cptr;
-		if (*cptr == '(')
-			paren_count++;
-		if (*cptr == ')')
-			paren_count--;
-		if (paren_count == 0)
-			break;
-	}
-	paren1[p1] = '\0';
-	cptr++;
-	if (*cptr != '/')
-	{
-		error_string = sformatf( " " "/" " must follow parentheses "
-				"ending first half of redox couple, %s.", token);
-		error_msg(error_string, CONTINUE);
-		parse_error++;
-		return (ERROR);
-	}
-	cptr++;
-	get_elt(&cptr, elt2, &e2);
-	if (strcmp(elt1.c_str(), elt2.c_str()) != 0)
-	{
-		error_string = sformatf( "Redox couple must be two redox states "
-				"of the same element, %s.", token);
-		error_msg(error_string, CONTINUE);
-		return (ERROR);
-	}
-	if (*cptr != '(')
-	{
-		error_string = sformatf( "Element name must be followed by "
-				"parentheses in redox couple, %s.", token);
-		error_msg(error_string, CONTINUE);
-		parse_error++;
-		return (ERROR);
-	}
-	paren2[0] = '(';
-	paren_count = 1;
-	p2 = 1;
-	while (*cptr != '\0')
-	{
-		cptr++;
-		if (*cptr == '/' || *cptr == '\0')
-		{
-			error_string = sformatf( "End of line or " "/" " encountered"
-					" before end of parentheses, %s.", token);
-			error_msg(error_string, CONTINUE);
-			return (ERROR);
-		}
-
-		paren2[p2++] = *cptr;
-		if (*cptr == '(')
-			paren_count++;
-		if (*cptr == ')')
-			paren_count--;
-		if (paren_count == 0)
-			break;
-	}
-	paren2[p2] = '\0';
-	if (strcmp(paren1, paren2) < 0)
-	{
-		strcpy(token, elt1.c_str());
-		strcat(token, paren1);
-		strcat(token, "/");
-		strcat(token, elt2.c_str());
-		strcat(token, paren2);
-	}
-	else if (strcmp(paren1, paren2) > 0)
-	{
-		strcpy(token, elt2.c_str());
-		strcat(token, paren2);
-		strcat(token, "/");
-		strcat(token, elt1.c_str());
-		strcat(token, paren1);
-	}
-	else
-	{
-		error_string = sformatf( "Both parts of redox couple are the same, %s.",
-				token);
-		error_msg(error_string, CONTINUE);
-		return (ERROR);
-	}
-	return (OK);
-}
-
-/* ---------------------------------------------------------------------- */
-int Phreeqc::
 print_centered(const char *string)
 /* ---------------------------------------------------------------------- */
 {
@@ -783,7 +658,7 @@ print_centered(const char *string)
 	for (i = 0; i < l1; i++)
 		token[i] = '-';
 	token[i] = '\0';
-	strcat(token, string);
+	Utilities::strcat_safe(token, MAX_LENGTH, string);
 	for (i = 0; i < l2; i++)
 		token[i + l1 + l] = '-';
 	token[79] = '\0';
@@ -1193,37 +1068,37 @@ status(int count, const char *str, bool rk_string)
 			{
 				stdstr = str;
 			}
-			sprintf(sim_str, "\rSimulation %d.", simulation);
-			sprintf(state_str, " ");
-			sprintf(spin_str, " ");
+			snprintf(sim_str, sizeof(sim_str), "\rSimulation %d.", simulation);
+			snprintf(state_str, sizeof(state_str), " ");
+			snprintf(spin_str, sizeof(spin_str), " ");
 			switch (state)
 			{
 			default:
 				break;
 			case INITIAL_SOLUTION:
-				sprintf(state_str, "Initial solution %d.", use.Get_solution_ptr()->Get_n_user());
+				snprintf(state_str, sizeof(state_str), "Initial solution %d.", use.Get_solution_ptr()->Get_n_user());
 				break;
 			case INITIAL_EXCHANGE:
-				sprintf(state_str, "Initial exchange %d.", use.Get_exchange_ptr()->Get_n_user());
+				snprintf(state_str, sizeof(state_str), "Initial exchange %d.", use.Get_exchange_ptr()->Get_n_user());
 				break;
 			case INITIAL_SURFACE:
-				sprintf(state_str, "Initial surface %d.", use.Get_surface_ptr()->Get_n_user());
+				snprintf(state_str, sizeof(state_str), "Initial surface %d.", use.Get_surface_ptr()->Get_n_user());
 				break;
 			case INVERSE:
-				sprintf(state_str, "Inverse %d. Models = %d.", use.Get_inverse_ptr()->n_user, count);
+				snprintf(state_str, sizeof(state_str), "Inverse %d. Models = %d.", use.Get_inverse_ptr()->n_user, count);
 				break;
 			case REACTION:
 				if (use.Get_kinetics_in() == TRUE)
 				{
-					sprintf(state_str, "Kinetic step %d.", reaction_step);
+					snprintf(state_str, sizeof(state_str), "Kinetic step %d.", reaction_step);
 				}
 				else
 				{
-					sprintf(state_str, "Reaction step %d.", reaction_step);
+					snprintf(state_str, sizeof(state_str), "Reaction step %d.", reaction_step);
 				}
 				break;
 			case ADVECTION:
-				sprintf(state_str, "Advection, shift %d.", advection_step);
+				snprintf(state_str, sizeof(state_str), "Advection, shift %d.", advection_step);
 				break;
 			}
 			spinner++;

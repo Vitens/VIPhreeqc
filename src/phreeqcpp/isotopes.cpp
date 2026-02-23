@@ -1,6 +1,7 @@
 #include "Phreeqc.h"
 #include "phqalloc.h"
 #include "Solution.h"
+#include "Utils.h"
 
 #if defined(PHREEQCI_GUI)
 #ifdef _DEBUG
@@ -900,11 +901,7 @@ punch_calculate_values(void)
 					calculate_value_ptr->name);
 				error_msg(error_string, STOP);
 			}
-#ifdef NPP
-			if (isnan(rate_moles))
-#else
-			if (rate_moles == NAN)
-#endif
+			if (std::isnan(rate_moles))
 			{
 				error_string = sformatf( "Calculated value not SAVEed for %s.",
 					calculate_value_ptr->name);
@@ -986,7 +983,7 @@ print_isotope_ratios(void)
 		/*
 		 *  Print isotope ratio
 		 */
-		strcpy(token, isotope_ratio[j]->name);
+		Utilities::strcpy_safe(token, MAX_LENGTH, isotope_ratio[j]->name);
 		while (replace("_", " ", token) == TRUE);
 		output_msg(sformatf( "     %-20s\t%12.5e\t%15.5g  %-10s\n",
 				   token, (double) isotope_ratio[j]->ratio,
@@ -1049,7 +1046,7 @@ print_isotope_alphas(void)
 		/*
 		 *  Print isotope ratio
 		 */
-		strcpy(token, isotope_alpha[j]->name);
+		Utilities::strcpy_safe(token, MAX_LENGTH, isotope_alpha[j]->name);
 		while (replace("_", " ", token) == TRUE);
 		if (isotope_alpha[j]->named_logk != NULL)
 		{
@@ -1133,11 +1130,7 @@ calculate_values(void)
 						calculate_value_ptr->name);
 					error_msg(error_string, STOP);
 				}
-#ifdef NPP
-				if (isnan(rate_moles))
-#else
-				if (rate_moles == NAN)
-#endif
+				if (std::isnan(rate_moles))
 				{
 					error_string = sformatf( "Calculated value not SAVEed for %s.",
 						calculate_value_ptr->name);
@@ -1200,11 +1193,7 @@ calculate_values(void)
 						calculate_value_ptr->name);
 					error_msg(error_string, STOP);
 				}
-#ifdef NPP
-				if (isnan(rate_moles))
-#else
-				if (rate_moles == NAN)
-#endif
+				if (std::isnan(rate_moles))
 				{
 					error_string = sformatf( "Calculated value not SAVEed for %s.",
 						calculate_value_ptr->name);

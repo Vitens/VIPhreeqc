@@ -135,6 +135,21 @@ read_input(void)
 		case Keywords::KEY_MIX:
 			read_mix();
 			break;
+		case Keywords::KEY_RATE_PARAMETERS_PK:
+			read_rate_parameters_pk();
+			break;
+		case Keywords::KEY_RATE_PARAMETERS_SVD:
+			read_rate_parameters_svd();
+			break;
+		case Keywords::KEY_RATE_PARAMETERS_HERMANSKA:
+			read_rate_parameters_hermanska();
+			break;
+		case Keywords::KEY_MEAN_GAMMAS:
+			read_mean_gammas();
+			break;
+		case Keywords::KEY_GAS_BINARY_PARAMETERS:
+			read_gas_binary_parameters();
+			break;
 		case Keywords::KEY_SOLUTION_MIX:
 			//read_solution_mix();
 			read_entity_mix(Rxn_solution_mix_map);
@@ -1097,7 +1112,7 @@ read_exchange_master_species(void)
 		   if (token[0] == '[') {
 		   cptr1 = token;
 		   get_elt(&cptr, element, &l);
-		   strcpy(token, element);
+		   Utilities::strcpy_safe(token, MAX_LENGTH, element);
 		   }
 		 */
 		replace("(+", "(", token);
@@ -1752,7 +1767,7 @@ read_inv_phases(class inverse *inverse_ptr, const char* cptr)
 		j = copy_token(token, &cptr, &l);
 		if (j == EMPTY)
 			break;
-		strcpy(token1, token);
+		Utilities::strcpy_safe(token1, MAX_LENGTH, token);
 		str_tolower(token1);
 		if (token1[0] == 'p')
 		{
@@ -2357,6 +2372,411 @@ read_kinetics(void)
 	return (return_value);
 }
 /* ---------------------------------------------------------------------- */
+int Phreeqc::
+read_rate_parameters_pk(void)
+/* ---------------------------------------------------------------------- */
+{
+	/*
+	 *      Reads kinetics data
+	 *
+	 *      Arguments:
+	 *	 none
+	 *
+	 *      Returns:
+	 *	 KEYWORD if keyword encountered, input_error may be incremented if
+	 *		    a keyword is encountered in an unexpected position
+	 *	 EOF     if eof encountered while reading mass balance concentrations
+	 *	 ERROR   if error occurred reading data
+	 *
+	 */
+	std::string token;
+	int return_value, opt;
+	const char* next_char;
+	const char* opt_list[] = {
+		"xxxx",					/* 0 */
+	};
+	int count_opt_list = 0;
+	/*
+	 *   Read rate parameters
+	 */
+	return_value = UNKNOWN;
+	for (;;)
+	{
+		opt = get_option(opt_list, count_opt_list, &next_char);
+		switch (opt)
+		{
+		case OPTION_EOF:		/* end of file */
+			return_value = EOF;
+			break;
+		case OPTION_KEYWORD:	/* keyword */
+			return_value = KEYWORD;
+			break;
+		case OPTION_DEFAULT:	/* add to rate_parameters_pk map */
+		{
+			std::string min_name;
+			int j = copy_token(token, &next_char);
+			if (j != EMPTY)
+			{
+				min_name = token;
+				str_tolower(min_name);
+			}
+			std::vector<double> v;
+			read_vector_doubles(&next_char, v);
+			rate_parameters_pk[min_name] = v;
+		}
+		break;
+		case OPTION_ERROR:
+			input_error++;
+			error_msg("Unknown input in KINETICS keyword.", CONTINUE);
+			error_msg(line_save, CONTINUE);
+			break;
+		}
+		if (return_value == EOF || return_value == KEYWORD)
+			break;
+	}
+	return (return_value);
+}
+/* ---------------------------------------------------------------------- */
+int Phreeqc::
+read_mean_gammas(void)
+/* ---------------------------------------------------------------------- */
+{
+	/*
+	 *      Reads MEAN_GAMMAS data
+	 *
+	 *      Arguments:
+	 *	 none
+	 *
+	 *      Returns:
+	 *	 KEYWORD if keyword encountered, input_error may be incremented if
+	 *		    a keyword is encountered in an unexpected position
+	 *	 EOF     if eof encountered while reading mass balance concentrations
+	 *	 ERROR   if error occurred reading data
+	 *
+	 */
+	std::string token;
+	int return_value, opt;
+	const char* next_char;
+	const char* opt_list[] = {
+		"xxxx",					/* 0 */
+	};
+	int count_opt_list = 0;
+	/*
+	 *   Read rate parameters
+	 */
+	return_value = UNKNOWN;
+	for (;;)
+	{
+		opt = get_option(opt_list, count_opt_list, &next_char);
+		switch (opt)
+		{
+		case OPTION_EOF:		/* end of file */
+			return_value = EOF;
+			break;
+		case OPTION_KEYWORD:	/* keyword */
+			return_value = KEYWORD;
+			break;
+		case OPTION_DEFAULT:	/* add to mean_gammas map */
+		{
+			std::string salt_name;
+			int j = copy_token(token, &next_char);
+			if (j != EMPTY)
+			{
+				salt_name = token;
+				str_tolower(salt_name);
+			}
+			cxxNameDouble nd;
+
+			/*
+			 *   Store reactant name, default coefficient
+			 */
+			const char* cptr = next_char;
+			bool have_name = false;
+			std::string name;
+			LDBLE coef = 1;
+			while (copy_token(token, &cptr) != EMPTY)
+			{
+				coef = 1;
+				if (isalpha((int)token[0]) || (token[0] == '(')
+					|| (token[0] == '['))
+				{
+					if (have_name)
+					{
+						nd.add(name.c_str(), coef);
+					}
+					name = token;
+					have_name = true;
+				}
+				else
+				{
+					if (!have_name)
+					{
+						error_string = sformatf("No species name has been defined.");
+						error_msg(error_string, CONTINUE);
+						input_error++;
+					}
+					/*
+					 *   Store relative coefficient
+					*/
+					int j = sscanf(token.c_str(), SCANFORMAT, &coef);
+
+					if (j == 1)
+					{
+						nd.add(name.c_str(), coef);
+						have_name = false;
+					}
+					else
+					{
+						error_msg("Reading relative coefficient of reactant.", CONTINUE);
+						error_msg(line_save, CONTINUE);
+						input_error++;
+					}
+				}
+				//if (have_name)
+				//{
+				//	nd.add(name.c_str(), coef);
+				//}
+			}
+			//read_vector_doubles(&next_char, v);
+			mean_gammas[salt_name] = nd;
+		}
+		break;
+		case OPTION_ERROR:
+			input_error++;
+			error_msg("Unknown input in MEAN_GAMMAS keyword.", CONTINUE);
+			error_msg(line_save, CONTINUE);
+			break;
+		}
+		if (return_value == EOF || return_value == KEYWORD)
+			break;
+	}
+	return (return_value);
+}
+/* ---------------------------------------------------------------------- */
+int Phreeqc::
+read_gas_binary_parameters(void)
+/* ---------------------------------------------------------------------- */
+{
+	/*
+	 *      Reads GAS_BINARY_PARAMETERS data
+	 *
+	 *      Arguments:
+	 *	 none
+	 *
+	 *      Returns:
+	 *	 KEYWORD if keyword encountered, input_error may be incremented if
+	 *		    a keyword is encountered in an unexpected position
+	 *	 EOF     if eof encountered while reading mass balance concentrations
+	 *	 ERROR   if error occurred reading data
+	 *
+	 */
+	std::string token;
+	int return_value, opt;
+	const char* next_char;
+	const char* opt_list[] = {
+		"xxxx",					/* 0 */
+	};
+	int count_opt_list = 0;
+	/*
+	 *   Read rate parameters
+	 */
+	return_value = UNKNOWN;
+	for (;;)
+	{
+		opt = get_option(opt_list, count_opt_list, &next_char);
+		switch (opt)
+		{
+		case OPTION_EOF:		/* end of file */
+			return_value = EOF;
+			break;
+		case OPTION_KEYWORD:	/* keyword */
+			return_value = KEYWORD;
+			break;
+		case OPTION_DEFAULT:	/* add to gas_binary_parameters map */
+		{
+			bool error = false;
+			std::string gas1, gas2;
+			int j = copy_token(token, &next_char);
+			if (j != EMPTY)
+			{
+				gas1 = token;
+			}
+			else
+			{
+				error = true;
+			}
+			j = copy_token(token, &next_char);
+			if (j != EMPTY)
+			{
+				gas2 = token;
+			}
+			else
+			{
+				error = true;
+			}
+			j = copy_token(token, &next_char);
+			double d;
+			if (j != EMPTY)
+			{
+				j = sscanf(token.c_str(), SCANFORMAT, &d);
+			}
+			else
+			{
+				error = true;
+			}
+			if (!error)
+			{
+				gas_binary_parameters[std::make_pair(gas1, gas2)] = d;
+				gas_binary_parameters[std::make_pair(gas2, gas1)] = d;
+			}
+			else
+			{
+				error_msg("Error reading gas binary parameter", CONTINUE);
+			}
+		}
+		break;
+		case OPTION_ERROR:
+			input_error++;
+			error_msg("Unknown input in GAS_BINARY_PARAMETERS keyword.", CONTINUE);
+			error_msg(line_save, CONTINUE);
+			break;
+		}
+		if (return_value == EOF || return_value == KEYWORD)
+			break;
+	}
+	return (return_value);
+}
+/* ---------------------------------------------------------------------- */
+int Phreeqc::
+read_rate_parameters_svd(void)
+/* ---------------------------------------------------------------------- */
+{
+	/*
+	 *      Reads kinetics data
+	 *
+	 *      Arguments:
+	 *	 none
+	 *
+	 *      Returns:
+	 *	 KEYWORD if keyword encountered, input_error may be incremented if
+	 *		    a keyword is encountered in an unexpected position
+	 *	 EOF     if eof encountered while reading mass balance concentrations
+	 *	 ERROR   if error occurred reading data
+	 *
+	 */
+	std::string token;
+	int return_value, opt;
+	const char* next_char;
+	const char* opt_list[] = {
+		"xxxx",					/* 0 */
+	};
+	int count_opt_list = 0;
+	/*
+	 *   Read rate parameters
+	 */
+	return_value = UNKNOWN;
+	for (;;)
+	{
+		opt = get_option(opt_list, count_opt_list, &next_char);
+		switch (opt)
+		{
+		case OPTION_EOF:		/* end of file */
+			return_value = EOF;
+			break;
+		case OPTION_KEYWORD:	/* keyword */
+			return_value = KEYWORD;
+			break;
+		case OPTION_DEFAULT:	/* add to rate_parameters_svd map */
+		{
+			std::string min_name;
+			int j = copy_token(token, &next_char);
+			if (j != EMPTY)
+			{
+				min_name = token;
+				str_tolower(min_name);
+			}
+			std::vector<double> v;
+			read_vector_doubles(&next_char, v);
+			rate_parameters_svd[min_name] = v;
+		}
+		break;
+		case OPTION_ERROR:
+			input_error++;
+			error_msg("Unknown input in KINETICS keyword.", CONTINUE);
+			error_msg(line_save, CONTINUE);
+			break;
+		}
+		if (return_value == EOF || return_value == KEYWORD)
+			break;
+	}
+	return (return_value);
+}
+/* ---------------------------------------------------------------------- */
+int Phreeqc::
+read_rate_parameters_hermanska(void)
+/* ---------------------------------------------------------------------- */
+{
+	/*
+	 *      Reads kinetics data
+	 *
+	 *      Arguments:
+	 *	 none
+	 *
+	 *      Returns:
+	 *	 KEYWORD if keyword encountered, input_error may be incremented if
+	 *		    a keyword is encountered in an unexpected position
+	 *	 EOF     if eof encountered while reading mass balance concentrations
+	 *	 ERROR   if error occurred reading data
+	 *
+	 */
+	std::string token;
+	int return_value, opt;
+	const char* next_char;
+	const char* opt_list[] = {
+		"xxxx",					/* 0 */
+	};
+	int count_opt_list = 0;
+	/*
+	 *   Read rate parameters
+	 */
+	return_value = UNKNOWN;
+	for (;;)
+	{
+		opt = get_option(opt_list, count_opt_list, &next_char);
+		switch (opt)
+		{
+		case OPTION_EOF:		/* end of file */
+			return_value = EOF;
+			break;
+		case OPTION_KEYWORD:	/* keyword */
+			return_value = KEYWORD;
+			break;
+		case OPTION_DEFAULT:	/* add to rate_parameters_hermanska map */
+		{
+			std::string min_name;
+			int j = copy_token(token, &next_char);
+			if (j != EMPTY)
+			{
+				min_name = token;
+				str_tolower(min_name);
+			}
+			std::vector<double> v;
+			read_vector_doubles(&next_char, v);
+			rate_parameters_hermanska[min_name] = v;
+		}
+		break;
+		case OPTION_ERROR:
+			input_error++;
+			error_msg("Unknown input in KINETICS keyword.", CONTINUE);
+			error_msg(line_save, CONTINUE);
+			break;
+		}
+		if (return_value == EOF || return_value == KEYWORD)
+			break;
+	}
+	return (return_value);
+}
+/* ---------------------------------------------------------------------- */
 bool Phreeqc::
 read_vector_doubles(const char** cptr, std::vector<double>& v)
 /* ---------------------------------------------------------------------- */
@@ -2699,7 +3119,7 @@ read_aq_species_vm_parms(const char* cptr, LDBLE * delta_v)
 	/*
 	*   Read supcrt parms and Ionic strength terms
 	*/
-	for (j = 0; j < 11; j++)
+	for (j = 0; j < 10; j++)
 	{
 		delta_v[j] = 0.0;
 	}
@@ -2707,7 +3127,7 @@ read_aq_species_vm_parms(const char* cptr, LDBLE * delta_v)
 /* Vmax, dmax...
 	delta_v[10] = 999.0;
 	delta_v[11] = 1.0; */
-	j = sscanf(cptr, SCANFORMAT SCANFORMAT SCANFORMAT SCANFORMAT SCANFORMAT SCANFORMAT SCANFORMAT SCANFORMAT SCANFORMAT SCANFORMAT SCANFORMAT SCANFORMAT ,
+	j = sscanf(cptr, SCANFORMAT SCANFORMAT SCANFORMAT SCANFORMAT SCANFORMAT SCANFORMAT SCANFORMAT SCANFORMAT SCANFORMAT SCANFORMAT/* SCANFORMAT SCANFORMAT*/ ,
 		/* a1..a4 */
 		&(delta_v[0]), &(delta_v[1]), &(delta_v[2]), &(delta_v[3]),
 		/* wref */
@@ -2715,9 +3135,9 @@ read_aq_species_vm_parms(const char* cptr, LDBLE * delta_v)
 		/* b_Av */
 		&(delta_v[5]),
 		/* c1..c4 */
-		&(delta_v[6]), &(delta_v[7]), &(delta_v[8]), &(delta_v[9]),
+		&(delta_v[6]), &(delta_v[7]), &(delta_v[8]), &(delta_v[9])/*,
 		 //vmP, exP
-		&(delta_v[10]), &(delta_v[11])); 
+		&(delta_v[10]), &(delta_v[11])*/); 
 	if (j < 1)
 	{
 		input_error++;
@@ -3107,7 +3527,7 @@ read_master_species(void)
 		   if (token[0] == '[') {
 		   cptr1 = token;
 		   get_elt(&cptr, element, &l);
-		   strcpy(token, element);
+		   Utilities::strcpy_safe(token, MAX_LENGTH, element);
 		   }
 		 */
 		replace("(+", "(", token);
@@ -3726,7 +4146,7 @@ read_phases(void)
 			/*
 			 *   Get pointer to each species in the reaction, store new species if necessary
 			 */
-			strcpy(token1, trxn.token[0].name);
+			Utilities::strcpy_safe(token1, MAX_LENGTH, trxn.token[0].name);
 			replace("(g)", "", token1);
 			replace("(s)", "", token1);
 			replace("(G)", "", token1);
@@ -3739,7 +4159,7 @@ read_phases(void)
 					(strstr(trxn.token[i].name, "(S)") == NULL) &&
 					(strstr(trxn.token[i].name, "(G)") == NULL))
 				{
-					strcpy(token1, trxn.token[i].name);
+					Utilities::strcpy_safe(token1, MAX_LENGTH, trxn.token[i].name);
 					replace("(aq)", "", token1);
 					replace("(AQ)", "", token1);
 					replace("H2O(l)", "H2O", token1);
@@ -4440,9 +4860,6 @@ read_selected_output(void)
 		temp_selected_output.Set_percent_error    ( so_ref.Get_percent_error() );
 		temp_selected_output.Set_have_punch_name  ( so_ref.Get_have_punch_name() );
 		temp_selected_output.Set_file_name        ( so_ref.Get_file_name() );
-#if PHREEQCI_GUI
-		assert(false);
-#endif
 	}
 	else if (n_user == 1 && so == SelectedOutput_map.end())
 	{
@@ -5499,9 +5916,17 @@ read_species(void)
 				input_error++;
 				break;
 			}
-			s_ptr->dw_t = 0;  s_ptr->dw_a = 0; s_ptr->dw_a2 = 0; s_ptr->dw_a_visc = 0;
-			i = sscanf(next_char, SCANFORMAT SCANFORMAT SCANFORMAT SCANFORMAT SCANFORMAT, &s_ptr->dw, &s_ptr->dw_t,
-				&s_ptr->dw_a, &s_ptr->dw_a2, &s_ptr->dw_a_visc);
+			s_ptr->dw_t = 0;  s_ptr->dw_a = 0; s_ptr->dw_a2 = 0; s_ptr->dw_a3 = 0; s_ptr->dw_a_visc = 0; s_ptr->dw_a_v_dif = 0;
+			i = sscanf(next_char, SCANFORMAT SCANFORMAT SCANFORMAT SCANFORMAT SCANFORMAT SCANFORMAT SCANFORMAT, 
+				&s_ptr->dw, &s_ptr->dw_t, &s_ptr->dw_a, &s_ptr->dw_a2, &s_ptr->dw_a_visc, &s_ptr->dw_a3, &s_ptr->dw_a_v_dif);
+			if (i < 1)
+			{
+				input_error++;
+				error_msg("Expecting numeric values for the diffusion coefficient, its temperature dependence, and coefficients for the SC calculation.",
+					CONTINUE);
+				return (ERROR);
+			}
+
 			s_ptr->dw_corr = s_ptr->dw;
 			opt_save = OPTION_DEFAULT;
 			break;
@@ -5737,7 +6162,7 @@ read_use(void)
 /*
  *   Read number
  */
-	strcpy(token1, token);
+	Utilities::strcpy_safe(token1, MAX_LENGTH, token);
 	for (;;)
 	{
 		i = copy_token(token, &cptr, &l);
@@ -6283,7 +6708,7 @@ read_surface(void)
 	 *   ERROR   if error occurred reading data
 	 *
 	 */
-	int n_user;
+	int n_user, i1;
 	LDBLE conc;
 	const char* cptr, *cptr1;
 	std::string token, token1, name;
@@ -6306,9 +6731,10 @@ read_surface(void)
 		"ccm",                  /* 13 */
         "equilibrium",          /* 14 */
 		"site_units",           /* 15 */
-		"ddl"                   /* 16 */
+		"ddl",                  /* 16 */
+		"donnan_factors"        /* 17 */
 	};
-	int count_opt_list = 17;
+	int count_opt_list = 18;
 	/*
 	 * kin_surf is for Surfaces, related to kinetically reacting minerals
 	 *    they are defined if "sites" is followed by mineral name:
@@ -6413,7 +6839,7 @@ read_surface(void)
 							if (thickness != 0)
 							{
 								error_msg
-									("You must enter EITHER thickness OR Debye lengths (1/k),\n	   and relative DDL viscosity, DDL limit.\nCorrect is (for example): -donnan 1e-8 viscosity 0.5\n or (default values):     -donnan debye_lengths 1 viscosity 1 limit 0.8",
+									("You must enter EITHER thickness OR Debye lengths (1/k),\n	   and relative DDL viscosity, DDL limit.\nCorrect is (for example): -donnan 1e-8 viscosity 0.5 limit 0.9 correct_D true\n or (default values):     -donnan debye_lengths 1 viscosity 1 limit 0.8 correct_D false",
 									CONTINUE);
 								error_msg(line_save, CONTINUE);
 								input_error++;
@@ -6436,13 +6862,40 @@ read_surface(void)
 								break;
 							}
 						}
+						else if (token[0] == 'C' || token[0] == 'c')
+						{
+							copy_token(token1, &next_char);
+							if (token1[0] == 'T' || token1[0] == 't' || token1[0] == 'F' || token1[0] == 'f')
+							{
+								temp_surface.Set_correct_D(get_true_false(token1.c_str(), TRUE) == TRUE);
+								continue;
+							} else
+							{
+								error_msg
+									("Expected True or False for correct_D (which brings co-ion concentrations closer to their integrated double layer value).",
+									CONTINUE);
+								error_msg(line_save, CONTINUE);
+								input_error++;
+								break;
+							}
+						}
 						else if (token[0] == 'V' || token[0] == 'v')
 						{
 							int j = copy_token(token1, &next_char);
 							if (j == DIGIT)
 							{
 								(void)sscanf(token1.c_str(), SCANFORMAT, &dummy);
+								if(dummy == 0)
+								{
+									dummy = 1; temp_surface.Calc_DDL_viscosity(true);
+								}
 								temp_surface.Set_DDL_viscosity(dummy);
+								continue;
+							}
+							else if (token1[0] == 'C' || token1[0] == 'c' )
+							{
+								temp_surface.Calc_DDL_viscosity(true);
+								temp_surface.Set_DDL_viscosity(1.0);
 								continue;
 							}
 							else if (j != EMPTY)
@@ -6569,6 +7022,31 @@ read_surface(void)
 			break;
 		case 16:				/* ddl */
 			temp_surface.Set_type(cxxSurface::DDL);
+			break;
+		case 17:			/* Donnan_factors */
+			temp_surface.Donnan_factors.clear();
+			i1 = 0;
+			for (;;)
+			{
+				int i = copy_token(token, &next_char);
+				if (i == DIGIT && i1 < 8)
+				{
+					(void)sscanf(token.c_str(), SCANFORMAT, &dummy);
+					temp_surface.Donnan_factors.push_back(dummy);
+					i1++;
+					continue;
+				}
+				else if (i != EMPTY || i1 > 4)
+				{
+					error_msg
+					("Expected 4 numbers for the Donnan_factors of single and double-charged coounter- and co-ions,\n 	z1, z2, z_1, z_2",
+						CONTINUE);
+					error_msg(line_save, CONTINUE);
+					input_error++;
+					break;
+				}
+				break;
+			}
 			break;
 		case OPTION_DEFAULT:
 			/*
@@ -6970,16 +7448,16 @@ read_surface_master_species(void)
 				master[count_master]->s = s_store(token1.c_str(), l_z, FALSE);
 			}
 			master[count_master]->primary = TRUE;
-			strcpy(token, master[count_master]->elt->name);
+			 Utilities::strcpy_safe(token, MAX_LENGTH, master[count_master]->elt->name);
 			count_master++;
 			/*
 			 *   Save values in master and species structure for surface psi
 			 */
-			strcpy(token1, token);
+			Utilities::strcpy_safe(token1, MAX_LENGTH, token);
 			replace("_", " ", token1);
 			cptr1 = token1;
 			copy_token(token, &cptr1, &l);
-			strcat(token, "_psi");
+			Utilities::strcat_safe(token, MAX_LENGTH, "_psi");
 			add_psi_master_species(token);
 			opt_save = OPTION_DEFAULT;
 			break;
@@ -6998,10 +7476,9 @@ add_psi_master_species(char *token)
 	class species *s_ptr;
 	class master *master_ptr;
 	const char* cptr;
-	char token1[MAX_LENGTH];
+	char token1[MAX_LENGTH] = "";
 	int i, n, plane;
-
-	strcpy(token1, token);
+	Utilities::strcpy_safe(token1, MAX_LENGTH, token);
 	for (plane = SURF_PSI; plane <= SURF_PSI2; plane++)
 	{
 		strcpy(token, token1);
@@ -7097,7 +7574,7 @@ read_title(void)
 	}
 
 /*
- *   Read additonal lines
+ *   Read additional lines
  */
 	for (;;)
 	{
@@ -8781,7 +9258,7 @@ read_solid_solutions(void)
 				if (j != 1)
 				{
 					error_string = sformatf(
-						"Expected temperature (Celcius) for parameters, assemblage %d, solid solution %s, using 25 C",
+						"Expected temperature (Celsius) for parameters, assemblage %d, solid solution %s, using 25 C",
 					n_user,
 					ss_ptr->Get_name().c_str());
 					warning_msg(error_string);
@@ -9438,7 +9915,7 @@ read_copy(void)
 	switch (next_keyword)
 	{
 	case Keywords::KEY_NONE:					/* Have not read line with keyword */
-		strcpy(nonkeyword, token);
+		Utilities::strcpy_safe(nonkeyword, MAX_LENGTH, token);
 		break;
 	case Keywords::KEY_SOLUTION:				/* Solution */
 	case Keywords::KEY_EQUILIBRIUM_PHASES:		/* Pure phases */
@@ -9465,7 +9942,7 @@ read_copy(void)
 /*
  *   Read source index
  */
-	strcpy(token1, token);
+	Utilities::strcpy_safe(token1, MAX_LENGTH, token);
 	i = copy_token(token, &cptr, &l);
 	if (i == DIGIT)
 	{
@@ -9685,8 +10162,8 @@ cleanup_after_parser(CParser &parser)
 	// check_key sets next_keyword
 	if (parser.get_m_line_type() == PHRQ_io::LT_EOF)
 	{
-		strcpy(line, "");
-		strcpy(line_save, "");
+		Utilities::strcpy_safe(line, max_line, "");
+		Utilities::strcpy_safe(line_save, max_line, "");
 		next_keyword = Keywords::KEY_END;
 		return(TRUE); 
 	}
@@ -9708,8 +10185,8 @@ cleanup_after_parser(CParser &parser)
 		if (line == NULL)
 			malloc_error();
 	}
-	strcpy(line, parser.line().c_str());
-	strcpy(line_save, parser.line_save().c_str());
+	Utilities::strcpy_safe(line, max_line, parser.line().c_str());
+	Utilities::strcpy_safe(line_save, max_line, parser.line_save().c_str());
 	return return_value;
 }
 /* ---------------------------------------------------------------------- */

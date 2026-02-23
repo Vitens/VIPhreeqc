@@ -432,36 +432,37 @@ calc_PR(void)
 				continue;
 			a_aa = sqrt(phase_ptr->pr_a * phase_ptr->pr_alpha *
 				        phase_ptr1->pr_a * phase_ptr1->pr_alpha);
-			if (!strcmp(phase_ptr->name, "H2O(g)"))
-			{
-				if (!strcmp(phase_ptr1->name, "CO2(g)"))
-					a_aa *= 0.81; // Soreide and Whitson, 1992, FPE 77, 217
-				else if (!strcmp(phase_ptr1->name, "H2S(g)") || !strcmp(phase_ptr1->name, "H2Sg(g)"))
-					a_aa *= 0.81;
-				else if (!strcmp(phase_ptr1->name, "CH4(g)") || !strcmp(phase_ptr1->name, "Mtg(g)") || !strcmp(phase_ptr1->name, "Methane(g)"))
-					a_aa *= 0.51;
-				else if (!strcmp(phase_ptr1->name, "N2(g)") || !strcmp(phase_ptr1->name, "Ntg(g)"))
-					a_aa *= 0.51;
-				else if (!strcmp(phase_ptr1->name, "Ethane(g)"))
-					a_aa *= 0.51;
-				else if (!strcmp(phase_ptr1->name, "Propane(g)"))
-					a_aa *= 0.45;
-			}
-			if (!strcmp(phase_ptr1->name, "H2O(g)"))
-			{
-				if (!strcmp(phase_ptr->name, "CO2(g)"))
-					a_aa *= 0.81;
-				else if (!strcmp(phase_ptr->name, "H2S(g)") || !strcmp(phase_ptr->name, "H2Sg(g)"))
-					a_aa *= 0.81;
-				else if (!strcmp(phase_ptr->name, "CH4(g)") || !strcmp(phase_ptr->name, "Mtg(g)") || !strcmp(phase_ptr->name, "Methane(g)"))
-					a_aa *= 0.51;
-				else if (!strcmp(phase_ptr->name, "N2(g)") || !strcmp(phase_ptr->name, "Ntg(g)"))
-					a_aa *= 0.51;
-				else if (!strcmp(phase_ptr->name, "Ethane(g)"))
-					a_aa *= 0.51;
-				else if (!strcmp(phase_ptr->name, "Propane(g)"))
-					a_aa *= 0.45;
-			}
+			a_aa *= calc_gas_binary_parameter(phase_ptr->name, phase_ptr1->name);
+			//if (!strcmp(phase_ptr->name, "H2O(g)"))
+			//{
+			//	if (!strcmp(phase_ptr1->name, "CO2(g)"))
+			//		a_aa *= 0.81; // Soreide and Whitson, 1992, FPE 77, 217
+			//	else if (!strcmp(phase_ptr1->name, "H2S(g)") || !strcmp(phase_ptr1->name, "H2Sg(g)"))
+			//		a_aa *= 0.81;
+			//	else if (!strcmp(phase_ptr1->name, "CH4(g)") || !strcmp(phase_ptr1->name, "Mtg(g)") || !strcmp(phase_ptr1->name, "Methane(g)"))
+			//		a_aa *= 0.51;
+			//	else if (!strcmp(phase_ptr1->name, "N2(g)") || !strcmp(phase_ptr1->name, "Ntg(g)"))
+			//		a_aa *= 0.51;
+			//	else if (!strcmp(phase_ptr1->name, "Ethane(g)"))
+			//		a_aa *= 0.51;
+			//	else if (!strcmp(phase_ptr1->name, "Propane(g)"))
+			//		a_aa *= 0.45;
+			//}
+			//if (!strcmp(phase_ptr1->name, "H2O(g)"))
+			//{
+			//	if (!strcmp(phase_ptr->name, "CO2(g)"))
+			//		a_aa *= 0.81;
+			//	else if (!strcmp(phase_ptr->name, "H2S(g)") || !strcmp(phase_ptr->name, "H2Sg(g)"))
+			//		a_aa *= 0.81;
+			//	else if (!strcmp(phase_ptr->name, "CH4(g)") || !strcmp(phase_ptr->name, "Mtg(g)") || !strcmp(phase_ptr->name, "Methane(g)"))
+			//		a_aa *= 0.51;
+			//	else if (!strcmp(phase_ptr->name, "N2(g)") || !strcmp(phase_ptr->name, "Ntg(g)"))
+			//		a_aa *= 0.51;
+			//	else if (!strcmp(phase_ptr->name, "Ethane(g)"))
+			//		a_aa *= 0.51;
+			//	else if (!strcmp(phase_ptr->name, "Propane(g)"))
+			//		a_aa *= 0.45;
+			//}
 			a_aa_sum += phase_ptr->fraction_x * phase_ptr1->fraction_x * a_aa;
 			a_aa_sum2 += phase_ptr1->fraction_x * a_aa;
 		}
@@ -566,12 +567,14 @@ calc_PR(void)
 			if (ri + rq / 2 <= 0)
 			{
 				V_m = pow(ri - rq / 2, one_3) + pow(- ri - rq / 2, one_3) - r3[1] / 3;
-			} else
+			}
+			else
 			{
 				ri = - pow(ri + rq / 2, one_3);
 				V_m = ri - rp / (3.0 * ri) - r3[1] / 3;
 			}
-		} else // use complex plane...
+		}
+		else // use complex plane...
 		{
 			ri = sqrt(- rp3 / 27); // rp < 0
 			ri1 = acos(- rq / 2 / ri);
@@ -606,10 +609,10 @@ calc_PR(void)
 		{
 			phi = B_r * (rz - 1) - log(rz - B) + A / (2.828427 * B) * (B_r - 2.0 * phase_ptr->pr_aa_sum2 / a_aa_sum) *
 				  log((rz + 2.41421356 * B) / (rz - 0.41421356 * B));
-			//phi = (phi > 4.44 ? 4.44 : (phi < -3 ? -3 : phi));
+			phi = (phi > 4.44 ? 4.44 : (phi < -4.6 ? -4.6 : phi));
 		}
 		else
-			phi = -3.0; // fugacity coefficient = 0.05
+			phi = -4.6; // fugacity coefficient = 0.01
 		phase_ptr->pr_phi = exp(phi);
 		phase_ptr->pr_si_f = phi / LOG_10;										// pr_si_f updated
 		// ****
@@ -624,7 +627,7 @@ int Phreeqc::
 calc_fixed_volume_gas_pressures(void)
 /* ---------------------------------------------------------------------- */
 {
-	int n_g = 0;
+	//int n_g = 0;
 	LDBLE lp;
 	class rxn_token *rxn_ptr;
 	class phase *phase_ptr;
@@ -636,7 +639,6 @@ calc_fixed_volume_gas_pressures(void)
 	if (use.Get_gas_phase_ptr() == NULL)
 		return (OK);
 	cxxGasPhase *gas_phase_ptr = use.Get_gas_phase_ptr();
-
 	gas_phase_ptr->Set_total_moles(0);
 
 	for (i = 0; i < gas_unknowns.size(); i++)
@@ -646,7 +648,7 @@ calc_fixed_volume_gas_pressures(void)
 		{
 			if (!PR && phase_ptr->t_c > 0 && phase_ptr->p_c > 0)
 				PR = true;
-			n_g++;
+			//n_g++;
 		}
 		gas_phase_ptr->Set_total_moles(gas_phase_ptr->Get_total_moles() + gas_unknowns[i]->moles);
 	}
@@ -695,4 +697,52 @@ calc_fixed_volume_gas_pressures(void)
 	}
 
 	return (OK);
+}
+/* ---------------------------------------------------------------------- */
+double Phreeqc::
+calc_gas_binary_parameter(std::string name1, std::string name2) const
+/* ---------------------------------------------------------------------- */
+{
+	double f = 1.0;
+	std::pair<std::string, std::string> p(name1, name2);
+	std::map<std::pair<std::string, std::string>, double>::const_iterator gas_pair_it;
+	gas_pair_it = gas_binary_parameters.find(p);
+	if (gas_pair_it != gas_binary_parameters.end())
+	{
+		f = (1.0 - gas_pair_it->second);
+	}
+	else
+	{
+		if (!strcmp(name1.c_str(), "H2O(g)"))
+		{
+			if (!strcmp(name2.c_str(), "CO2(g)"))
+				f = 0.81; // Soreide and Whitson, 1992, FPE 77, 217
+			else if (!strcmp(name2.c_str(), "H2S(g)") || !strcmp(name2.c_str(), "H2Sg(g)"))
+				f = 0.81;
+			else if (!strcmp(name2.c_str(), "CH4(g)") || !strcmp(name2.c_str(), "Mtg(g)") || !strcmp(name2.c_str(), "Methane(g)"))
+				f = 0.51;
+			else if (!strcmp(name2.c_str(), "N2(g)") || !strcmp(name2.c_str(), "Ntg(g)"))
+				f = 0.51;
+			else if (!strcmp(name2.c_str(), "Ethane(g)"))
+				f = 0.51;
+			else if (!strcmp(name2.c_str(), "Propane(g)"))
+				f = 0.45;
+		}
+		if (!strcmp(name2.c_str(), "H2O(g)"))
+		{
+			if (!strcmp(name1.c_str(), "CO2(g)"))
+				f = 0.81;
+			else if (!strcmp(name1.c_str(), "H2S(g)") || !strcmp(name1.c_str(), "H2Sg(g)"))
+				f = 0.81;
+			else if (!strcmp(name1.c_str(), "CH4(g)") || !strcmp(name1.c_str(), "Mtg(g)") || !strcmp(name1.c_str(), "Methane(g)"))
+				f = 0.51;
+			else if (!strcmp(name1.c_str(), "N2(g)") || !strcmp(name1.c_str(), "Ntg(g)"))
+				f = 0.51;
+			else if (!strcmp(name1.c_str(), "Ethane(g)"))
+				f = 0.51;
+			else if (!strcmp(name1.c_str(), "Propane(g)"))
+				f = 0.45;
+		}
+	}
+	return f;
 }

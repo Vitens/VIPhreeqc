@@ -14,6 +14,7 @@
 #include "PBasic.h"
 #include "Temperature.h"
 #include "SSassemblage.h"
+#include "Utils.h"
 
 #if defined(PHREEQCI_GUI)
 #ifdef _DEBUG
@@ -554,7 +555,7 @@ size_t Phreeqc::list_components(std::list<std::string> &list_c)
 	{
 		if (it->first == "Charge") continue;
 		char string[MAX_LENGTH];
-		strcpy(string, it->first.c_str());
+		Utilities::strcpy_safe(string, MAX_LENGTH, it->first.c_str());
 		class master *master_ptr = master_bsearch_primary(string);
 		if (master_ptr == NULL) continue;
 		if (master_ptr->type != AQ) continue;
@@ -963,7 +964,6 @@ void Phreeqc::init(void)
 	solution_pe_x           = 0;
 	mu_x                    = 0;
 	ah2o_x                  = 1.0;
-	density_x               = 0;
 	total_h_x               = 0;
 	total_o_x               = 0;
 	cb_x                    = 0;
@@ -1278,6 +1278,7 @@ void Phreeqc::init(void)
 	viscos                  = 0.0;
 	viscos_0                = 0.0;
 	viscos_0_25             = 0.0;
+	density_x               = 0.0;
 	rho_0                   = 0.0;
 	kappa_0                 = 0.0;
 	p_sat                   = 0.0;
@@ -1581,6 +1582,7 @@ Phreeqc::InternalCopy(const Phreeqc* pSrc)
 	Rxn_kinetics_map = pSrc->Rxn_kinetics_map;
 	use_kinetics_limiter = pSrc->use_kinetics_limiter;
 	save_values = pSrc->save_values;
+	save_strings = pSrc->save_strings;
 	save = pSrc->save;
 	//class copier copy_solution;
 	//class copier copy_pp_assemblage;
@@ -1596,6 +1598,12 @@ Phreeqc::InternalCopy(const Phreeqc* pSrc)
 	//	Inverse not implemented
 	//std::vector<class inverse> inverse;
 	count_inverse = 0;
+	/* rate parameters */
+	rate_parameters_pk = pSrc->rate_parameters_pk;
+	rate_parameters_svd = pSrc->rate_parameters_svd;
+	rate_parameters_hermanska = pSrc->rate_parameters_hermanska;
+	// Mean gammas
+	mean_gammas = pSrc->mean_gammas;
 	//   Mix
 	Rxn_mix_map = pSrc->Rxn_mix_map;
 	Dispersion_mix_map = pSrc->Dispersion_mix_map;
@@ -2094,7 +2102,11 @@ Phreeqc::InternalCopy(const Phreeqc* pSrc)
 	viscos = pSrc->viscos;
 	viscos_0 = pSrc->viscos_0;
 	viscos_0_25 = pSrc->viscos_0_25; // viscosity of the solution, of pure water, of pure water at 25 C
-	cell_pore_volume = pSrc->cell_pore_volume;;
+	density_x = pSrc->density_x;
+	solution_volume_x = pSrc->solution_volume_x;
+	solution_mass_x = pSrc->solution_mass_x;
+	kgw_kgs = pSrc->kgw_kgs;
+	cell_pore_volume = pSrc->cell_pore_volume;
 	cell_porosity = pSrc->cell_porosity;
 	cell_volume = pSrc->cell_volume;
 	cell_saturation = pSrc->cell_saturation;
@@ -2102,9 +2114,6 @@ Phreeqc::InternalCopy(const Phreeqc* pSrc)
 	sys_tot = pSrc->sys_tot;
 	// solution properties
 	V_solutes = pSrc->V_solutes;
-	viscos = pSrc->viscos;
-	viscos_0 = pSrc->viscos_0;
-	viscos_0_25 = pSrc->viscos_0_25;
 	rho_0 = pSrc->rho_0;
 	kappa_0 = pSrc->kappa_0;
 	p_sat = pSrc->p_sat;
@@ -2128,6 +2137,7 @@ Phreeqc::InternalCopy(const Phreeqc* pSrc)
 	b2 = pSrc->b2;
 	b_sum = pSrc->b_sum;
 	R_TK = pSrc->R_TK;
+	gas_binary_parameters = pSrc->gas_binary_parameters;
 	/* input.cpp ------------------------------- */
 	check_line_return = 0;
 	reading_db = FALSE;
@@ -2338,7 +2348,7 @@ Phreeqc::InternalCopy(const Phreeqc* pSrc)
 	//count_tally_table_rows  = 0;
 
 	/* transport.cpp ------------------------------- */
-	/* storage is created and freed in tranport.cpp */
+	/* storage is created and freed in transport.cpp */
 	sol_D = NULL;
 	sol_D_dbg = NULL;
 	J_ij = NULL;
