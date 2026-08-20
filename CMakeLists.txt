@@ -6,7 +6,7 @@ cmake_minimum_required(VERSION 3.21)
 
 project (
   IPhreeqc
-  VERSION 3.8.7
+  VERSION 3.9.0
   LANGUAGES CXX C
   )
 
@@ -315,8 +315,8 @@ if (NOT IPHREEQC_ENABLE_MODULE)
   )
 endif()
 
-# c++14
-target_compile_features(IPhreeqc PUBLIC cxx_std_14)
+# c++17
+target_compile_features(IPhreeqc PUBLIC cxx_std_17)
 
 if (${CMAKE_CXX_COMPILER_ID} STREQUAL MSVC)
   target_compile_options(IPhreeqc PRIVATE /wd4251 /wd4275 /wd4793)
