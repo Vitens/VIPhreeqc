@@ -32,10 +32,10 @@ A. Distribution file
 	compilation-related files, and an advection example in
         C++, C, and Fortran) are available for Linux and Windows:
 
-        IPhreeqcCOM-3.7.3-15968-win32.msi  Windows
-        IPhreeqcCOM-3.7.3-15968-x64.msi    Windows
-        iphreeqc-3.7.3-15968.zip           Windows
-        iphreeqc-3.7.3-15968.tar.gz        Linux
+        IPhreeqcCOM-@VERSION@-@REVISION@-win32.msi  Windows
+        IPhreeqcCOM-@VERSION@-@REVISION@-x64.msi    Windows
+        iphreeqc-@VERSION@-@REVISION@.zip           Windows
+        iphreeqc-@VERSION@-@REVISION@.tar.gz        Linux
 
 -----------------------------------------------------------------------------------
 B. Documentation
@@ -90,8 +90,8 @@ C. Installing Windows COM versions
 	
 	For 64-bit computers, download both 32- and 64-bit versions:
 	
-	IPhreeqcCOM-3.7.3-15968-win32.msi  
-	IPhreeqcCOM-3.7.3-15968-x64.msi    	
+	IPhreeqcCOM-@VERSION@-@REVISION@-win32.msi  
+	IPhreeqcCOM-@VERSION@-@REVISION@-x64.msi    	
 	
 	Double click on each .msi file and follow the instructions.
 	
@@ -109,15 +109,15 @@ D. Downloading and unzipping the distribution file
 
 	Steps in extracting files                       Explanation
 	----------------------------------------        -----------------------------------
-	gunzip iphreeqc-3.7.3-15968.tar.gz     Uncompress the tar.gz file.
-	tar -xvpof iphreeqc-3.7.3-15968.tar    Extract files from the tar file.
+	gunzip iphreeqc-@VERSION@-@REVISION@.tar.gz     Uncompress the tar.gz file.
+	tar -xvpof iphreeqc-@VERSION@-@REVISION@.tar    Extract files from the tar file.
 
-	The directory iphreeqc-3.7.3-15968 is created when the files are
+	The directory iphreeqc-@VERSION@-@REVISION@ is created when the files are
 	extracted; if this directory already exists, you may want to delete or rename
 	it before extracting the files. The following directory structure is created 
 	(the contents of each directory are shown to the right):
 
-	iphreeqc-3.7.3-15968                   Source code and configure/CMake files
+	iphreeqc-@VERSION@-@REVISION@                   Source code and configure/CMake files
 	     ./config                                   More configure files
 	     ./database                                 Database files for PHREEQC
 	     ./doc                                      Documentation files 
@@ -143,7 +143,7 @@ E. Linux compiling, testing, and installing the IPhreeqc library
 
   E.1.  Change directory to the directory that was extracted from the tar file.
 
-        cd iphreeqc-3.7.3-15968
+        cd iphreeqc-@VERSION@-@REVISION@
         
   E.2.  Make a directory, for example, build.
 	
@@ -228,6 +228,7 @@ E. Linux compiling, testing, and installing the IPhreeqc library
 			  phreeqc.dat
 			  pitzer.dat
 			  sit.dat
+			  stimela.dat
 			  Tipping_Hurley.dat
 			  wateq4f.dat
 		
@@ -261,7 +262,7 @@ F. Windows compiling, testing, and installing the IPhreeqc library
 	
 	Open CMake. Fill in the top two lines.
 		Where is the source code: 
-			The top level directory (ie c:/iphreeqc-3.7.3-15968).
+			The top level directory (ie c:/iphreeqc-@VERSION@-@REVISION@).
 		Where to build the binaries: 
 			A new directory. It is suggested that the name
 			of the directory include the characteristics of 
@@ -361,6 +362,7 @@ F. Windows compiling, testing, and installing the IPhreeqc library
 			phreeqc.dat
 			pitzer.dat
 			sit.dat
+			stimela.dat
 			wateq4f.dat
 				
 		Install\doc files:

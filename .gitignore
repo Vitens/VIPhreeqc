@@ -45,3 +45,4 @@ emsdk/
 .vscode/
 CMakePresets.json
 CMakeUserPresets.json
+.Rhistory

@@ -199,7 +199,6 @@ EMSCRIPTEN_BINDINGS(VIPhreeqcModule) {
 		.field("dVal",&VAR::dVal)
 		.field("sVal",&VAR::get_sVal, &VAR::set_sVal);
 	
-	function("c_str_to_std_string", &c_str_to_std_string, allow_raw_pointers());
 	function("AccumulateLine", &SAccumulateLine);
 	function("AddError", &SAddError);
 	function("AddWarning", &SAddWarning);
